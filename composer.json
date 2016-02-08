@@ -1,0 +1,16 @@
+{
+    "require": {
+        "slim/slim": "*",
+        "illuminate/database": "<5.2"
+    },
+    "autoload": {
+        "classmap" : [
+            "Modelos/",
+            "Controladores/"
+        ],
+        "files": [
+          "Conexion/Conexion.php",
+          "Utiles/Utiles.php"
+        ]
+    }
+}

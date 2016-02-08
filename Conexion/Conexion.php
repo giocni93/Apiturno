@@ -3,9 +3,9 @@
   $config = array(
       'driver'    => 'mysql',
       'host'      => 'localhost',
-      'database'  => 'symfony',
+      'database'  => 'turnobd',
       'username'  => 'root',
-      'password'  => 'colombia',
+      'password'  => '',
       'collation' => 'utf8_general_ci',
       'prefix'    => '',
       'charset'   => 'utf8'

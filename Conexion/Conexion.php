@@ -3,9 +3,9 @@
   $config = array(
       'driver'    => 'mysql',
       'host'      => 'localhost',
-      'database'  => 'buscalo',
+      'database'  => 'symfony',
       'username'  => 'root',
-      'password'  => '',
+      'password'  => 'colombia',
       'collation' => 'utf8_general_ci',
       'prefix'    => '',
       'charset'   => 'utf8'

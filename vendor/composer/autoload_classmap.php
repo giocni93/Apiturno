@@ -6,26 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'CalificacionEmpresa' => $baseDir . '/Modelos/CalificacionEmpresa.php',
-    'Categoria' => $baseDir . '/Modelos/Categoria.php',
-    'CategoriaControl' => $baseDir . '/Controladores/CategoriaControl.php',
-    'CategoriasCliente' => $baseDir . '/Modelos/CategoriasCliente.php',
-    'CategoriasPromocion' => $baseDir . '/Modelos/CategoriasPromocion.php',
-    'CategoriasSucursal' => $baseDir . '/Modelos/CategoriasSucursal.php',
-    'Cliente' => $baseDir . '/Modelos/Cliente.php',
-    'ClienteControl' => $baseDir . '/Controladores/ClienteControl.php',
-    'Empresa' => $baseDir . '/Modelos/Empresa.php',
-    'EmpresaControl' => $baseDir . '/Controladores/EmpresaControl.php',
-    'FotosOferta' => $baseDir . '/Modelos/FotosOferta.php',
-    'FotosPeticion' => $baseDir . '/Modelos/FotosPeticion.php',
-    'Oferta' => $baseDir . '/Modelos/Oferta.php',
-    'OfertaControl' => $baseDir . '/Controladores/OfertaControl.php',
-    'Peticion' => $baseDir . '/Modelos/Peticion.php',
-    'PeticionControl' => $baseDir . '/Controladores/PeticionControl.php',
-    'Promocion' => $baseDir . '/Modelos/Promocion.php',
-    'PromocionControl' => $baseDir . '/Controladores/PromocionControl.php',
-    'Sucursal' => $baseDir . '/Modelos/Sucursal.php',
-    'SucursalControl' => $baseDir . '/Controladores/SucursalControl.php',
-    'Usuario' => $baseDir . '/Modelos/Usuario.php',
-    'UsuarioControl' => $baseDir . '/Controladores/UsuarioControl.php',
+    'Ejemplo' => $baseDir . '/Modelos/Ejemplo.php',
+    'EjemploControl' => $baseDir . '/Controladores/EjemploControl.php',
 );

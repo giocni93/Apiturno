@@ -1,8 +1,8 @@
 <?php
 	use Illuminate\Database\Eloquent\Model;
 
-	class Categoria extends Model{
-	    protected $table = "categoria";
+	class Ejemplo extends Model{
+	    protected $table = "ejemplo";
 			protected $primaryKey = "id";
 	    public $timestamps = false;
 	}

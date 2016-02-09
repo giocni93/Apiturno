@@ -11,4 +11,5 @@ class EjemploControl{
       $response->getBody()->write($data);
       return $response;
   }
+
 }

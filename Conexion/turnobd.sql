@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-02-2016 a las 21:28:03
+-- Tiempo de generación: 09-02-2016 a las 21:49:46
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -159,6 +159,18 @@ CREATE TABLE `servicio` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `serviciosempleado`
+--
+
+CREATE TABLE `serviciosempleado` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `idEmpleado` int(10) UNSIGNED NOT NULL,
+  `idServicio` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `serviciossucursal`
 --
 
@@ -166,18 +178,6 @@ CREATE TABLE `serviciossucursal` (
   `id` int(10) UNSIGNED NOT NULL,
   `idServicio` int(10) UNSIGNED NOT NULL,
   `idSucursal` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `serviciosusuario`
---
-
-CREATE TABLE `serviciosusuario` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `idUsuario` int(10) UNSIGNED NOT NULL,
-  `idServicio` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -297,20 +297,20 @@ ALTER TABLE `servicio`
   ADD KEY `idSucursal_2` (`idEmpresa`);
 
 --
+-- Indices de la tabla `serviciosempleado`
+--
+ALTER TABLE `serviciosempleado`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idUsuario` (`idEmpleado`),
+  ADD KEY `idServicio` (`idServicio`);
+
+--
 -- Indices de la tabla `serviciossucursal`
 --
 ALTER TABLE `serviciossucursal`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idServicio` (`idServicio`),
   ADD KEY `idSucursal` (`idSucursal`);
-
---
--- Indices de la tabla `serviciosusuario`
---
-ALTER TABLE `serviciosusuario`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `idUsuario` (`idUsuario`),
-  ADD KEY `idServicio` (`idServicio`);
 
 --
 -- Indices de la tabla `sucursal`
@@ -388,14 +388,14 @@ ALTER TABLE `sector`
 ALTER TABLE `servicio`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT de la tabla `serviciosempleado`
+--
+ALTER TABLE `serviciosempleado`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT de la tabla `serviciossucursal`
 --
 ALTER TABLE `serviciossucursal`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `serviciosusuario`
---
-ALTER TABLE `serviciosusuario`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `sucursal`
@@ -442,18 +442,18 @@ ALTER TABLE `servicio`
   ADD CONSTRAINT `servicio_ibfk_2` FOREIGN KEY (`idEmpresa`) REFERENCES `empresa` (`id`) ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `serviciosempleado`
+--
+ALTER TABLE `serviciosempleado`
+  ADD CONSTRAINT `serviciosempleado_ibfk_1` FOREIGN KEY (`idEmpleado`) REFERENCES `empleado` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `serviciosempleado_ibfk_2` FOREIGN KEY (`idServicio`) REFERENCES `servicio` (`id`) ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `serviciossucursal`
 --
 ALTER TABLE `serviciossucursal`
   ADD CONSTRAINT `serviciossucursal_ibfk_1` FOREIGN KEY (`idServicio`) REFERENCES `servicio` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `serviciossucursal_ibfk_2` FOREIGN KEY (`idSucursal`) REFERENCES `sucursal` (`id`) ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `serviciosusuario`
---
-ALTER TABLE `serviciosusuario`
-  ADD CONSTRAINT `serviciosusuario_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `empleado` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `serviciosusuario_ibfk_2` FOREIGN KEY (`idServicio`) REFERENCES `servicio` (`id`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `sucursal`

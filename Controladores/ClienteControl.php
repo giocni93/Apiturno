@@ -27,7 +27,7 @@ class ClienteControl{
   function post(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $data = json_decode($request->getBody(),true);
-
+    //echo $data["email"];
     try{
         $cliente = new Cliente;
         $cliente->email     =   $data['email'];
@@ -44,6 +44,7 @@ class ClienteControl{
     }catch(Exception $err){
         $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
         $response = $response->withStatus(404);
+        //echo $respuesta;
     }
     $response->getBody()->write($respuesta);
     return $response;
@@ -56,7 +57,7 @@ class ClienteControl{
       $id = $request->getAttribute("id");
       $cliente = Cliente::select("*")
                       ->where("id","=",$id)
-                      ->get();
+                      ->first();
       $cliente->estado = "INACTIVO";
       $cliente->save();
       $respuesta = json_encode(array('msg' => "Eliminado correctamente", "std" => 1));
@@ -70,7 +71,7 @@ class ClienteControl{
       
   }
 
-  public function update(Request $request, Response $response)
+  public function put(Request $request, Response $response)
   {
     try {
       $response = $response->withHeader('Content-type', 'application/json');
@@ -78,7 +79,7 @@ class ClienteControl{
       $id = $request->getAttribute("id");
       $cliente = Cliente::select("*")
                           ->where("id","=",$id)
-                          ->get();
+                          ->first();
       $cliente->email     =   $data['email'];
       $cliente->nombres   =   $data['nombres'];
       $cliente->apellidos =   $data['apellidos'];
@@ -87,7 +88,7 @@ class ClienteControl{
       $cliente->idPush    =   $data['idPush'];
       $cliente->idFace    =   $data['idFace'];
       $cliente->save();
-      $respuesta = json_encode(array('msg' => "Eliminado correctamente", "std" => 1));
+      $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
       $response = $response->withStatus(200);
     } catch (Exception $err) {
       $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));

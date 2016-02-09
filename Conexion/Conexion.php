@@ -3,11 +3,7 @@
   $config = array(
       'driver'    => 'mysql',
       'host'      => 'localhost',
-<<<<<<< Updated upstream
       'database'  => 'turnobd',
-=======
-      'database'  => 'bdhotel',
->>>>>>> Stashed changes
       'username'  => 'root',
       'password'  => '',
       'collation' => 'utf8_general_ci',

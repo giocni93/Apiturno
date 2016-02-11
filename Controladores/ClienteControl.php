@@ -35,8 +35,8 @@ class ClienteControl{
         $cliente->apellidos =   $data['apellidos'];
         $cliente->telefono  =   $data['telefono'];
         $cliente->pass      =   sha1($data['pass']);
-        $cliente->idPush    =   $data['idPush'];
-        $cliente->idFace    =   $data['idFace'];
+        $cliente->idPush    =   "01";//$data['idPush'];
+        $cliente->idFace    =   "01";//$data['idFace'];
         $cliente->estado    =   "ACTIVO";
         $cliente->save();
         $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));

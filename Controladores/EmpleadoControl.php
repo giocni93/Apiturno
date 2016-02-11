@@ -67,7 +67,6 @@ class EmpleadoControl{
     }
     $response->getBody()->write($respuesta);
     return $response;
-
   }
 
   public function update(Request $request, Response $response)
@@ -98,14 +97,16 @@ class EmpleadoControl{
   function sesion(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $data = json_decode($request->getBody(),true);
-    $data = Empleado::select("id","nombres","apellidos","email")
+    $data = Empleado::select("id","idSucursal","nombres","apellidos","email","telefono","identificacion")
                     ->where("pass","=",sha1($data['pass']))
                     ->where("identificacion","=",$data['identificacion'])
                     ->first();
+    $respuesta = json_encode(array('empleado' => $data, "std" => 1));
     if($data == null){
+      $respuesta = json_encode(array('empleado' => null, "std" => 0));
       $response = $response->withStatus(404);
     }
-    $response->getBody()->write($data);
+    $response->getBody()->write($respuesta);
     return $response;
   }
 

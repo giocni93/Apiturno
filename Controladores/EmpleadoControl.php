@@ -119,7 +119,7 @@ class EmpleadoControl{
                           ->first();
       $empleado->idPush   =   $data['idpush'];
       $empleado->save();
-      $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
+      $respuesta = json_encode(array('msg' => "idpus registrado correctamente", "std" => 1));
       $response = $response->withStatus(200);
     } catch (Exception $err) {
       $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));

@@ -98,4 +98,23 @@ class ClienteControl{
     return $response;
   }
 
+  function login(Request $request, Response $response)
+  {    
+    $response = $response->withHeader('Content-type', 'application/json');
+    $data = json_decode($request->getBody(),true);
+    //echo $data["email"];
+    $cliente = Cliente::select("*")
+                        ->where("email","=",$data["email"])
+                        ->where("pass","=",sha1($data["pass"]))
+                        ->first();  
+    $respuesta = json_encode(array("std" => 1, "cliente" => $cliente, "msg" => "Ok"));  
+    if($cliente == null){
+      $respuesta = json_encode(array('cliente' => null, "std" => 0, "msg" => "error"));
+      $response = $response->withStatus(404);
+    }
+    $response->getBody()->write($respuesta);
+    return $response;
+  
+  }
+
 }

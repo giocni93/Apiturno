@@ -2,6 +2,13 @@
   //VARIABLES GLOBALES
   $rutaServidor = "http://localhost/PROYECTOS/ProyectoSlim/BuscaloApi/";
 
+  function fechaHoraActual(){
+    $tz_object = new DateTimeZone('America/Bogota');
+    $datetime = new DateTime();
+    $datetime->setTimezone($tz_object);
+    return $datetime->format('Y-m-d h:i:s');
+  }
+
   function formatearFecha($lista){
       foreach ($lista as $item) {
           $fecha = $item['fecha'];

@@ -7,7 +7,7 @@ class TurnoControl{
   public function getTurnosEnColaByEmpleado(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $idEmpleado = $request->getAttribute("idEmpleado");
-    $data = Turno::select("turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.estadoTurno","cliente.idPush")
+    $data = Turno::select("turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush")
                     ->join("cliente","cliente.id","=","turno.idCliente")
                     ->where("turno.idEmpleado","=",$idEmpleado)
                     ->where("turno.estadoTurno","=","CONFIRMADO")
@@ -27,7 +27,7 @@ class TurnoControl{
   public function getTurnosEnEsperaByEmpleado(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $idEmpleado = $request->getAttribute("idEmpleado");
-    $data = Turno::select("turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.estadoTurno","cliente.idPush")
+    $data = Turno::select("turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush")
                     ->join("cliente","cliente.id","=","turno.idCliente")
                     ->where("turno.idEmpleado","=",$idEmpleado)
                     ->where("turno.estadoTurno","=","SOLICITADO")
@@ -47,22 +47,23 @@ class TurnoControl{
     $data = json_decode($request->getBody(),true);
     $id = $request->getAttribute("id");
     $banTerminado = false;
+
     try {
       $turno = Turno::select("*")
                       ->where("id","=",$id)
                       ->first();
       $turno->estadoTurno   =   $data['estadoTurno'];
       if($turno->estadoTurno == "TERMINADO"){
-        $turno->fechaFinal = "2016-02-12 15:27:26";
+        $turno->fechaFinal = fechaHoraActual();
         $banTerminado = true;
       }
       if($turno->estadoTurno == "ATENDIENDO"){
-        $turno->fechaInicio = "2016-02-12 15:27:26";
+        $turno->fechaInicio = fechaHoraActual();
       }
       $turno->save();
       if($banTerminado){
         //ENVIAR NOTIFICACIONES A LOS CLIENTES
-        
+
       }
       $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
       $response = $response->withStatus(200);

@@ -5,4 +5,4 @@ $app->post('/empleado', "EmpleadoControl:post");
 $app->delete('/empleado/{id}', "EmpleadoControl:delete");
 $app->put('/empleado/{id}',"EmpleadoControl;update");
 $app->post('/empleado/sesion', "EmpleadoControl:sesion");
-$app->post('/empleado/{id}/idpush', "EmpleadoControl:updatePush");
+$app->put('/empleado/{id}/idpush', "EmpleadoControl:updatePush");

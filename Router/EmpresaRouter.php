@@ -1,7 +1,7 @@
 <?php
 
 $app->post('/empresa', "EmpresaControl:post");
-$app->post('/empresa/logo',"EmpresaControl:postfoto");
+$app->put('/logoempresa/{id}', "EmpresaControl:putfotoservidor");
 $app->get('/empresa/{id}',"EmpresaControl:getId");
 $app->get('/empresa',"EmpresaControl:getAll");
 $app->get('/empresas/maxid',"EmpresaControl:maxId");

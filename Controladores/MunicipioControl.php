@@ -14,4 +14,14 @@ class MunicipiosControl{
         return $response;
     }
 
+    function getMunicipioId(Request $request, Response $response){
+    	$response = $response->withHeader('Content-type', 'application/json');
+    	$id = $request->getAttribute("id");
+	    $data = Municipio::select("*")
+	                    ->where("idDepartamento","=",$id)
+	                    ->get();
+	    $response->getBody()->write($data);
+	    return $response;
+    }
+
 }

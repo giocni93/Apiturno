@@ -20,7 +20,8 @@ class EmpresaControl{
             $empresa->telefono      =   $data['telefono'];
             $empresa->contacto      =   $data['contacto'];
             $empresa->promedio      =   $data['promedio'];
-            $empresa->estado        =   "ESPERA";
+            //$empresa->logo          =   $data['logo'];
+            $empresa->estado        =   "INACTIVO";
             $empresa->save();
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
             $response = $response->withStatus(200);
@@ -32,23 +33,17 @@ class EmpresaControl{
         return $response;
     }
 
-    function postfoto(Request $request,Response $response){
+    function putfotoservidor(Request $request,Response $response){
         $response = $response->withHeader('Content-type', 'application/json');
         $data = json_decode($request->getBody(),true);
         try{
-            $id = $data['id'];
+            $id = $request->getAttribute("id");
             $empresa = Empresa::find($id);
-            $empresa->logo = "http://".$_SERVER['HTTP_HOST'].'/Apiturno/img/logos/'.$id.".jpg";
+            $empresa->logo  =  $data['logo'];
             $empresa->save();
-            if ($request->hasFile('imagen')) {
-                $request->file('imagen')->move("../img/perfil/", $id.".jpg");
-                $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
-            }
-            /*if(move_uploaded_file($_FILE['files']['tmp_name'],"img/logos",$_FILE['files']['id'])){
-                $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
-            }*/
-            $respuesta = json_encode(array('msg' => "Error al guardar la foto", "std" => 1));
-        }catch(Exception $ex){
+            $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+            $response = $response->withStatus(200);
+        }catch(Exception $err){
             $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
             $response = $response->withStatus(404);
         }

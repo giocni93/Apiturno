@@ -1,6 +1,7 @@
 <?php
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class EmpleadoControl{
   function getAll(Request $request, Response $response) {
@@ -130,5 +131,23 @@ class EmpleadoControl{
     return $response;
   }
 
+  function getEmpleadosBySucursal(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $idSucursal = $request->getAttribute("idSucursal");
+    $query = "SELECT "
+              . "emp.id as idEmpleado,"
+              . "ser.id as idServicio,"
+              . "CONCAT(emp.nombres, ' ', emp.apellidos) AS empleado,"
+              . "ser.nombre as servicio "
+              . "FROM empleado emp "
+              . "INNER JOIN "
+              . "serviciosempleado serem ON(serem.idEmpleado = emp.id) "
+              . "INNER JOIN "
+              . "servicio ser ON(ser.id = serem.idServicio) "
+              . "WHERE emp.idSucursal = $idSucursal AND emp.estadoOnline = 'ACTIVO'";
+    $data = DB::select(DB::raw($query));
+    $response->getBody()->write(json_encode($data));
+    return $response;
+  }
 
 }

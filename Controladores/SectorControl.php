@@ -55,7 +55,6 @@ class SectorControl{
 	    return $response;
 	}
 
-
   	function postSector(Request $request, Response $response){
   		$response = $response->withHeader('Content-type', 'application/json');
         $data = json_decode($request->getBody(),true);

@@ -12,9 +12,7 @@ class SectorControl{
 	    }
 	    $response->getBody()->write($data);
 	    return $response;
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
+
 	}
 
 	function getSectorEmpresas(Request $request, Response $response)
@@ -30,9 +28,6 @@ class SectorControl{
 	    return $response;
 	}
 
-
-=======
->>>>>>> Stashed changes
   	}
   	function postSector(Request $request, Response $response){
   		$response = $response->withHeader('Content-type', 'application/json');
@@ -52,8 +47,5 @@ class SectorControl{
         $response->getBody()->write($respuesta);
         return $response;
   	}
-<<<<<<< Updated upstream
-=======
->>>>>>> origin/master
->>>>>>> Stashed changes
+
 }

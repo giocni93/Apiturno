@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e429669979097bed35d820250a598a9b",
-    "content-hash": "24cc5f766d71379779d574b06abacd63",
+    "hash": "9aa2bc6ca72e1e02b5e03fa017b33f99",
+    "content-hash": "b562d64dd65a1924fc76a567827af31b",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -159,7 +159,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v5.1.28",
+            "version": "v5.1.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -202,7 +202,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.1.28",
+            "version": "v5.1.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -244,16 +244,16 @@
         },
         {
             "name": "illuminate/database",
-            "version": "v5.1.28",
+            "version": "v5.1.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "508d4dca412f7645a4e5ae97a2ee0f3cf836550f"
+                "reference": "30866aef5b44460e3a7eee8246bfea2f0ef875a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/508d4dca412f7645a4e5ae97a2ee0f3cf836550f",
-                "reference": "508d4dca412f7645a4e5ae97a2ee0f3cf836550f",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/30866aef5b44460e3a7eee8246bfea2f0ef875a2",
+                "reference": "30866aef5b44460e3a7eee8246bfea2f0ef875a2",
                 "shasum": ""
             },
             "require": {
@@ -300,20 +300,65 @@
                 "orm",
                 "sql"
             ],
-            "time": "2015-12-30 23:14:26"
+            "time": "2016-02-17 17:29:27"
         },
         {
-            "name": "illuminate/support",
-            "version": "v5.1.28",
+            "name": "illuminate/events",
+            "version": "v5.1.30",
             "source": {
                 "type": "git",
-                "url": "https://github.com/illuminate/support.git",
-                "reference": "8d62c6e1064d3013609ccc9ab6221efd86c31403"
+                "url": "https://github.com/illuminate/events.git",
+                "reference": "34e549cd4dcccd210324ebd4ea5f530bd7c3bbb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/8d62c6e1064d3013609ccc9ab6221efd86c31403",
-                "reference": "8d62c6e1064d3013609ccc9ab6221efd86c31403",
+                "url": "https://api.github.com/repos/illuminate/events/zipball/34e549cd4dcccd210324ebd4ea5f530bd7c3bbb1",
+                "reference": "34e549cd4dcccd210324ebd4ea5f530bd7c3bbb1",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/container": "5.1.*",
+                "illuminate/contracts": "5.1.*",
+                "illuminate/support": "5.1.*",
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Events\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "The Illuminate Events package.",
+            "homepage": "http://laravel.com",
+            "time": "2015-12-30 20:19:08"
+        },
+        {
+            "name": "illuminate/support",
+            "version": "v5.1.30",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/support.git",
+                "reference": "96e4fa331ed8bad83314a6bdb26a998970a0d8c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/96e4fa331ed8bad83314a6bdb26a998970a0d8c2",
+                "reference": "96e4fa331ed8bad83314a6bdb26a998970a0d8c2",
                 "shasum": ""
             },
             "require": {
@@ -354,7 +399,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "http://laravel.com",
-            "time": "2015-12-28 21:10:29"
+            "time": "2016-02-15 19:41:59"
         },
         {
             "name": "nesbot/carbon",

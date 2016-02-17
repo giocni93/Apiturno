@@ -3,4 +3,4 @@
 
  $app->post('/sector',"SectorControl:postSector");
 
- $app->get('/sector/{id}/empresas', "SectorControl:getSectorEmpresas");
+ $app->get('/sector/{id}/posicion/{latitud}/{longitud}/empresas', "SectorControl:getSectorEmpresas");

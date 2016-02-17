@@ -35,4 +35,6 @@ return array(
     'TipoTurnoControl' => $baseDir . '/Controladores/TipoTurnoControl.php',
     'Turno' => $baseDir . '/Modelos/Turno.php',
     'TurnoControl' => $baseDir . '/Controladores/TurnoControl.php',
+    'Parametros' => $baseDir . '/Modelos/Parametros.php',
+    'ParametrosControl' => $baseDir . '/Controladores/ParametrosControl.php',
 );

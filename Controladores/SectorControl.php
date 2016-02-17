@@ -3,6 +3,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 
 class SectorControl{
+
 	function getAll(Request $request, Response $response) {
 	    $response = $response->withHeader('Content-type', 'application/json');
 	    $data = Sector::all();
@@ -11,6 +12,27 @@ class SectorControl{
 	    }
 	    $response->getBody()->write($data);
 	    return $response;
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+	}
+
+	function getSectorEmpresas(Request $request, Response $response)
+	{
+		$response = $response->withHeader('Content-type', 'application/json');
+	    $id = $request->getAttribute("id");
+	    $data = Empresa::select("empresa.*")
+	    				->join("sectorempresa","sectorempresa.idEmpresa","=","empresa.id")
+	    				->join("sector","sector.id","=","sectorempresa.idSector")
+	                    ->where("sector.id","=",$id)
+	                    ->get();
+	    $response->getBody()->write($data);
+	    return $response;
+	}
+
+
+=======
+>>>>>>> Stashed changes
   	}
   	function postSector(Request $request, Response $response){
   		$response = $response->withHeader('Content-type', 'application/json');
@@ -30,4 +52,8 @@ class SectorControl{
         $response->getBody()->write($respuesta);
         return $response;
   	}
+<<<<<<< Updated upstream
+=======
+>>>>>>> origin/master
+>>>>>>> Stashed changes
 }

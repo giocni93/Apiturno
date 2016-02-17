@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-02-2016 a las 21:47:08
+-- Tiempo de generación: 17-02-2016 a las 22:54:18
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -61,7 +61,8 @@ CREATE TABLE `cliente` (
 INSERT INTO `cliente` (`id`, `email`, `nombres`, `apellidos`, `telefono`, `pass`, `idPush`, `idFace`, `estado`) VALUES
 (1, 'prueba@gmail.com', 'Gilmar', 'Ocampo Nieves', '5841611', '1234', NULL, NULL, 'ACTIVO'),
 (2, 'cliente2@gmail.com', 'Fabio Andres', 'Rojas Gulloso', NULL, '1234', NULL, NULL, 'ACTIVO'),
-(3, 'perro@gmail.com', 'El musulman', 'Anti bombas', NULL, '1234', NULL, NULL, 'ACTIVO');
+(3, 'perro@gmail.com', 'El musulman', 'Anti bombas', NULL, '1234', NULL, NULL, 'ACTIVO'),
+(4, 'perrofabio@gmail.com', 'perro', 'fabio', '5841611', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', '01', '01', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -169,6 +170,24 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `parametros`
+--
+
+CREATE TABLE `parametros` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `diametro_busqueda` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `parametros`
+--
+
+INSERT INTO `parametros` (`id`, `diametro_busqueda`) VALUES
+(1, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `sector`
 --
 
@@ -184,7 +203,8 @@ CREATE TABLE `sector` (
 --
 
 INSERT INTO `sector` (`id`, `nombre`, `descripcion`, `estado`) VALUES
-(1, 'Lavaderos', 'Lavaderos de carros y motos', 'ACTIVO');
+(1, 'Lavaderos', 'Lavaderos de carros y motos', 'ACTIVO'),
+(2, 'Peluquerias', 'Cortes de cabello y demas', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -197,6 +217,13 @@ CREATE TABLE `sectorempresa` (
   `idSector` int(10) UNSIGNED NOT NULL,
   `idEmpresa` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `sectorempresa`
+--
+
+INSERT INTO `sectorempresa` (`id`, `idSector`, `idEmpresa`) VALUES
+(1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -217,7 +244,8 @@ CREATE TABLE `servicio` (
 --
 
 INSERT INTO `servicio` (`id`, `idEmpresa`, `nombre`, `descripcion`, `estado`) VALUES
-(1, 1, 'Lavada estandar', 'Lavada de carro sencilla', 'ACTIVO');
+(1, 1, 'Lavada estandar', 'Lavada de carro sencilla', 'ACTIVO'),
+(2, 1, 'Lavadero con mujeres encueras', NULL, 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -281,7 +309,7 @@ CREATE TABLE `sucursal` (
 --
 
 INSERT INTO `sucursal` (`id`, `idEmpresa`, `idMunicipio`, `nombre`, `direccion`, `telefono`, `latitud`, `longitud`, `promedio`, `estado`) VALUES
-(1, 1, 1, 'El centro', 'Cra 6 # 18a - 61', '5841611', '0', '0', 0, 'ACTIVO');
+(1, 1, 1, 'El centro', 'Cra 6 # 18a - 61', '5841611', '10.4762763', '-73.2590097', 0, 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -378,6 +406,12 @@ ALTER TABLE `municipio`
   ADD KEY `idDepartamento` (`idDepartamento`);
 
 --
+-- Indices de la tabla `parametros`
+--
+ALTER TABLE `parametros`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `sector`
 --
 ALTER TABLE `sector`
@@ -453,7 +487,7 @@ ALTER TABLE `calificacion`
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `departamento`
 --
@@ -480,20 +514,25 @@ ALTER TABLE `estadoturno`
 ALTER TABLE `municipio`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
+-- AUTO_INCREMENT de la tabla `parametros`
+--
+ALTER TABLE `parametros`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT de la tabla `sector`
 --
 ALTER TABLE `sector`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `sectorempresa`
 --
 ALTER TABLE `sectorempresa`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `servicio`
 --
 ALTER TABLE `servicio`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `serviciosempleado`
 --

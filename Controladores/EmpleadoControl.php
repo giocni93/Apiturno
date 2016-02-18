@@ -138,7 +138,9 @@ class EmpleadoControl{
               . "emp.id as idEmpleado,"
               . "ser.id as idServicio,"
               . "CONCAT(emp.nombres, ' ', emp.apellidos) AS empleado,"
-              . "ser.nombre as servicio "
+              . "ser.nombre as servicio, "
+              . "'' as tiempoEstimado, "
+              . "'' as turnoActual "
               . "FROM empleado emp "
               . "INNER JOIN "
               . "serviciosempleado serem ON(serem.idEmpleado = emp.id) "
@@ -146,6 +148,32 @@ class EmpleadoControl{
               . "servicio ser ON(ser.id = serem.idServicio) "
               . "WHERE emp.idSucursal = $idSucursal AND emp.estadoOnline = 'ACTIVO'";
     $data = DB::select(DB::raw($query));
+    for($i = 0; $i < count($data); $i++){
+      //CALCULAR TIEMPO
+      $query = "SELECT "
+                ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes)),'%H:%i:%s') as tiempoEstimado, "
+                ."COALESCE(turnoAct.turnoActual,0) as turnoActual "
+                ."FROM "
+                ."( "
+                ."	SELECT "
+                ."    count(t.id) as faltantes "
+                ."    FROM "
+                ."    turno as t "
+                ."    WHERE "
+                ."    t.idEmpleado = ".$data[$i]->idEmpleado." AND "
+                ."    t.idServicio = ".$data[$i]->idServicio." AND "
+                ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
+                .") as turnosFaltantes, "
+                ."(SELECT MAX(tu.turno) as turnoActual FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND tu.estadoTurno = 'ATENDIENDO') as turnoAct,"
+                ."turno "
+                ."WHERE "
+                ."idEmpleado = ".$data[$i]->idEmpleado." AND "
+                ."idServicio = ".$data[$i]->idServicio." AND "
+                ."estadoTurno = 'TERMINADO' LIMIT 1";
+        $dataTiempo = DB::select(DB::raw($query));
+        $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
+        $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
+    }
     $response->getBody()->write(json_encode($data));
     return $response;
   }

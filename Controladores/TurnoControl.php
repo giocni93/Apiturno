@@ -75,4 +75,61 @@ class TurnoControl{
     return $response;
   }
 
+  public function postTurno(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $data = json_decode($request->getBody(),true);
+    //VALIDAR SI TIENE UN TURNO EN EL SERVICIO DE LA SUCURSAL SOLICITADA
+    $turnoCliente = Turno::select("idCliente")
+                    ->where("idCliente","=",$data["idCliente"])
+                    ->where("idServicio","=",$data["idServicio"])
+                    ->where("idSucursal","=",$data["idSucursal"])
+                    ->where("estadoTurno","<>","TERMINADO")
+                    ->where("estadoTurno","<>","CANCELADO")
+                    ->first();
+    if($turnoCliente != null){
+        //CALCULAR EL SIGUIENTE TURNO
+        $turnoSiguiente = 1;
+        $con_turno = Turno::select("turno")
+                        ->where("idServicio","=",$data["idServicio"])
+                        ->where("idSucursal","=",$data["idSucursal"])
+                        ->where("estadoTurno","<>","TERMINADO")
+                        ->where("estadoTurno","<>","CANCELADO")
+                        ->orderBy('turno', 'desc')
+                        ->first();
+        if($con_turno != null){
+          $turnoSiguiente = $con_turno['turno'] + 1;
+        }
+
+        //INSERTAR TURNO
+        try{
+            $turno = new Turno;
+            $turno->idCliente   =   $data['idCliente'];
+            $turno->idEmpleado  =   $data['idEmpleado'];
+            $turno->idSucursal  =   $data['idSucursal'];
+            $turno->idServicio  =   $data['idServicio'];
+            $turno->tiempo      =   $data['tiempo'];
+            $turno->turno       =   $turnoSiguiente;
+            $turno->tipoTurno   =   $data['tipoTurno'];
+            $turno->estadoTurno =   "SOLICITADO";
+            $turno->estado      =   "ACTIVO";
+            $turno->save();
+            $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+            $response = $response->withStatus(200);
+
+            //ENVIAR NOTIFICACION AL EMPLEADO
+
+        }catch(Exception $err){
+            $respuesta = json_encode(array('msg' => "error al pedir el turno", "std" => 0,"err" => $err->getMessage()));
+            $response = $response->withStatus(404);
+        }
+
+    }else{
+      $respuesta = json_encode(array('msg' => "Ya tienes un turno activo en este servicio", "std" => 0));
+      $response = $response->withStatus(404);
+    }
+
+    $response->getBody()->write($respuesta);
+    return $response;
+  }
+
 }

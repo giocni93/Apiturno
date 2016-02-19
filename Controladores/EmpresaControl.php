@@ -78,6 +78,66 @@ class EmpresaControl{
         return $response;
     }
 
+
+    function updateempresa(Request $request,Response $response){
+        try{
+            $response = $response->withHeader('Content-type', 'application/json');
+            $data = json_decode($request->getBody(),true);
+            $id = $request->getAttribute("id");
+            $empresa = Empresa::find($id);
+            $empresa->nit           =   $data['nit'];
+            $empresa->razonSocial   =   $data['razonSocial'];
+            $empresa->email         =   $data['email'];
+            $empresa->telefono      =   $data['telefono'];
+            $empresa->contacto      =   $data['contacto'];
+            $empresa->promedio      =   $data['promedio'];
+            $empresa->save();
+            $respuesta = json_encode(array('msg' => "Actualizado correctamente", "std" => 1));
+            $response = $response->withStatus(200);
+        }catch(Exception $err){
+            $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+            $response = $response->withStatus(404);
+        }
+        $response->getBody()->write($respuesta);
+        return $response;
+    }
+
+
+    function updateempresaestado(Request $request,Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        try{
+            $id = $request->getAttribute("id");
+            $empresa = Empresa::find($id);
+            $empresa->estado   =   $data['estado'];
+            $empresa->save();
+            $respuesta = json_encode(array('msg' => "Actualizado correctamente", "std" => 1));
+            $response = $response->withStatus(200);
+        }catch(Exception $err){
+            $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+            $response = $response->withStatus(404);
+        }
+        $response->getBody()->write($respuesta);
+        return $response;
+    }
+
+    function updateempresaestadodesactivar(Request $request,Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        try{
+            $id = $request->getAttribute("id");
+            $empresa = Empresa::find($id);
+            $empresa->estado   =   $data['estado'];
+            $empresa->save();
+            $respuesta = json_encode(array('msg' => "Actualizado correctamente", "std" => 1));
+            $response = $response->withStatus(200);
+        }catch(Exception $err){
+            $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+            $response = $response->withStatus(404);
+        }
+        $response->getBody()->write($respuesta);
+        return $response;
+    }
     
 
 }

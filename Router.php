@@ -14,3 +14,8 @@
   include_once 'Router/SucursalRouter.php';
   include_once 'Router/TipoTurnoRouter.php';
   include_once 'Router/TurnoRouter.php';
+  include_once 'Router/AdministradorRouter.php';
+  include_once 'Router/PerfilRouter.php';
+  include_once 'Router/PerfilpermisosRouter.php';
+  include_once 'Router/PermisoRouter.php';
+  include_once 'Router/ModuloRouter.php';

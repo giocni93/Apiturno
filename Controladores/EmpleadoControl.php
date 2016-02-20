@@ -143,9 +143,7 @@ class EmpleadoControl{
               . "'' as turnoActual "
               . "FROM empleado emp "
               . "INNER JOIN "
-              . "serviciosempleado serem ON(serem.idEmpleado = emp.id) "
-              . "INNER JOIN "
-              . "servicio ser ON(ser.id = serem.idServicio) "
+              . "servicio ser ON(ser.id = emp.idServicio) "
               . "WHERE emp.idSucursal = $idSucursal AND emp.estadoOnline = 'ACTIVO'";
     $data = DB::select(DB::raw($query));
     for($i = 0; $i < count($data); $i++){

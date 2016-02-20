@@ -20,7 +20,7 @@ class EmpresaControl{
             $empresa->telefono      =   $data['telefono'];
             $empresa->contacto      =   $data['contacto'];
             $empresa->promedio      =   $data['promedio'];
-            //$empresa->logo          =   $data['logo'];
+            $empresa->pass          =   sha1($data['pass']);
             $empresa->estado        =   "INACTIVO";
             $empresa->save();
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));

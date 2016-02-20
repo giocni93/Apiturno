@@ -6,6 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Administrador' => $baseDir . '/Modelos/Administrador.php',
+    'AdministradorControl' => $baseDir . '/Controladores/AdministradorControl.php',
     'Calificacion' => $baseDir . '/Modelos/Calificacion.php',
     'CalificacionControl' => $baseDir . '/Controladores/CalificacionControl.php',
     'Cliente' => $baseDir . '/Modelos/Cliente.php',
@@ -19,8 +21,18 @@ return array(
     'EmpresaControl' => $baseDir . '/Controladores/EmpresaControl.php',
     'EstadoTurno' => $baseDir . '/Modelos/EstadoTurno.php',
     'EstadoTurnoControl' => $baseDir . '/Controladores/EstadoTurnoControl.php',
+    'Modulo' => $baseDir . '/Modelos/Modulo.php',
+    'ModuloControl' => $baseDir . '/Controladores/ModuloControl.php',
     'Municipio' => $baseDir . '/Modelos/Municipio.php',
     'MunicipiosControl' => $baseDir . '/Controladores/MunicipioControl.php',
+    'Parametros' => $baseDir . '/Modelos/Parametros.php',
+    'ParametrosControl' => $baseDir . '/Controladores/ParametrosControl.php',
+    'Perfil' => $baseDir . '/Modelos/Perfil.php',
+    'PerfilControl' => $baseDir . '/Controladores/PerfilControl.php',
+    'Perfilpermisos' => $baseDir . '/Modelos/Perfilpermisos.php',
+    'PerfilpermisosControl' => $baseDir . '/Controladores/PerfilpermisosControl.php',
+    'Permiso' => $baseDir . '/Modelos/Permiso.php',
+    'PermisoControl' => $baseDir . '/Controladores/PermisoControl.php',
     'Sector' => $baseDir . '/Modelos/Sector.php',
     'SectorControl' => $baseDir . '/Controladores/SectorControl.php',
     'Servicio' => $baseDir . '/Modelos/Servicio.php',
@@ -35,6 +47,4 @@ return array(
     'TipoTurnoControl' => $baseDir . '/Controladores/TipoTurnoControl.php',
     'Turno' => $baseDir . '/Modelos/Turno.php',
     'TurnoControl' => $baseDir . '/Controladores/TurnoControl.php',
-    'Parametros' => $baseDir . '/Modelos/Parametros.php',
-    'ParametrosControl' => $baseDir . '/Controladores/ParametrosControl.php',
 );

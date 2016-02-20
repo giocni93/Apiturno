@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-02-2016 a las 22:54:18
+-- Tiempo de generación: 20-02-2016 a las 15:21:44
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -92,6 +92,7 @@ INSERT INTO `departamento` (`id`, `nombre`, `estado`) VALUES
 CREATE TABLE `empleado` (
   `id` int(10) UNSIGNED NOT NULL,
   `idSucursal` int(10) UNSIGNED NOT NULL,
+  `idServicio` int(10) UNSIGNED NOT NULL,
   `identificacion` varchar(12) NOT NULL,
   `email` varchar(30) DEFAULT NULL,
   `nombres` varchar(30) NOT NULL,
@@ -107,8 +108,8 @@ CREATE TABLE `empleado` (
 -- Volcado de datos para la tabla `empleado`
 --
 
-INSERT INTO `empleado` (`id`, `idSucursal`, `identificacion`, `email`, `nombres`, `apellidos`, `telefono`, `pass`, `idPush`, `estado`, `estadoOnline`) VALUES
-(1, 1, '1065650321', 'giocni@gmail.com', 'Gilmar', 'Ocampo Nieves', '3004061405', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'APA91bEiXMbd-69LQSFm3bMJMnC7ZE1nWmGAT9j3cli9lgbkbZfpzMLSEW95wwPtOjXcheuFxSfBN2lwRqgTn4E3Ky0g7wp996ts', 'ACTIVO', 'INACTIVO');
+INSERT INTO `empleado` (`id`, `idSucursal`, `idServicio`, `identificacion`, `email`, `nombres`, `apellidos`, `telefono`, `pass`, `idPush`, `estado`, `estadoOnline`) VALUES
+(1, 1, 1, '1065650321', 'giocni@gmail.com', 'Gilmar', 'Ocampo Nieves', '3004061405', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'APA91bEiXMbd-69LQSFm3bMJMnC7ZE1nWmGAT9j3cli9lgbkbZfpzMLSEW95wwPtOjXcheuFxSfBN2lwRqgTn4E3Ky0g7wp996ts', 'ACTIVO', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -245,26 +246,9 @@ CREATE TABLE `servicio` (
 
 INSERT INTO `servicio` (`id`, `idEmpresa`, `nombre`, `descripcion`, `estado`) VALUES
 (1, 1, 'Lavada estandar', 'Lavada de carro sencilla', 'ACTIVO'),
-(2, 1, 'Lavadero con mujeres encueras', NULL, 'ACTIVO');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `serviciosempleado`
---
-
-CREATE TABLE `serviciosempleado` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `idEmpleado` int(10) UNSIGNED NOT NULL,
-  `idServicio` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `serviciosempleado`
---
-
-INSERT INTO `serviciosempleado` (`id`, `idEmpleado`, `idServicio`) VALUES
-(1, 1, 1);
+(2, 1, 'Lavadero con mujeres encueras', NULL, 'ACTIVO'),
+(3, 1, 'otro servicio', 'jajaja', 'ACTIVO'),
+(4, 1, 'el servicio del perro', 'perrrrrro', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -350,9 +334,10 @@ CREATE TABLE `turno` (
 --
 
 INSERT INTO `turno` (`id`, `idCliente`, `idServicio`, `idSucursal`, `idEmpleado`, `fechaSolicitud`, `fechaInicio`, `fechaFinal`, `tiempo`, `turno`, `tipoTurno`, `estadoTurno`, `estado`) VALUES
-(1, 1, 1, 1, 1, '2016-02-12 15:27:26', '2016-02-13 01:45:19', '2016-02-13 01:45:34', 0, 1, 'NORMAL', 'SOLICITADO', 'ACTIVO'),
+(1, 1, 1, 1, 1, '2016-02-12 15:27:26', '2016-02-13 01:45:19', '2016-02-13 01:51:34', 0, 1, 'NORMAL', 'TERMINADO', 'ACTIVO'),
 (3, 2, 1, 1, 1, '2016-02-13 10:27:00', '2016-02-13 01:45:37', '2016-02-13 12:14:22', 0, 2, 'NORMAL', 'CONFIRMADO', 'ACTIVO'),
-(4, 3, 1, 1, 1, '2016-02-13 10:27:27', '2016-02-13 18:04:05', '2016-02-13 18:05:54', 0, 3, 'NORMAL', 'SOLICITADO', 'ACTIVO');
+(4, 3, 1, 1, 1, '2016-02-13 10:27:27', '2016-02-13 18:04:05', '2016-02-13 18:05:54', 0, 3, 'NORMAL', 'SOLICITADO', 'ACTIVO'),
+(5, 1, 1, 1, 1, '2016-02-18 15:05:07', NULL, NULL, 10, 4, 'NORMAL', 'SOLICITADO', 'ACTIVO');
 
 --
 -- Índices para tablas volcadas
@@ -384,7 +369,8 @@ ALTER TABLE `departamento`
 ALTER TABLE `empleado`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `identificacion` (`identificacion`),
-  ADD KEY `idSucursal` (`idSucursal`);
+  ADD KEY `idSucursal` (`idSucursal`),
+  ADD KEY `idServicio` (`idServicio`);
 
 --
 -- Indices de la tabla `empresa`
@@ -431,14 +417,6 @@ ALTER TABLE `sectorempresa`
 ALTER TABLE `servicio`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idSucursal_2` (`idEmpresa`);
-
---
--- Indices de la tabla `serviciosempleado`
---
-ALTER TABLE `serviciosempleado`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `idUsuario` (`idEmpleado`),
-  ADD KEY `idServicio` (`idServicio`);
 
 --
 -- Indices de la tabla `serviciossucursal`
@@ -532,12 +510,7 @@ ALTER TABLE `sectorempresa`
 -- AUTO_INCREMENT de la tabla `servicio`
 --
 ALTER TABLE `servicio`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT de la tabla `serviciosempleado`
---
-ALTER TABLE `serviciosempleado`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `serviciossucursal`
 --
@@ -557,7 +530,7 @@ ALTER TABLE `tipoturno`
 -- AUTO_INCREMENT de la tabla `turno`
 --
 ALTER TABLE `turno`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- Restricciones para tablas volcadas
 --
@@ -572,7 +545,8 @@ ALTER TABLE `calificacion`
 -- Filtros para la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`idSucursal`) REFERENCES `sucursal` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`idSucursal`) REFERENCES `sucursal` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `empleado_ibfk_2` FOREIGN KEY (`idServicio`) REFERENCES `servicio` (`id`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `municipio`
@@ -592,13 +566,6 @@ ALTER TABLE `sectorempresa`
 --
 ALTER TABLE `servicio`
   ADD CONSTRAINT `servicio_ibfk_2` FOREIGN KEY (`idEmpresa`) REFERENCES `empresa` (`id`) ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `serviciosempleado`
---
-ALTER TABLE `serviciosempleado`
-  ADD CONSTRAINT `serviciosempleado_ibfk_1` FOREIGN KEY (`idEmpleado`) REFERENCES `empleado` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `serviciosempleado_ibfk_2` FOREIGN KEY (`idServicio`) REFERENCES `servicio` (`id`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `serviciossucursal`

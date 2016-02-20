@@ -35,8 +35,8 @@ class SectorControl{
 								. "INNER JOIN "
 								. "empresa em ON (em.id = su.idEmpresa) "
 								. "INNER JOIN "
-								. "sectorempresa secemp ON (secemp.idEmpresa = em.id) "
-                . "WHERE su.Estado = 'ACTIVO' AND em.estado = 'ACTIVO' AND secemp.idSector = $idSector "
+								. "sectorempresa secemp ON (secemp.idEmpresa = em.id && secemp.idSector =  $idSector) "
+                . "WHERE su.Estado = 'ACTIVO' AND em.estado = 'ACTIVO' "
 								. "HAVING distancia < $km ORDER BY distancia ASC";
       $data = DB::select(DB::raw($query));
 			for($i = 0; $i < count($data); $i++){

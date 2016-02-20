@@ -86,7 +86,7 @@ class TurnoControl{
                     ->where("estadoTurno","<>","TERMINADO")
                     ->where("estadoTurno","<>","CANCELADO")
                     ->first();
-    if($turnoCliente != null){
+    if($turnoCliente == null){
         //CALCULAR EL SIGUIENTE TURNO
         $turnoSiguiente = 1;
         $con_turno = Turno::select("turno")

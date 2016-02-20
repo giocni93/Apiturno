@@ -170,6 +170,9 @@ class EmpleadoControl{
                 ."estadoTurno = 'TERMINADO' LIMIT 1";
         $dataTiempo = DB::select(DB::raw($query));
         $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
+        if($data[$i]->tiempoEstimado == null){
+          $data[$i]->tiempoEstimado = "00:00:00";
+        }
         $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
     }
     $response->getBody()->write(json_encode($data));

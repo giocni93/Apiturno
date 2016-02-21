@@ -95,6 +95,27 @@ class EmpleadoControl{
     return $response;
   }
 
+  public function updatePass(Request $request, Response $response)
+  {
+    try {
+      $response = $response->withHeader('Content-type', 'application/json');
+      $data = json_decode($request->getBody(),true);
+      $id = $request->getAttribute("id");
+      $empleado = Empleado::select("*")
+                          ->where("id","=",$id)
+                          ->first();
+      $empleado->pass   =   sha1($data['pass']);
+      $empleado->save();
+      $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
+      $response = $response->withStatus(200);
+    } catch (Exception $err) {
+      $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+      $response = $response->withStatus(404);
+    }
+    $response->getBody()->write($respuesta);
+    return $response;
+  }
+
   function sesion(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $data = json_decode($request->getBody(),true);

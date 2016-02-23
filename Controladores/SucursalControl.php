@@ -16,11 +16,21 @@ class SucursalControl{
 	        $sucursal->direccion   =  $data['direccion'];
 	        $sucursal->telefono    =  $data['telefono'];
 	        $sucursal->latitud     =  $data['latitud'];
-	        $sucursal->longitud   =   $data['longitud'];
+	        $sucursal->longitud    =  $data['longitud'];
 	        $sucursal->promedio    =  $data['promedio'];
+	        $sucursal->usuario	   =  $data['usuario'];
+	        $sucursal->pass		   =  sha1($data['pass']);	
 	        $sucursal->estado      =  "ACTIVO";
 	        $sucursal->save();
-	        //$val = $servicio->id;
+	        $val = $sucursal->id;
+
+	        for($i=0; $i< count($data['servicios']);$i++){
+	    		$servicio = new ServiciosSucursal;
+	    		$servicio->idServicio =	 $data['servicios'][$i]['id'];
+	    		$servicio->idSucursal =  $val;
+	    		$servicio->save();
+	    	}
+
 	        $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
 	        $response = $response->withStatus(200);
 	    }catch(Exception $err){
@@ -31,6 +41,9 @@ class SucursalControl{
 	    return $response;
 	}
 
+	
+	
+
     function Versucursales(Request $request, Response $response){
         $response = $response->withHeader('Content-type', 'application/json');
 	    $data = Sucursal::select('*')->get();
@@ -40,6 +53,14 @@ class SucursalControl{
 	    $response->getBody()->write($data);
 	    return $response;
     }
+
+    function maxIdsucursal(Request $request,Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = Sucursal::select("")
+                        ->max('id');
+        $response->getBody()->write($data);
+        return $response;
+	}
 
 		function getSucursalesByPosicion(Request $request, Response $response){
 				$response = $response->withHeader('Content-type', 'application/json');
@@ -59,5 +80,42 @@ class SucursalControl{
 		    $response->getBody()->write(json_encode($data));
 		    return $response;
 		}
+
+	function getsucursalxempresa(Request $request, Response $response){
+		$response = $response->withHeader('Content-type', 'application/json');
+	    $id = $request->getAttribute("id");
+	    $data = Sucursal::select("*")
+	                    ->where("idEmpresa","=",$id)
+	                    ->get();
+	    $response->getBody()->write($data);
+	    return $response;
+	}
+
+	function putsucursal(Request $request, Response $response){
+
+		$response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        try{
+            $id = $request->getAttribute("id");
+            $sucursal = Sucursal::find($id);
+            $sucursal->nombre   	 	=   $data['nombre'];
+            $sucursal->direccion    	=   $data['direccion'];
+            $sucursal->telefono    		=   $data['telefono'];
+            $sucursal->latitud     		=  	$data['latitud'];
+	        $sucursal->longitud    		=  	$data['longitud'];
+	        $sucursal->promedio    		=  	$data['promedio'];
+	        $sucursal->usuario	   		=  	$data['usuario'];
+            $sucursal->save();
+            $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
+      		$response = $response->withStatus(200);
+		} catch (Exception $err) {
+	      $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+	      $response = $response->withStatus(404);
+	    }
+	    $response->getBody()->write($respuesta);
+	    return $response;
+
+	}
+		
 
 }

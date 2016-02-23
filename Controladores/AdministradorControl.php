@@ -55,13 +55,35 @@ class AdministradorControl{
 	    return $response;
   	}
 
+  	function postadminsucursal(Request $request, Response $response){
+	    $response = $response->withHeader('Content-type', 'application/json');
+	    $data = json_decode($request->getBody(),true);
+
+	    try{
+	        $administrador = new Administrador;
+	        $administrador->nombres       	=   $data['nombres'];
+	        $administrador->identificacion  = 	$data['identificacion'];
+	        $administrador->pass            =   sha1($data['pass']);
+	        $administrador->estado          =   "ACTIVO";
+	        $administrador->idperfil		=  	$data['idperfil'];
+	        $administrador->save();
+	        $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+	        $response = $response->withStatus(200);
+	    }catch(Exception $err){
+	        $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+	        $response = $response->withStatus(404);
+	    }
+	    $response->getBody()->write($respuesta);
+	    return $response;
+  	}
+
   	function sesion(Request $request, Response $response){
 	    $response = $response->withHeader('Content-type', 'application/json');
 	    $data = json_decode($request->getBody(),true);
 	    $data = Administrador::select("administrador.id","administrador.nombres","administrador.apellidos","administrador.identificacion","administrador.estado","perfil.nombre as nombreperfil","perfil.id as idperfil","administrador.correo","administrador.idempresa")
 	    				->join("perfil","perfil.id","=","administrador.idperfil")
 	    				->join("perfilpermisos","perfilpermisos.idperfil","=","perfil.id")
-	                    ->where("pass","=",sha1($data['pass']))
+	    				->where("pass","=",sha1($data['pass']))
 	                    ->where("identificacion","=",$data['identificacion'])
 	                    ->where("administrador.estado","=","ACTIVO")
 	                    ->first();

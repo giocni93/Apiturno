@@ -17,7 +17,7 @@ class PerfilpermisosControl{
   	function getId(Request $request, Response $response){
   		$response = $response->withHeader('Content-type', 'application/json');
   		$id = $request->getAttribute("id");
-  		$data = Perfilpermisos::select('idpermiso')
+  		$data = Perfilpermisos::select('idpermiso','idmodulo')
   								->where('idperfil','=',$id)
   								->get();
   		$response->getBody()->write($data);

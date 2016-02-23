@@ -40,7 +40,7 @@ return array(
     'ServiciosEmpleado' => $baseDir . '/Modelos/ServiciosEmpleado.php',
     'ServiciosEmpleadoControl' => $baseDir . '/Controladores/ServiciosEmpleadoControl.php',
     'ServiciosSucursal' => $baseDir . '/Modelos/ServiciosSucursal.php',
-    'ServiciosSucursalControl' => $baseDir . '/Controladores/ServiciosSucursal.php',
+    'ServiciosSucursalControl' => $baseDir . '/Controladores/ServiciosSucursalControl.php',
     'Sucursal' => $baseDir . '/Modelos/Sucursal.php',
     'SucursalControl' => $baseDir . '/Controladores/SucursalControl.php',
     'TipoTurno' => $baseDir . '/Modelos/TipoTurno.php',

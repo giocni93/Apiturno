@@ -3,6 +3,6 @@
 
 	class ServiciosSucursal extends Model{
 	    protected $table = "serviciossucursal";
-			protected $primaryKey = "id";
+		protected $primaryKey = "id";
 	    public $timestamps = false;
 	}

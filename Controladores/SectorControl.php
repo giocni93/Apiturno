@@ -73,5 +73,61 @@ class SectorControl{
         $response->getBody()->write($respuesta);
         return $response;
   	}
+        
+        function updatesector(Request $request, Response $response){
+  		$response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        try{
+            $id = $request->getAttribute("id");
+            $sector = Sector::find($id);
+            $sector->nombre   	 	=   $data['nombre'];
+            $sector->descripcion   =   $data['descripcion'];
+            $sector->save();
+            $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
+      		$response = $response->withStatus(200);
+		} catch (Exception $err) {
+	      $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+	      $response = $response->withStatus(404);
+	    }
+	    $response->getBody()->write($respuesta);
+	    return $response;
+  	}
+
+  	function updateestado(Request $request, Response $response){
+  		$response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        try{
+            $id = $request->getAttribute("id");
+            $sector = Sector::find($id);
+            $sector->estado   	 =   $data['estado'];
+            $sector->save();
+            $respuesta = json_encode(array('msg' => "Activado correctamente", "std" => 1));
+      		$response = $response->withStatus(200);
+		} catch (Exception $err) {
+	      $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+	      $response = $response->withStatus(404);
+	    }
+		    $response->getBody()->write($respuesta);
+		    return $response;
+  	}
+
+  	function updateestadodesactivar(Request $request, Response $response){
+  		$response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        try{
+            $id = $request->getAttribute("id");
+            $sector = Sector::find($id);
+            $sector->estado   	 =   $data['estado'];
+            $sector->save();
+            $respuesta = json_encode(array('msg' => "Desactivado correctamente", "std" => 1));
+      		$response = $response->withStatus(200);
+		} catch (Exception $err) {
+	      $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+	      $response = $response->withStatus(404);
+	    }
+	    $response->getBody()->write($respuesta);
+	    return $response;
+  	}
+        
 
 }

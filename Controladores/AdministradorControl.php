@@ -58,14 +58,16 @@ class AdministradorControl{
   	function postadminsucursal(Request $request, Response $response){
 	    $response = $response->withHeader('Content-type', 'application/json');
 	    $data = json_decode($request->getBody(),true);
-
 	    try{
 	        $administrador = new Administrador;
 	        $administrador->nombres       	=   $data['nombres'];
+	        $administrador->apellidos		= 	$data['apellidos'];
 	        $administrador->identificacion  = 	$data['identificacion'];
 	        $administrador->pass            =   sha1($data['pass']);
+	        $administrador->telefono		= 	$data['telefono'];
 	        $administrador->estado          =   "ACTIVO";
 	        $administrador->idperfil		=  	$data['idperfil'];
+	        $administrador->idSucursal		= 	$data['idSucursal'];
 	        $administrador->save();
 	        $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
 	        $response = $response->withStatus(200);
@@ -139,6 +141,16 @@ class AdministradorControl{
         return $response;
     }
 
+    function getIdAdmin(Request $request,Response $response){
+    	$response = $response->withHeader('Content-type', 'application/json');
+	    $id = $request->getAttribute("id");
+	    $data = Administrador::select("*")
+	                    ->where("idSucursal","=",$id)
+	                    ->get();
+	    $response->getBody()->write($data);
+	    return $response;
+    }
 
+    
 
 }

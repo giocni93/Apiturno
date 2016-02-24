@@ -41,7 +41,15 @@ class SucursalControl{
 	    return $response;
 	}
 
-	
+	function getAllsucursalesId(Request $request, Response $response) {
+	    $response = $response->withHeader('Content-type', 'application/json');
+	    $id = $request->getAttribute("id");
+	    $data = Sucursal::select("*")
+	                    ->where("idEmpresa","=",$id)
+	                    ->get();
+	    $response->getBody()->write($data);
+	    return $response;
+  	}
 	
 
     function Versucursales(Request $request, Response $response){
@@ -106,6 +114,18 @@ class SucursalControl{
 	        $sucursal->promedio    		=  	$data['promedio'];
 	        $sucursal->usuario	   		=  	$data['usuario'];
             $sucursal->save();
+
+            $administrador = Administrador::select("*")
+                          ->where("idSucursal","=",$id)
+                          ->first();
+            $administrador->nombres       	=   $data['nombres'];
+	        $administrador->apellidos		= 	$data['apellidos'];
+	        $administrador->identificacion  = 	$data['usuario'];
+	        //$administrador->pass            =   sha1($data['pass']);
+	        $administrador->telefono		= 	$data['telefono'];
+	        $administrador->estado          =   "ACTIVO";
+	        $administrador->save();
+
             $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
       		$response = $response->withStatus(200);
 		} catch (Exception $err) {
@@ -117,5 +137,53 @@ class SucursalControl{
 
 	}
 		
+
+	function updateestado(Request $request, Response $response){
+  		$response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        try{
+            $id = $request->getAttribute("id");
+            $sector = Sucursal::find($id);
+            $sector->estado   	 =   $data['estado'];
+            $sector->save();
+
+            $admin = Administrador::select("*")
+                          ->where("idSucursal","=",$id)
+                          ->first();
+            $admin->estado   =   $data['estado'];
+            $admin->save();
+
+            $respuesta = json_encode(array('msg' => "Activado correctamente", "std" => 1));
+      		$response = $response->withStatus(200);
+		} catch (Exception $err) {
+	      	$respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+	      	$response = $response->withStatus(404);
+	    }
+		    $response->getBody()->write($respuesta);
+		    return $response;
+  	}
+
+  	function updateestadodesactivar(Request $request, Response $response){
+  		$response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        try{
+            $id = $request->getAttribute("id");
+            $sector = Sucursal::find($id);
+            $sector->estado   	 =   $data['estado'];
+            $sector->save();
+            $admin = Administrador::select("*")
+                          ->where("idSucursal","=",$id)
+                          ->first();
+            $admin->estado   =   $data['estado'];
+            $admin->save();
+            $respuesta = json_encode(array('msg' => "Desactivado correctamente", "std" => 1));
+      		$response = $response->withStatus(200);
+		} catch (Exception $err) {
+	      $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+	      $response = $response->withStatus(404);
+	    }
+	    $response->getBody()->write($respuesta);
+	    return $response;
+  	}
 
 }

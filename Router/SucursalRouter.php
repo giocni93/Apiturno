@@ -6,3 +6,9 @@
 		$app->get('/empresa/{idEmpresa}/posicion/{latitud}/{longitud}/sucursal', "SucursalControl:getSucursalesByPosicion");
 
 	$app->get('/sucursal/empresas/{id}',"SucursalControl:getsucursalxempresa");
+
+	$app->put('/sucursal/estado/{id}',"SucursalControl:updateestado");
+
+	$app->put('/sucursal/estado/desactivar/{id}',"SucursalControl:updateestadodesactivar");
+
+	$app->get('/sucursal/idempresa/{id}', "SucursalControl:getAllsucursalesId");

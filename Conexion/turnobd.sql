@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-02-2016 a las 21:57:53
+-- Tiempo de generación: 25-02-2016 a las 22:22:17
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -21,44 +21,6 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `turnobd` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `turnobd`;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `administrador`
---
-
-CREATE TABLE `administrador` (
-  `id` int(11) NOT NULL,
-  `nombres` varchar(40) NOT NULL,
-  `apellidos` varchar(40) DEFAULT NULL,
-  `identificacion` varchar(30) DEFAULT NULL,
-  `telefono` varchar(12) DEFAULT NULL,
-  `pass` varchar(50) NOT NULL,
-  `estado` enum('INACTIVO','ACTIVO') NOT NULL,
-  `idperfil` int(11) NOT NULL,
-  `correo` varchar(40) DEFAULT NULL,
-  `idempresa` int(10) UNSIGNED DEFAULT NULL,
-  `idSucursal` int(10) UNSIGNED DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `administrador`
---
-
-INSERT INTO `administrador` (`id`, `nombres`, `apellidos`, `identificacion`, `telefono`, `pass`, `estado`, `idperfil`, `correo`, `idempresa`, `idSucursal`) VALUES
-(5, 'Elsy Maria', 'Gomez Gomez', '1065622719', NULL, '5dd634422d39c48f29b9f2b50aa068d51aef2ea7', 'ACTIVO', 1, 'fandresroja@gmail.com', NULL, NULL),
-(8, 'Sena', NULL, '10737', NULL, '7cf79aafacbeef95b36a35b9c9aef1183f592db3', 'ACTIVO', 3, 'sena.edu.co', 26, NULL),
-(10, 'Sena centrak', NULL, '123', NULL, '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'ACTIVO', 4, NULL, NULL, 13),
-(11, 'da', NULL, 're', NULL, '3b1466f04e3448fe98af577b5498db00765a9db1', 'ACTIVO', 4, NULL, NULL, NULL),
-(12, 'rew', NULL, 'rew', NULL, '52c0e20be5c4108d95c609f421dbce736331d073', 'ACTIVO', 4, NULL, NULL, NULL),
-(14, 'rw', NULL, 'tret', NULL, '33e9505d12942e8259a3c96fb6f88ed325b95797', 'ACTIVO', 4, NULL, NULL, NULL),
-(15, 're', NULL, 'rw', NULL, '3b1466f04e3448fe98af577b5498db00765a9db1', 'ACTIVO', 4, NULL, NULL, NULL),
-(17, 'rew', NULL, 'rwe', NULL, 'c387c982a132d05cbd5f88840aef2c8157740049', 'ACTIVO', 4, NULL, NULL, NULL),
-(21, 'Sena agropecuario', NULL, 'agropecuario', NULL, 'b4fd0d5b4ef1d0855f94ea10dd482b85281f9d83', 'ACTIVO', 4, NULL, NULL, NULL),
-(22, 'Sena informatico', NULL, 'informatico', NULL, 'fd760a08e5f13d22e23b58f6b156460f8605d087', 'ACTIVO', 4, NULL, NULL, NULL),
-(23, 'Sena salud', NULL, 'salud', NULL, '682f7e1a5938305a39470d19970604b33753daf7', 'ACTIVO', 4, NULL, NULL, NULL),
-(24, 'fsdf', NULL, 'sad', NULL, 'bebabb62faccb84a5df481779a4e9f0603fce05c', 'ACTIVO', 4, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -150,7 +112,9 @@ INSERT INTO `departamento` (`id`, `nombre`, `estado`) VALUES
 
 CREATE TABLE `empleado` (
   `id` int(10) UNSIGNED NOT NULL,
-  `idSucursal` int(10) UNSIGNED NOT NULL,
+  `idSucursal` int(10) UNSIGNED DEFAULT NULL,
+  `idEmpresa` int(10) UNSIGNED DEFAULT NULL,
+  `idPerfil` int(11) NOT NULL,
   `identificacion` varchar(12) NOT NULL,
   `email` varchar(30) DEFAULT NULL,
   `nombres` varchar(30) NOT NULL,
@@ -166,8 +130,8 @@ CREATE TABLE `empleado` (
 -- Volcado de datos para la tabla `empleado`
 --
 
-INSERT INTO `empleado` (`id`, `idSucursal`, `identificacion`, `email`, `nombres`, `apellidos`, `telefono`, `pass`, `idPush`, `estado`, `estadoOnline`) VALUES
-(1, 13, '1065650321', 'giocni@gmail.com', 'Gilmar', 'Ocampo nieves', NULL, '40bd001563085fc35165329ea1ff5c5ecbdbbeef', NULL, 'ACTIVO', 'ACTIVO');
+INSERT INTO `empleado` (`id`, `idSucursal`, `idEmpresa`, `idPerfil`, `identificacion`, `email`, `nombres`, `apellidos`, `telefono`, `pass`, `idPush`, `estado`, `estadoOnline`) VALUES
+(1, 13, NULL, 3, '1065650321', 'giocni@gmail.com', 'Gilmar', 'Ocampo nieves', NULL, '40bd001563085fc35165329ea1ff5c5ecbdbbeef', NULL, 'ACTIVO', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -1624,16 +1588,6 @@ CREATE TABLE `turno` (
 --
 
 --
--- Indices de la tabla `administrador`
---
-ALTER TABLE `administrador`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `identificacion` (`identificacion`),
-  ADD KEY `idperfil` (`idperfil`),
-  ADD KEY `idempresa` (`idempresa`),
-  ADD KEY `idSucursal` (`idSucursal`);
-
---
 -- Indices de la tabla `calificacion`
 --
 ALTER TABLE `calificacion`
@@ -1659,7 +1613,9 @@ ALTER TABLE `departamento`
 ALTER TABLE `empleado`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `identificacion` (`identificacion`),
-  ADD KEY `idSucursal` (`idSucursal`);
+  ADD KEY `idSucursal` (`idSucursal`),
+  ADD KEY `idEmpresa` (`idEmpresa`),
+  ADD KEY `idPerfil` (`idPerfil`);
 
 --
 -- Indices de la tabla `empresa`
@@ -1783,11 +1739,6 @@ ALTER TABLE `turno`
 --
 
 --
--- AUTO_INCREMENT de la tabla `administrador`
---
-ALTER TABLE `administrador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
---
 -- AUTO_INCREMENT de la tabla `calificacion`
 --
 ALTER TABLE `calificacion`
@@ -1892,14 +1843,6 @@ ALTER TABLE `turno`
 --
 
 --
--- Filtros para la tabla `administrador`
---
-ALTER TABLE `administrador`
-  ADD CONSTRAINT `administrador_ibfk_1` FOREIGN KEY (`idperfil`) REFERENCES `perfil` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `administrador_ibfk_2` FOREIGN KEY (`idempresa`) REFERENCES `empresa` (`id`),
-  ADD CONSTRAINT `administrador_ibfk_3` FOREIGN KEY (`idSucursal`) REFERENCES `sucursal` (`id`) ON UPDATE CASCADE;
-
---
 -- Filtros para la tabla `calificacion`
 --
 ALTER TABLE `calificacion`
@@ -1909,7 +1852,9 @@ ALTER TABLE `calificacion`
 -- Filtros para la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`idSucursal`) REFERENCES `sucursal` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`idSucursal`) REFERENCES `sucursal` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `empleado_ibfk_2` FOREIGN KEY (`idEmpresa`) REFERENCES `empresa` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `empleado_ibfk_3` FOREIGN KEY (`idPerfil`) REFERENCES `perfil` (`id`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `municipio`

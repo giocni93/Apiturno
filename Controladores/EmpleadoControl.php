@@ -119,14 +119,23 @@ class EmpleadoControl{
   function sesion(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $data = json_decode($request->getBody(),true);
-    $data = Empleado::select("id","idSucursal","nombres","apellidos","email","telefono","identificacion")
+    $da = Empleado::select("id","idSucursal","nombres","apellidos","email","telefono","identificacion")
                     ->where("pass","=",sha1($data['pass']))
                     ->where("identificacion","=",$data['identificacion'])
                     ->first();
-    $respuesta = json_encode(array('empleado' => $data, "std" => 1));
-    if($data == null){
-      $respuesta = json_encode(array('empleado' => null, "std" => 0));
-      $response = $response->withStatus(404);
+
+    if($da == null){
+      $da = Administrador::select("id","idSucursal","nombres","apellidos","correo","telefono","identificacion")
+                      ->where("pass","=",sha1($data['pass']))
+                      ->where("identificacion","=",$data['identificacion'])
+                      ->first();
+      if($da == null){
+        $respuesta = json_encode(array('empleado' => null, "std" => 0));
+        $response = $response->withStatus(404);
+      }else{
+        $respuesta = json_encode(array('administrador' => $da, "std" => 2));
+      }
+    }else{
     }
     $response->getBody()->write($respuesta);
     return $response;
@@ -164,14 +173,16 @@ class EmpleadoControl{
               . "'' as turnoActual "
               . "FROM empleado emp "
               . "INNER JOIN "
-              . "servicio ser ON(ser.id = emp.idServicio) "
+              . "serviciosempleado seremp ON(seremp.idEmpleado = emp.id) "
+              . "INNER JOIN "
+              . "servicio ser ON(ser.id = seremp.idServicio) "
               . "WHERE emp.idSucursal = $idSucursal AND emp.estadoOnline = 'ACTIVO'";
     $data = DB::select(DB::raw($query));
     for($i = 0; $i < count($data); $i++){
       //CALCULAR TIEMPO
       $query = "SELECT "
                 ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes)),'%H:%i:%s') as tiempoEstimado, "
-                ."COALESCE(turnoAct.turnoActual,0) as turnoActual "
+                ."COALESCE(turnoAct.turnoActual,1) as turnoActual "
                 ."FROM "
                 ."( "
                 ."	SELECT "

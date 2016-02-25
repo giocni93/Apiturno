@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-02-2016 a las 20:43:22
+-- Tiempo de generación: 25-02-2016 a las 21:57:53
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -49,7 +49,7 @@ CREATE TABLE `administrador` (
 INSERT INTO `administrador` (`id`, `nombres`, `apellidos`, `identificacion`, `telefono`, `pass`, `estado`, `idperfil`, `correo`, `idempresa`, `idSucursal`) VALUES
 (5, 'Elsy Maria', 'Gomez Gomez', '1065622719', NULL, '5dd634422d39c48f29b9f2b50aa068d51aef2ea7', 'ACTIVO', 1, 'fandresroja@gmail.com', NULL, NULL),
 (8, 'Sena', NULL, '10737', NULL, '7cf79aafacbeef95b36a35b9c9aef1183f592db3', 'ACTIVO', 3, 'sena.edu.co', 26, NULL),
-(10, 'Sena centrak', NULL, '123', NULL, '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'ACTIVO', 4, NULL, NULL, 13),
+(10, 'Sena centrak', NULL, '123', NULL, '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'ACTIVO', 4, NULL, NULL, 13),
 (11, 'da', NULL, 're', NULL, '3b1466f04e3448fe98af577b5498db00765a9db1', 'ACTIVO', 4, NULL, NULL, NULL),
 (12, 'rew', NULL, 'rew', NULL, '52c0e20be5c4108d95c609f421dbce736331d073', 'ACTIVO', 4, NULL, NULL, NULL),
 (14, 'rw', NULL, 'tret', NULL, '33e9505d12942e8259a3c96fb6f88ed325b95797', 'ACTIVO', 4, NULL, NULL, NULL),
@@ -1448,6 +1448,14 @@ CREATE TABLE `sector` (
   `estado` enum('ACTIVO','INACTIVO') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `sector`
+--
+
+INSERT INTO `sector` (`id`, `nombre`, `descripcion`, `estado`) VALUES
+(1, 'Peluquerias', NULL, 'ACTIVO'),
+(2, 'Lavaderos', NULL, 'ACTIVO');
+
 -- --------------------------------------------------------
 
 --
@@ -1478,9 +1486,9 @@ CREATE TABLE `servicio` (
 --
 
 INSERT INTO `servicio` (`id`, `nombre`, `descripcion`, `estado`) VALUES
-(5, 'Agropecuario', 'Servicios agropecuario', 'ACTIVO'),
-(6, 'Informatica', 'Servicio Informatico', 'ACTIVO'),
-(7, 'Salud', 'Servicio salud', 'ACTIVO');
+(5, 'Corte de cabello', 'Servicios agropecuario', 'ACTIVO'),
+(6, 'Uñas', 'Servicio Informatico', 'ACTIVO'),
+(7, 'Lavada estandar', 'Servicio salud', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -1494,6 +1502,13 @@ CREATE TABLE `serviciosempleado` (
   `idServicio` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `serviciosempleado`
+--
+
+INSERT INTO `serviciosempleado` (`id`, `idEmpleado`, `idServicio`) VALUES
+(1, 1, 5);
+
 -- --------------------------------------------------------
 
 --
@@ -1506,6 +1521,15 @@ CREATE TABLE `serviciossector` (
   `idServicio` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `serviciossector`
+--
+
+INSERT INTO `serviciossector` (`id`, `idSector`, `idServicio`) VALUES
+(1, 1, 5),
+(2, 1, 6),
+(3, 2, 7);
+
 -- --------------------------------------------------------
 
 --
@@ -1515,18 +1539,20 @@ CREATE TABLE `serviciossector` (
 CREATE TABLE `serviciossucursal` (
   `id` int(10) UNSIGNED NOT NULL,
   `idServicio` int(10) UNSIGNED NOT NULL,
-  `idSucursal` int(10) UNSIGNED NOT NULL
+  `idSucursal` int(10) UNSIGNED NOT NULL,
+  `precio` float UNSIGNED DEFAULT NULL,
+  `precioVIP` float UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `serviciossucursal`
 --
 
-INSERT INTO `serviciossucursal` (`id`, `idServicio`, `idSucursal`) VALUES
-(37, 7, 26),
-(60, 6, 13),
-(61, 5, 13),
-(62, 7, 13);
+INSERT INTO `serviciossucursal` (`id`, `idServicio`, `idSucursal`, `precio`, `precioVIP`) VALUES
+(37, 7, 26, NULL, NULL),
+(60, 6, 13, NULL, NULL),
+(61, 5, 13, NULL, NULL),
+(62, 7, 13, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1820,7 +1846,7 @@ ALTER TABLE `permisos`
 -- AUTO_INCREMENT de la tabla `sector`
 --
 ALTER TABLE `sector`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `sectorempresa`
 --
@@ -1835,12 +1861,12 @@ ALTER TABLE `servicio`
 -- AUTO_INCREMENT de la tabla `serviciosempleado`
 --
 ALTER TABLE `serviciosempleado`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `serviciossector`
 --
 ALTER TABLE `serviciossector`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `serviciossucursal`
 --

@@ -119,23 +119,14 @@ class EmpleadoControl{
   function sesion(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $data = json_decode($request->getBody(),true);
-    $da = Empleado::select("id","idSucursal","nombres","apellidos","email","telefono","identificacion")
+    $data = Empleado::select("id","idSucursal","nombres","apellidos","email","telefono","identificacion","idPerfil")
                     ->where("pass","=",sha1($data['pass']))
                     ->where("identificacion","=",$data['identificacion'])
                     ->first();
-
-    if($da == null){
-      $da = Administrador::select("id","idSucursal","nombres","apellidos","correo","telefono","identificacion")
-                      ->where("pass","=",sha1($data['pass']))
-                      ->where("identificacion","=",$data['identificacion'])
-                      ->first();
-      if($da == null){
-        $respuesta = json_encode(array('empleado' => null, "std" => 0));
-        $response = $response->withStatus(404);
-      }else{
-        $respuesta = json_encode(array('administrador' => $da, "std" => 2));
-      }
-    }else{
+    $respuesta = json_encode(array('empleado' => $data, "std" => $data->idPerfil));
+    if($data == null){
+      $respuesta = json_encode(array('empleado' => null, "std" => 0));
+      $response = $response->withStatus(404);
     }
     $response->getBody()->write($respuesta);
     return $response;
@@ -176,7 +167,7 @@ class EmpleadoControl{
               . "serviciosempleado seremp ON(seremp.idEmpleado = emp.id) "
               . "INNER JOIN "
               . "servicio ser ON(ser.id = seremp.idServicio) "
-              . "WHERE emp.idSucursal = $idSucursal AND emp.estadoOnline = 'ACTIVO'";
+              . "WHERE emp.idSucursal = $idSucursal AND emp.estadoOnline = 'ACTIVO' AND ser.estado = 'ACTIVO'";
     $data = DB::select(DB::raw($query));
     for($i = 0; $i < count($data); $i++){
       //CALCULAR TIEMPO

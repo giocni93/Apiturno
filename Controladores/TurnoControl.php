@@ -116,7 +116,7 @@ class TurnoControl{
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
             $response = $response->withStatus(200);
 
-            //ENVIAR NOTIFICACION AL EMPLEADO
+            //ENVIAR NOTIFICACION AL EMPLEADO Y AL ADMINISTRADOR DE LA SUCURSAL
 
         }catch(Exception $err){
             $respuesta = json_encode(array('msg' => "error al pedir el turno", "std" => 0,"err" => $err->getMessage()));

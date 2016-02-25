@@ -24,7 +24,7 @@ class ServicioControl{
 	    $response->getBody()->write($respuesta);
 	    return $response;
 	}
-	
+
 	function getAllservicios(Request $request, Response $response) {
 	    $response = $response->withHeader('Content-type', 'application/json');
 	    $id = $request->getAttribute("id");
@@ -101,6 +101,36 @@ class ServicioControl{
 	      $response = $response->withStatus(404);
 	    }
 		    $response->getBody()->write($respuesta);
+		    return $response;
+  	}
+
+		function getServiciosBySucursal(Request $request, Response $response){
+  		$response = $response->withHeader('Content-type', 'application/json');
+        $idSucursal = $request->getAttribute("idSucursal");
+				$data = Servicio::select('servicio.*')
+					->join("serviciossucursal","serviciossucursal.idServicio","=","servicio.id")
+		    	->where('serviciossucursal.idSucursal','=',$idSucursal)
+		    	->where('servicio.estado','=','ACTIVO')
+		    	->get();
+		    if(count($data) == 0){
+		      $response = $response->withStatus(404);
+		    }else{
+					for($i = 0; $i < count($data); $i++){
+							$tur = Turno::select('turno.turno')
+										->join("empleado","empleado.id","=","turno.idEmplado")
+							    	->where('turno.idSucursal','=',$idSucursal)
+										->where('turno.idServicio','=',$data[$i]->idServicio)
+							    	->where('turno.estadoTurno','=','CONFIRMADO')
+										->orwhere('turno.estadoTurno','=','ATENDIENDO')
+										->orderBy("turno.fechaSolicitud","Desc")
+							    	->first();
+										$turno = 1;
+							if($tur != null){
+								$turno = $tur->turno;
+							}
+					}
+				}
+		    $response->getBody()->write($data);
 		    return $response;
   	}
 

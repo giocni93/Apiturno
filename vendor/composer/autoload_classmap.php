@@ -35,6 +35,8 @@ return array(
     'PermisoControl' => $baseDir . '/Controladores/PermisoControl.php',
     'Sector' => $baseDir . '/Modelos/Sector.php',
     'SectorControl' => $baseDir . '/Controladores/SectorControl.php',
+    'SectorEmpresa' => $baseDir . '/Modelos/SectorEmpresa.php',
+    'SectorEmpresaControl' => $baseDir . '/Controladores/SectorEmpresaControl.php',
     'Servicio' => $baseDir . '/Modelos/Servicio.php',
     'ServicioControl' => $baseDir . '/Controladores/ServicioControl.php',
     'ServiciosEmpleado' => $baseDir . '/Modelos/ServiciosEmpleado.php',

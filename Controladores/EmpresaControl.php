@@ -23,6 +23,20 @@ class EmpresaControl{
             $empresa->pass          =   sha1($data['pass']);
             $empresa->estado        =   "INACTIVO";
             $empresa->save();
+
+            $administrador = new Administrador;
+            $administrador->nombres         =   $data['nombres'];
+            $administrador->apellidos       =   $data['apellidos'];
+            $administrador->identificacion  =   $data['identificacion'];
+            $administrador->pass            =   sha1($data['pass']);
+            $administrador->estado          =   "INACTIVO";
+            $administrador->telefono        =   $data['telefonoadmin'];
+            $administrador->idperfil        =   $data['idperfil'];
+            $administrador->correo          =   $data['correo'];
+            $administrador->idempresa       =   $empresa->id;
+
+            $administrador->save();
+
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
             $response = $response->withStatus(200);
         }catch(Exception $err){

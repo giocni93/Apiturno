@@ -159,7 +159,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v5.1.30",
+            "version": "v5.1.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -202,7 +202,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.1.30",
+            "version": "v5.1.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -244,16 +244,16 @@
         },
         {
             "name": "illuminate/database",
-            "version": "v5.1.30",
+            "version": "v5.1.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "30866aef5b44460e3a7eee8246bfea2f0ef875a2"
+                "reference": "42e0edf2da29373d8f73dfc9dddb03bafb6586d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/30866aef5b44460e3a7eee8246bfea2f0ef875a2",
-                "reference": "30866aef5b44460e3a7eee8246bfea2f0ef875a2",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/42e0edf2da29373d8f73dfc9dddb03bafb6586d8",
+                "reference": "42e0edf2da29373d8f73dfc9dddb03bafb6586d8",
                 "shasum": ""
             },
             "require": {
@@ -300,11 +300,11 @@
                 "orm",
                 "sql"
             ],
-            "time": "2016-02-17 17:29:27"
+            "time": "2016-02-24 14:58:10"
         },
         {
             "name": "illuminate/events",
-            "version": "v5.1.30",
+            "version": "v5.1.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/events.git",
@@ -349,7 +349,7 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v5.1.30",
+            "version": "v5.1.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",

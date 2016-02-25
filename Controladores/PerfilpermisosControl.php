@@ -19,6 +19,17 @@ class PerfilpermisosControl{
   		$id = $request->getAttribute("id");
   		$data = Perfilpermisos::select('idpermiso','idmodulo')
   								->where('idperfil','=',$id)
+  								->groupBy('idmodulo')
+  								->get();
+  		$response->getBody()->write($data);
+    	return $response;
+  	}
+
+  	function getIdPermisos(Request $request, Response $response){
+  		$response = $response->withHeader('Content-type', 'application/json');
+  		$id = $request->getAttribute("id");
+  		$data = Perfilpermisos::select('idpermiso')
+  								->where('idperfil','=',$id)
   								->get();
   		$response->getBody()->write($data);
     	return $response;

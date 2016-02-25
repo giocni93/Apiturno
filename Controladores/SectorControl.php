@@ -64,6 +64,12 @@ class SectorControl{
             $sector->descripcion =  $data['descripcion'];
             $sector->estado		 =  "INACTIVO";
             $sector->save();
+
+            $sectorempresa = new SectorEmpresa;
+            $sectorempresa->idSector 	= $sector->id;
+            $sectorempresa->idEmpresa 	= $data['idEmpresa'];
+            $sectorempresa->save();
+
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
             $response = $response->withStatus(200);
         }catch(Exception $err){
@@ -128,6 +134,10 @@ class SectorControl{
 	    $response->getBody()->write($respuesta);
 	    return $response;
   	}
+
+	function sectorxid(){
+		
+	}  	
         
 
 }

@@ -546,8 +546,8 @@
     },
     {
         "name": "illuminate/contracts",
-        "version": "v5.1.30",
-        "version_normalized": "5.1.30.0",
+        "version": "v5.1.31",
+        "version_normalized": "5.1.31.0",
         "source": {
             "type": "git",
             "url": "https://github.com/illuminate/contracts.git",
@@ -590,8 +590,8 @@
     },
     {
         "name": "illuminate/support",
-        "version": "v5.1.30",
-        "version_normalized": "5.1.30.0",
+        "version": "v5.1.31",
+        "version_normalized": "5.1.31.0",
         "source": {
             "type": "git",
             "url": "https://github.com/illuminate/support.git",
@@ -646,8 +646,8 @@
     },
     {
         "name": "illuminate/container",
-        "version": "v5.1.30",
-        "version_normalized": "5.1.30.0",
+        "version": "v5.1.31",
+        "version_normalized": "5.1.31.0",
         "source": {
             "type": "git",
             "url": "https://github.com/illuminate/container.git",
@@ -691,17 +691,17 @@
     },
     {
         "name": "illuminate/database",
-        "version": "v5.1.30",
-        "version_normalized": "5.1.30.0",
+        "version": "v5.1.31",
+        "version_normalized": "5.1.31.0",
         "source": {
             "type": "git",
             "url": "https://github.com/illuminate/database.git",
-            "reference": "30866aef5b44460e3a7eee8246bfea2f0ef875a2"
+            "reference": "42e0edf2da29373d8f73dfc9dddb03bafb6586d8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/illuminate/database/zipball/30866aef5b44460e3a7eee8246bfea2f0ef875a2",
-            "reference": "30866aef5b44460e3a7eee8246bfea2f0ef875a2",
+            "url": "https://api.github.com/repos/illuminate/database/zipball/42e0edf2da29373d8f73dfc9dddb03bafb6586d8",
+            "reference": "42e0edf2da29373d8f73dfc9dddb03bafb6586d8",
             "shasum": ""
         },
         "require": {
@@ -719,7 +719,7 @@
             "illuminate/filesystem": "Required to use the migrations (5.1.*).",
             "illuminate/pagination": "Required to paginate the result set (5.1.*)."
         },
-        "time": "2016-02-17 17:29:27",
+        "time": "2016-02-24 14:58:10",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -753,8 +753,8 @@
     },
     {
         "name": "illuminate/events",
-        "version": "v5.1.30",
-        "version_normalized": "5.1.30.0",
+        "version": "v5.1.31",
+        "version_normalized": "5.1.31.0",
         "source": {
             "type": "git",
             "url": "https://github.com/illuminate/events.git",

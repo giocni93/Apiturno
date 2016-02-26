@@ -9,7 +9,6 @@ class ServicioControl{
 	    $data = json_decode($request->getBody(),true);
 	    try{
 	        $servicio = new Servicio;
-	        $servicio->idEmpresa   =  $data['idEmpresa'];
 	        $servicio->nombre 	   =  $data['nombre'];
 	        $servicio->descripcion =  $data['descripcion'];
 	        $servicio->estado      =  "ACTIVO";
@@ -25,23 +24,11 @@ class ServicioControl{
 	    return $response;
 	}
 
-	function getAllservicios(Request $request, Response $response) {
-	    $response = $response->withHeader('Content-type', 'application/json');
-	    $id = $request->getAttribute("id");
-	    $data = Servicio::select('servicio.nombre','servicio.descripcion','servicio.estado','servicio.id')
-	    	->where('servicio.idEmpresa','=',$id)
-	    	->where('servicio.estado','=','ACTIVO')
-	    	->get();
-	    if(count($data) == 0){
-	      $response = $response->withStatus(404);
-	    }
-	    $response->getBody()->write($data);
-	    return $response;
-  	}
-
 	function getAll(Request $request, Response $response) {
 	    $response = $response->withHeader('Content-type', 'application/json');
-	    $data = Servicio::select('empresa.razonSocial','empresa.nit','servicio.nombre','servicio.descripcion','servicio.estado','servicio.id')->join('empresa','empresa.id','=','servicio.idEmpresa')->get();
+	    $data = Servicio::select('*')
+								->where('estado','=','ACTIVO')
+								->get();
 	    if(count($data) == 0){
 	      $response = $response->withStatus(404);
 	    }

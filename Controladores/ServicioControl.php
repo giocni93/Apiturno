@@ -118,8 +118,11 @@ class ServicioControl{
 							$tur = Turno::select('turno.turno')
 							    	->where('turno.idSucursal','=',$idSucursal)
 										->where('turno.idServicio','=',$data[$i]->idServicio)
-							    	->where('turno.estadoTurno','=','ATENDIENDO')
-										->orderBy("turno.fechaSolicitud","Desc")
+										->where(function($q){
+											$q->where('turno.estadoTurno','=','CONFIRMADO')
+											->orwhere('turno.estadoTurno','=','ATENDIENDO');
+										})
+										->orderBy("turno.fechaSolicitud","Asc")
 							    	->first();
 							$turno = 0;
 							if($tur != null){
@@ -159,9 +162,11 @@ class ServicioControl{
 					for($i = 0; $i < count($data); $i++){
 							$tur = Turno::select('turno.turno')
 										->where('turno.idServicio','=',$data[$i]->idServicio)
-							    	->where('turno.estadoTurno','=','CONFIRMADO')
-										->orwhere('turno.estadoTurno','=','ATENDIENDO')
-										->orderBy("turno.fechaSolicitud","Desc")
+										->where(function($q){
+											$q->where('turno.estadoTurno','=','CONFIRMADO')
+											->orwhere('turno.estadoTurno','=','ATENDIENDO');
+										})
+										->orderBy("turno.fechaSolicitud","Asc")
 							    	->first();
 							$turno = 0;
 							if($tur != null){

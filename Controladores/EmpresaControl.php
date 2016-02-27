@@ -9,7 +9,7 @@ use Slim\Http\Response;
 class EmpresaControl{
 
 
-	function post(Request $request, Response $response){
+    function post(Request $request, Response $response){
         $response = $response->withHeader('Content-type', 'application/json');
         $data = json_decode($request->getBody(),true);
         try{
@@ -24,18 +24,24 @@ class EmpresaControl{
             $empresa->estado        =   "INACTIVO";
             $empresa->save();
 
-            $administrador = new Administrador;
+            $administrador = new Empleado;
             $administrador->nombres         =   $data['nombres'];
             $administrador->apellidos       =   $data['apellidos'];
             $administrador->identificacion  =   $data['identificacion'];
             $administrador->pass            =   sha1($data['pass']);
             $administrador->estado          =   "INACTIVO";
             $administrador->telefono        =   $data['telefonoadmin'];
-            $administrador->idperfil        =   $data['idperfil'];
-            $administrador->correo          =   $data['correo'];
-            $administrador->idempresa       =   $empresa->id;
-
+            $administrador->idperfil        =   '3';
+            $administrador->email           =   $data['emailadmin'];
+            $administrador->idEmpresa       =   $empresa->id;
             $administrador->save();
+
+            for($i=0; $i<count($data['sectores']);$i++){
+                $sector = new SectorEmpresa;
+                $sector->idSector   =   $data['sectores'][$i]['id'];
+                $sector->idEmpresa  =   $empresa->id;
+                $sector->save();
+            }
 
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
             $response = $response->withStatus(200);
@@ -152,6 +158,6 @@ class EmpresaControl{
         $response->getBody()->write($respuesta);
         return $response;
     }
-    
+
 
 }

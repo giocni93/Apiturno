@@ -18,16 +18,28 @@ class SucursalControl{
 	        $sucursal->latitud     =  $data['latitud'];
 	        $sucursal->longitud    =  $data['longitud'];
 	        $sucursal->promedio    =  $data['promedio'];
-	        $sucursal->usuario	   =  $data['usuario'];
-	        $sucursal->pass		   =  sha1($data['pass']);	
+	        //$sucursal->usuario	   =  $data['usuario'];
+	        //$sucursal->pass		   =  sha1($data['pass']);	
 	        $sucursal->estado      =  "ACTIVO";
 	        $sucursal->save();
 	        $val = $sucursal->id;
 
+	        $admin = new Empleado;
+	        $admin->nombres       	=   $data['nombres'];
+	        $admin->apellidos		= 	$data['apellidos'];
+	        $admin->identificacion  = 	$data['identificacion'];
+	        $admin->pass            =   sha1($data['pass']);
+	        $admin->telefono		= 	$data['telefonoadmin'];
+	        $admin->estado          =   "ACTIVO";
+	        $admin->idperfil		=  	'4';
+	        $admin->idSucursal		= 	$sucursal->id;
+	        $admin->email 			=	$data['email'];
+	        $admin->save();
+
 	        for($i=0; $i< count($data['servicios']);$i++){
 	    		$servicio = new ServiciosSucursal;
-	    		$servicio->idServicio =	 $data['servicios'][$i]['id'];
-	    		$servicio->idSucursal =  $val;
+	    		$servicio->idServicio =	 $data['servicios'][$i][0]['idServicio'];
+	    		$servicio->idSucursal =  $val;    					 
 	    		$servicio->save();
 	    	}
 
@@ -112,19 +124,17 @@ class SucursalControl{
             $sucursal->latitud     		=  	$data['latitud'];
 	        $sucursal->longitud    		=  	$data['longitud'];
 	        $sucursal->promedio    		=  	$data['promedio'];
-	        $sucursal->usuario	   		=  	$data['usuario'];
-            $sucursal->save();
+	        $sucursal->save();
 
-            $administrador = Administrador::select("*")
-                          ->where("idSucursal","=",$id)
-                          ->first();
-            $administrador->nombres       	=   $data['nombres'];
-	        $administrador->apellidos		= 	$data['apellidos'];
-	        $administrador->identificacion  = 	$data['usuario'];
-	        //$administrador->pass            =   sha1($data['pass']);
-	        $administrador->telefono		= 	$data['telefono'];
-	        $administrador->estado          =   "ACTIVO";
-	        $administrador->save();
+            $admin = Empleado::select("*")
+                        ->where("idSucursal","=",$id)
+                        ->first();
+	        $admin->nombres       	=   $data['nombres'];
+	        $admin->apellidos		= 	$data['apellidos'];
+	        $admin->identificacion  = 	$data['identificacion'];
+	        $admin->telefono		= 	$data['telefonoadmin'];
+	        $admin->email 			=	$data['email'];
+	        $admin->save();
 
             $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
       		$response = $response->withStatus(200);

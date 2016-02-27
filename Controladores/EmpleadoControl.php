@@ -176,7 +176,7 @@ class EmpleadoControl{
                 ."COALESCE(turnoAct.turnoActual,1) as turnoActual "
                 ."FROM "
                 ."( "
-                ."	SELECT "
+                ."  SELECT "
                 ."    count(t.id) as faltantes "
                 ."    FROM "
                 ."    turno as t "
@@ -201,5 +201,98 @@ class EmpleadoControl{
     $response->getBody()->write(json_encode($data));
     return $response;
   }
+
+  function sesionlogin(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $data = json_decode($request->getBody(),true);
+    $data = Empleado::select("empleado.id","empleado.idSucursal","empleado.nombres","empleado.apellidos","empleado.email","empleado.telefono","empleado.identificacion","empleado.idPerfil","empleado.idEmpresa","perfil.nombre as admin")
+                    ->join("perfil","perfil.id","=","empleado.idPerfil")
+                    ->where("pass","=",sha1($data['pass']))
+                    ->where("identificacion","=",$data['identificacion'])
+                    ->where("empleado.estado","=","ACTIVO")
+                    ->first();
+    $respuesta = json_encode(array('admin' => $data, "std" => 1));
+
+      if($data == null){
+        $respuesta = json_encode(array('admin' => null, "std" => 0));
+        $response = $response->withStatus(404);
+      }
+
+      $response->getBody()->write($respuesta);
+      return $response;
+  }
+
+    function postsuperadmin(Request $request, Response $response){
+      $response = $response->withHeader('Content-type', 'application/json');
+      $data = json_decode($request->getBody(),true);
+      try{
+          $empleado = new Empleado;
+          $empleado->nombres          =   $data['nombres'];
+          $empleado->apellidos        =   $data['apellidos'];
+          $empleado->identificacion   =   $data['identificacion'];
+          $empleado->pass             =   sha1($data['pass']);
+          $empleado->idperfil         =   $data['idperfil'];
+          $empleado->email           =   $data['email'];
+          $empleado->estado           =   "ACTIVO";
+          $empleado->save();
+          $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+          $response = $response->withStatus(200);
+      }catch(Exception $err){
+          $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+          $response = $response->withStatus(404);
+      }
+      $response->getBody()->write($respuesta);
+      return $response;
+    }
+
+    function updateadminestado(Request $request,Response $response){
+        try{
+          $response = $response->withHeader('Content-type', 'application/json');
+          $data = json_decode($request->getBody(),true);
+          $id = $request->getAttribute("id");
+          $admin = Empleado::select("*")
+                        ->where("idEmpresa","=",$id)
+                        ->first();
+          $admin->estado   =   $data['estado'];
+          $admin->save();
+          $respuesta = json_encode(array('msg' => "Actualizado correctamente", "std" => 1));
+          $response = $response->withStatus(200);
+        }catch(Exception $err){
+            $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+            $response = $response->withStatus(404);
+        }
+        $response->getBody()->write($respuesta);
+        return $response;
+    }
+
+    function updateadminestadodesactivar(Request $request,Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        try{
+            $id = $request->getAttribute("id");
+            $admin = Empleado::select("*")
+                          ->where("idempresa","=",$id)
+                          ->first();
+            $admin->estado   =   $data['estado'];
+            $admin->save();
+            $respuesta = json_encode(array('msg' => "Actualizado correctamente", "std" => 1));
+            $response = $response->withStatus(200);
+        }catch(Exception $err){
+            $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+            $response = $response->withStatus(404);
+        }
+        $response->getBody()->write($respuesta);
+        return $response;
+    }
+
+    function getEmpleadoByIdsucursal(Request $request,Response $response){
+      $response = $response->withHeader('Content-type', 'application/json');
+      $id = $request->getAttribute("id");
+      $data = Empleado::select("*")
+                      ->where("idSucursal","=",$id)
+                      ->get();
+      $response->getBody()->write($data);
+      return $response;
+    }
 
 }

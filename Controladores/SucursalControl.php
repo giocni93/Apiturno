@@ -84,19 +84,21 @@ class SucursalControl{
 
 		function getSucursalesByPosicion(Request $request, Response $response){
 				$response = $response->withHeader('Content-type', 'application/json');
-				$data = Parametros::select("*")->first();
-				$km = $data["diametro_busqueda"];
-				$idEmpresa = $request->getAttribute("idEmpresa");
+				//$data = Parametros::select("*")->first();
+				//$km = $data["diametro_busqueda"];
+				$idServicio = $request->getAttribute("idServicio");
 				$lat = $request->getAttribute("latitud");
 				$lng = $request->getAttribute("longitud");
 				$query = "SELECT "
 	                . "(6371 * ACOS( SIN(RADIANS(su.latitud)) * SIN(RADIANS($lat)) + COS(RADIANS(su.longitud - $lng)) * "
-									. "COS(RADIANS(su.latitud)) * COS(RADIANS($lat)))) AS distancia, "
-									. "su.* "
+					. "COS(RADIANS(su.latitud)) * COS(RADIANS($lat)))) AS distancia, "
+					. "su.* "
 	                . "FROM sucursal su "
-	                . "WHERE su.Estado = 'ACTIVO' AND su.idEmpresa = $idEmpresa "
-									. "HAVING distancia < $km ORDER BY distancia ASC";
-	      $data = DB::select(DB::raw($query));
+	                . "INNER JOIN serviciossucursal ss ON ss.idSucursal = su.id "
+	                . "INNER JOIN servicio se ON se.id = ss.idServicio "
+	                . "WHERE su.Estado = 'ACTIVO' AND se.id= $idServicio "
+					. "HAVING distancia < 1 ORDER BY distancia ASC";
+	      	$data = DB::select(DB::raw($query));
 		    $response->getBody()->write(json_encode($data));
 		    return $response;
 		}

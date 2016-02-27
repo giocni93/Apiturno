@@ -14,3 +14,4 @@ $app->put('/empleado/estado/admin/{id}',"EmpleadoControl:updateadminestado");
 $app->put('/empleado/estado/admin/desac/{id}',"EmpleadoControl:updateadminestadodesactivar");
 $app->get('/empleado/bysucursal/{id}', "EmpleadoControl:getEmpleadoByIdsucursal");
 $app->get('/empleado/bysucursal/empleado/{id}', "EmpleadoControl:getEmpleadoByIdsucursalempleado");
+$app->get('/empleado/{idEmpleado}/informacion', "EmpleadoControl:getEmpleadosAll");

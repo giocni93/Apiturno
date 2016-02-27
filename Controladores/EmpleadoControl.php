@@ -162,6 +162,7 @@ class EmpleadoControl{
               . "CONCAT(emp.nombres, ' ', emp.apellidos) AS empleado,"
               . "ser.nombre as servicio, "
               . "'' as tiempoEstimado, "
+              . "'' as cliente, "
               . "'' as turnoActual "
               . "FROM empleado emp "
               . "INNER JOIN "
@@ -173,6 +174,8 @@ class EmpleadoControl{
     for($i = 0; $i < count($data); $i++){
       //CALCULAR TIEMPO
       $query = "SELECT "
+                ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * ( "
+                ."    SELECT     count(t.id) as faltantes "
                 ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes)),'%H:%i:%s') as tiempoEstimado, "
                 ."COALESCE(turnoAct.turnoActual,1) as turnoActual "
                 ."FROM "
@@ -184,20 +187,34 @@ class EmpleadoControl{
                 ."    WHERE "
                 ."    t.idEmpleado = ".$data[$i]->idEmpleado." AND "
                 ."    t.idServicio = ".$data[$i]->idServicio." AND "
-                ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
-                .") as turnosFaltantes, "
-                ."(SELECT MAX(tu.turno) as turnoActual FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND tu.estadoTurno = 'ATENDIENDO') as turnoAct,"
+                ."    t.estadoTurno <> 'TERMINADO' AND "
+                ."    t.estadoTurno <> 'CANCELADO' "
+                ."))),'%H:%i:%s') as tiempoEstimado "
+                ."FROM "
                 ."turno "
-                ."WHERE "
-                ."idEmpleado = ".$data[$i]->idEmpleado." AND "
+                ."WHERE idEmpleado = ".$data[$i]->idEmpleado." AND "
                 ."idServicio = ".$data[$i]->idServicio." AND "
-                ."estadoTurno = 'TERMINADO' LIMIT 1";
+                ."estadoTurno = 'TERMINADO' "
+                ."LIMIT 1";
         $dataTiempo = DB::select(DB::raw($query));
+        $query = "SELECT "
+                  ."COALESCE(MAX(tu.turno),0) as turnoActual, "
+                  ."COALESCE(CONCAT(cl.nombres,' ',cl.apellidos),'') as cliente "
+                  ."FROM turno as tu "
+                  ."INNER JOIN "
+                  ."cliente as cl "
+                  ."ON(cl.id = tu.idCliente) "
+                  ."WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND "
+                  ."tu.idServicio = ".$data[$i]->idServicio." AND "
+                  ."tu.estadoTurno = 'ATENDIENDO' OR "
+                  ."tu.estadoTurno = 'CONFIRMADO' LIMIT 1";
+        $dataCliente = DB::select(DB::raw($query));
         $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
         if($data[$i]->tiempoEstimado == null){
           $data[$i]->tiempoEstimado = "00:00:00";
         }
-        $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
+        $data[$i]->turnoActual = $dataCliente[0]->turnoActual;
+        $data[$i]->cliente = $dataCliente[0]->cliente;
     }
     $response->getBody()->write(json_encode($data));
     return $response;

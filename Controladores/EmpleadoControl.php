@@ -37,6 +37,7 @@ class EmpleadoControl{
         $empleado->apellidos        =   $data['apellidos'];
         $empleado->telefono         =   $data['telefono'];
         $empleado->pass             =   sha1($data['pass']);
+        $empleado->idPerfil         =   '2';
         $empleado->estado           =   "ACTIVO";
         $empleado->estadoOnline     =   "INACTIVO";
         $empleado->save();
@@ -290,6 +291,18 @@ class EmpleadoControl{
       $id = $request->getAttribute("id");
       $data = Empleado::select("*")
                       ->where("idSucursal","=",$id)
+                      ->where('idPerfil','=','4')
+                      ->get();
+      $response->getBody()->write($data);
+      return $response;
+    }
+
+    function getEmpleadoByIdsucursalempleado(Request $request,Response $response){
+      $response = $response->withHeader('Content-type', 'application/json');
+      $id = $request->getAttribute("id");
+      $data = Empleado::select("*")
+                      ->where("idSucursal","=",$id)
+                      ->where('idPerfil','=','2')
                       ->get();
       $response->getBody()->write($data);
       return $response;

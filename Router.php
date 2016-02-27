@@ -19,3 +19,5 @@
   include_once 'Router/PerfilpermisosRouter.php';
   include_once 'Router/PermisoRouter.php';
   include_once 'Router/ModuloRouter.php';
+  include_once 'Router/ServiciosSectorRouter.php';
+  include_once 'Router/SectorEmpresaRouter.php';

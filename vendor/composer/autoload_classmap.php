@@ -41,6 +41,8 @@ return array(
     'ServicioControl' => $baseDir . '/Controladores/ServicioControl.php',
     'ServiciosEmpleado' => $baseDir . '/Modelos/ServiciosEmpleado.php',
     'ServiciosEmpleadoControl' => $baseDir . '/Controladores/ServiciosEmpleadoControl.php',
+    'ServiciosSector' => $baseDir . '/Modelos/ServiciosSector.php',
+    'ServiciosSectorControl' => $baseDir . '/Controladores/ServiciosSectorControl.php',
     'ServiciosSucursal' => $baseDir . '/Modelos/ServiciosSucursal.php',
     'ServiciosSucursalControl' => $baseDir . '/Controladores/ServiciosSucursalControl.php',
     'Sucursal' => $baseDir . '/Modelos/Sucursal.php',

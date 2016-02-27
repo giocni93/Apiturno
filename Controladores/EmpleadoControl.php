@@ -175,11 +175,6 @@ class EmpleadoControl{
       //CALCULAR TIEMPO
       $query = "SELECT "
                 ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * ( "
-                ."    SELECT     count(t.id) as faltantes "
-                ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes)),'%H:%i:%s') as tiempoEstimado, "
-                ."COALESCE(turnoAct.turnoActual,1) as turnoActual "
-                ."FROM "
-                ."( "
                 ."  SELECT "
                 ."    count(t.id) as faltantes "
                 ."    FROM "

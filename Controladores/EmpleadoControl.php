@@ -193,7 +193,7 @@ class EmpleadoControl{
                 ."LIMIT 1";
         $dataTiempo = DB::select(DB::raw($query));
         $query = "SELECT "
-                  ."COALESCE(MAX(tu.turno),0) as turnoActual, "
+                  ."COALESCE(tu.turno,0) as turnoActual, "
                   ."COALESCE(CONCAT(cl.nombres,' ',cl.apellidos),'') as cliente "
                   ."FROM turno as tu "
                   ."INNER JOIN "
@@ -201,15 +201,21 @@ class EmpleadoControl{
                   ."ON(cl.id = tu.idCliente) "
                   ."WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND "
                   ."tu.idServicio = ".$data[$i]->idServicio." AND "
-                  ."tu.estadoTurno = 'ATENDIENDO' OR "
-                  ."tu.estadoTurno = 'CONFIRMADO' LIMIT 1";
+                  ."(tu.estadoTurno = 'ATENDIENDO' OR "
+                  ."tu.estadoTurno = 'CONFIRMADO') ORDER BY tu.fechaSolicitud Asc LIMIT 1";
         $dataCliente = DB::select(DB::raw($query));
         $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
         if($data[$i]->tiempoEstimado == null){
           $data[$i]->tiempoEstimado = "00:00:00";
         }
         $data[$i]->turnoActual = $dataCliente[0]->turnoActual;
+        if($data[$i]->turnoActual == null){
+          $data[$i]->turnoActual = 0;
+        }
         $data[$i]->cliente = $dataCliente[0]->cliente;
+        if($data[$i]->cliente == null){
+          $data[$i]->cliente = "";
+        }
     }
     $response->getBody()->write(json_encode($data));
     return $response;

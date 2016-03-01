@@ -17,3 +17,4 @@ $app->get('/empleado/bysucursal/empleado/{id}', "EmpleadoControl:getEmpleadoById
 $app->get('/empleado/getempresaxByIdsucursal/{id}',"EmpleadoControl:getempresaxByIdsucursal");
 $app->get('/empleadomax',"EmpleadoControl:maxId");
 $app->put('/trabajador/estado/{id}',"EmpleadoControl:updateestado");
+$app->get('/empleado/{idEmpleado}/informacion', "EmpleadoControl:getEmpleadosAll");

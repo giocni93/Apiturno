@@ -107,13 +107,13 @@ class TurnoControl{
             $turno->idEmpleado  =   $data['idEmpleado'];
             $turno->idSucursal  =   $data['idSucursal'];
             $turno->idServicio  =   $data['idServicio'];
-            $turno->tiempo      =   $data['tiempo'];
+            $turno->tiempo      =   0; //$data['tiempo'];
             $turno->turno       =   $turnoSiguiente;
-            $turno->tipoTurno   =   $data['tipoTurno'];
+            $turno->tipoTurno   =   "NORMAL";//$data['tipoTurno'];
             $turno->estadoTurno =   "SOLICITADO";
             $turno->estado      =   "ACTIVO";
             $turno->save();
-            $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+            $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1, "numeroTurno" => $turnoSiguiente));
             $response = $response->withStatus(200);
 
             //ENVIAR NOTIFICACION AL EMPLEADO Y AL ADMINISTRADOR DE LA SUCURSAL

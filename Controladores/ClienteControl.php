@@ -109,7 +109,7 @@ class ClienteControl{
                         ->first();
     $respuesta = json_encode(array("std" => 1, "cliente" => $cliente, "msg" => "Ok"));
     if($cliente == null){
-      $respuesta = json_encode(array('cliente' => null, "std" => 0, "msg" => "error"));
+      $respuesta = json_encode(array('cliente' => null, "std" => 0, "msg" => "Email o contraseña no validos."));
       $response = $response->withStatus(404);
     }
     $response->getBody()->write($respuesta);

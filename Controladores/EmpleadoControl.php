@@ -391,7 +391,7 @@ class EmpleadoControl{
     public function getEmpleadosAll(Request $request, Response $response)
     {
       $idEmpleado= $request->getAttribute("idEmpleado");
-      $query = "SELECT emp.id as idEmpleado,ser.id as idServicio,CONCAT(emp.nombres, ' ', emp.apellidos) AS empleado,ser.nombre as servicio, '' as tiempoEstimado, '' as cliente, '' as turnoActual, su.nombre as sucursal, em.razonSocial as Empresa FROM empleado emp INNER JOIN serviciosempleado seremp ON(seremp.idEmpleado = emp.id) INNER JOIN servicio ser ON(ser.id = seremp.idServicio) INNER JOIN sucursal su ON(su.id = emp.idSucursal) INNER JOIN empresa em ON(em.id = su.idEmpresa) WHERE emp.id = $idEmpleado AND emp.estadoOnline = 'ACTIVO' AND ser.estado = 'ACTIVO'";
+      $query = "SELECT emp.id as idEmpleado,ser.id as idServicio,CONCAT(emp.nombres, ' ', emp.apellidos) AS empleado,ser.nombre as servicio, '' as tiempoEstimado, '' as cliente, '' as turnoActual, su.nombre as sucursal, em.razonSocial as Empresa, su.id as idSucursal FROM empleado emp INNER JOIN serviciosempleado seremp ON(seremp.idEmpleado = emp.id) INNER JOIN servicio ser ON(ser.id = seremp.idServicio) INNER JOIN sucursal su ON(su.id = emp.idSucursal) INNER JOIN empresa em ON(em.id = su.idEmpresa) WHERE emp.id = $idEmpleado AND emp.estadoOnline = 'ACTIVO' AND ser.estado = 'ACTIVO'";
       $data = DB::select(DB::raw($query));
       for($i = 0; $i < count($data); $i++){
         //CALCULAR TIEMPO

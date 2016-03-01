@@ -135,9 +135,31 @@ class SectorControl{
 	    return $response;
   	}
 
-	function sectorxid(){
-		
-	}  	
+	function maxIdSector(Request $request,Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = Sector::select("")
+                        ->max('id');
+        $response->getBody()->write($data);
+        return $response;
+    }
+
+    function putfotoservidor(Request $request,Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        try{
+            $id = $request->getAttribute("id");
+            $sector = Sector::find($id);
+            $sector->logo  =  $data['logo'];
+            $sector->save();
+            $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+            $response = $response->withStatus(200);
+        }catch(Exception $err){
+            $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+            $response = $response->withStatus(404);
+        }
+        $response->getBody()->write($respuesta);
+        return $response;
+    }
         
 
 }

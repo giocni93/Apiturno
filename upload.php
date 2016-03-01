@@ -3,8 +3,8 @@
 if($_FILES["imagen"]["error"] <= 0) 
 {
     //obtenemos el archivo a subir
-    $file = $_FILES['imagen']['name'];
-    //$file = $_GET['n'].".".$_GET['e'];
+    //$file = $_FILES['imagen']['name'];
+    $file = $_GET['n'].".".$_GET['e'];
     
     //comprobamos si existe un directorio para subir el archivo
     //si no es así, lo creamos

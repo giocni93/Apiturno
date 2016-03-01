@@ -11,3 +11,7 @@ $app->put('/sector/estado/{id}',"SectorControl:updateestado");
 
 $app->put('/sector/estado/desactivar/{id}',"SectorControl:updateestadodesactivar");
 
+$app->get('/sector/maxid',"SectorControl:maxIdSector");
+
+$app->put('/logosector/{id}', "SectorControl:putfotoservidor");
+

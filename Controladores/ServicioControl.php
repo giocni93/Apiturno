@@ -11,10 +11,10 @@ class ServicioControl{
 	        $servicio = new Servicio;
 	        $servicio->nombre 	   =  $data['nombre'];
 	        $servicio->descripcion =  $data['descripcion'];
-	        $servicio->estado      =  "ACTIVO";
+	        $servicio->estado      =  $data['estado'];
 	        $servicio->save();
 	        //$val = $servicio->id;
-
+	        
 	        $servisector = new ServiciosSector;
 	        $servisector->idSector		=	$data['idSector'];
 	        $servisector->idServicio	= 	$servicio->id;
@@ -35,6 +35,20 @@ class ServicioControl{
 	    $data = Servicio::select('*')
 								->where('estado','=','ACTIVO')
 								->get();
+	    if(count($data) == 0){
+	      $response = $response->withStatus(404);
+	    }
+	    $response->getBody()->write($data);
+	    return $response;
+  	}
+
+  	function getAllservis(Request $request, Response $response){
+  		$response = $response->withHeader('Content-type', 'application/json');
+	    $data = Servicio::select('servicio.*','serviciossector.*','sector.nombre as sector')
+	    					->join('serviciossector','serviciossector.idServicio','=','servicio.id')
+	    					->join('sector','sector.id','=','serviciossector.idSector')
+	    					->orderBy('sector','ASC')
+							->get();
 	    if(count($data) == 0){
 	      $response = $response->withStatus(404);
 	    }
@@ -100,14 +114,8 @@ class ServicioControl{
 		function getServiciosBySucursal(Request $request, Response $response){
   		$response = $response->withHeader('Content-type', 'application/json');
         $idSucursal = $request->getAttribute("idSucursal");
-				$data = Servicio::select('servicio.id as idServicio',
-																"servicio.nombre as servicio",
-																"servicio.id as turnoActual",
-																"empleado.nombres as empleado",
-																"empleado.apellidos as apeEmp")
+				$data = Servicio::select('servicio.*')
 					->join("serviciossucursal","serviciossucursal.idServicio","=","servicio.id")
-					->join("serviciosempleado","serviciosempleado.idServicio","=","servicio.id")
-					->join("empleado","serviciosempleado.idEmpleado","=","empleado.id")
 		    	->where('serviciossucursal.idSucursal','=',$idSucursal)
 		    	->where('servicio.estado','=','ACTIVO')
 		    	->get();
@@ -116,68 +124,23 @@ class ServicioControl{
 		    }else{
 					for($i = 0; $i < count($data); $i++){
 							$tur = Turno::select('turno.turno')
+										->join("empleado","empleado.id","=","turno.idEmplado")
 							    	->where('turno.idSucursal','=',$idSucursal)
 										->where('turno.idServicio','=',$data[$i]->idServicio)
-										->where(function($q){
-											$q->where('turno.estadoTurno','=','CONFIRMADO')
-											->orwhere('turno.estadoTurno','=','ATENDIENDO');
-										})
-										->orderBy("turno.fechaSolicitud","Asc")
+							    	->where('turno.estadoTurno','=','CONFIRMADO')
+										->orwhere('turno.estadoTurno','=','ATENDIENDO')
+										->orderBy("turno.fechaSolicitud","Desc")
 							    	->first();
-							$turno = 0;
+										$turno = 1;
 							if($tur != null){
 								$turno = $tur->turno;
 							}
-							$data[$i]->empleado = $data[$i]->empleado." ".$data[$i]->apeEmp;
-							$data[$i]->turnoActual = $turno;
 					}
 				}
 		    $response->getBody()->write($data);
 		    return $response;
   	}
 
-  	public function getServiciosBySector(Request $request, Response $response)
-  	{
-  		$response = $response->withHeader('Content-type', 'application/json');
-        $idSector = $request->getAttribute("idSector");
-        $data = Servicio::select("servicio.*")
-        		->join("serviciossector", "serviciossector.idServicio", "=", "servicio.id")
-        		->join("sector", "serviciossector.idSector", "=", "sector.id")
-        		->where("sector.id", $idSector)
-        		->get();
-        $response->getBody()->write($data);
-		return $response;
-  	}
-
-		function getServiciosByEmpleado(Request $request, Response $response){
-  		$response = $response->withHeader('Content-type', 'application/json');
-			$idEmpleado = $request->getAttribute("idEmpleado");
-			$data = Servicio::select("servicio.id as idServicio","servicio.nombre as servicio","servicio.nombre as turnoActual")
-					->join("serviciosempleado", "serviciosempleado.idServicio", "=", "servicio.id")
-					->where("serviciosempleado.idEmpleado","=", $idEmpleado)
-					->get();
-		    if(count($data) == 0){
-		      $response = $response->withStatus(404);
-		    }else{
-					for($i = 0; $i < count($data); $i++){
-							$tur = Turno::select('turno.turno')
-										->where('turno.idServicio','=',$data[$i]->idServicio)
-										->where(function($q){
-											$q->where('turno.estadoTurno','=','CONFIRMADO')
-											->orwhere('turno.estadoTurno','=','ATENDIENDO');
-										})
-										->orderBy("turno.fechaSolicitud","Asc")
-							    	->first();
-							$turno = 0;
-							if($tur != null){
-								$turno = $tur->turno;
-							}
-							$data[$i]->turnoActual = $turno;
-					}
-				}
-		    $response->getBody()->write($data);
-		    return $response;
-  	}
 
 
 }

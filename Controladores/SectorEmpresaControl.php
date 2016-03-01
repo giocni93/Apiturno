@@ -7,7 +7,7 @@ class SectorEmpresaControl{
 
 	function serviciosempresa(Request $request, Response $response){
 		$response = $response->withHeader('Content-type', 'application/json');
-        $id = $request->getAttribute("id");
+                $id = $request->getAttribute("id");
         	$servi = SectorEmpresa::select('idSector')
         		->where('idEmpresa','=',$id)
         		->get();
@@ -17,10 +17,12 @@ class SectorEmpresaControl{
         						->join('servicio','servicio.id','=','serviciossector.idServicio')
 								->where('serviciossector.idSector','=',$servi[$i]->idSector)
 								->get();
-        			$servi[$i] = $serviciosector;	
+        			$servi[$i]['servicio'] = $serviciosector;	
         		}
         	$response->getBody()->write(json_encode($servi));
 		    return $response;
 	}
+
+        
 	
 }

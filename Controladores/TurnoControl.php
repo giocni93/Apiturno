@@ -10,10 +10,8 @@ class TurnoControl{
     $data = Turno::select("turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush")
                     ->join("cliente","cliente.id","=","turno.idCliente")
                     ->where("turno.idEmpleado","=",$idEmpleado)
-                    ->where(function($q){
-                      $q->where("turno.estadoTurno","=","CONFIRMADO")
-                      ->orwhere("turno.estadoTurno","=","ATENDIENDO");
-                    })
+                    ->where("turno.estadoTurno","=","CONFIRMADO")
+                    ->orwhere("turno.estadoTurno","=","ATENDIENDO")
                     ->where("turno.estado","=","ACTIVO")
                     ->whereRaw('ABS(TIMESTAMPDIFF(MINUTE,turno.fechaSolicitud,NOW())) >= turno.tiempo', [])
                     ->orderBy('turno.id', 'asc')
@@ -113,84 +111,6 @@ class TurnoControl{
             $turno->turno       =   $turnoSiguiente;
             $turno->tipoTurno   =   $data['tipoTurno'];
             $turno->estadoTurno =   "SOLICITADO";
-            $turno->estado      =   "ACTIVO";
-            $turno->save();
-            $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
-            $response = $response->withStatus(200);
-
-            //ENVIAR NOTIFICACION AL EMPLEADO Y AL ADMINISTRADOR DE LA SUCURSAL
-
-        }catch(Exception $err){
-            $respuesta = json_encode(array('msg' => "error al pedir el turno", "std" => 0,"err" => $err->getMessage()));
-            $response = $response->withStatus(404);
-        }
-
-    }else{
-      $respuesta = json_encode(array('msg' => "Ya tienes un turno activo en este servicio", "std" => 0));
-      $response = $response->withStatus(404);
-    }
-
-    $response->getBody()->write($respuesta);
-    return $response;
-  }
-
-  public function postTurnoAnonimo(Request $request, Response $response){
-    $response = $response->withHeader('Content-type', 'application/json');
-    $data = json_decode($request->getBody(),true);
-    //VALIDAR CLIENTE SI EXISTE
-    $idCliente = 0;
-    $c = Cliente::select("*")
-                    ->where("email","=",$data['email'])
-                    ->first();
-    if($c == null){
-      //REGISTRAR CLIENTES
-      try{
-          $cliente = new Cliente;
-          $cliente->email     =   $data['email'];
-          $cliente->nombres   =   $data['nombres'];
-          $cliente->apellidos =   $data['apellidos'];
-          $cliente->pass      =   sha1($data['email']);
-          $cliente->estado    =   "ACTIVO";
-          $cliente->save();
-          $idCliente = $cliente->id;
-      }catch(Exception $err){
-      }
-    }else{
-      $idCliente = $c->id;
-    }
-
-    $turnoCliente = Turno::select("idCliente")
-                    ->where("idCliente","=",$idCliente)
-                    ->where("idServicio","=",$data["idServicio"])
-                    ->where("idSucursal","=",$data["idSucursal"])
-                    ->where("estadoTurno","<>","TERMINADO")
-                    ->where("estadoTurno","<>","CANCELADO")
-                    ->first();
-    if($turnoCliente == null){
-        //CALCULAR EL SIGUIENTE TURNO
-        $turnoSiguiente = 1;
-        $con_turno = Turno::select("turno")
-                        ->where("idServicio","=",$data["idServicio"])
-                        ->where("idSucursal","=",$data["idSucursal"])
-                        ->where("estadoTurno","<>","TERMINADO")
-                        ->where("estadoTurno","<>","CANCELADO")
-                        ->orderBy('turno', 'desc')
-                        ->first();
-        if($con_turno != null){
-          $turnoSiguiente = $con_turno['turno'] + 1;
-        }
-
-        //INSERTAR TURNO
-        try{
-            $turno = new Turno;
-            $turno->idCliente   =   $idCliente;
-            $turno->idEmpleado  =   $data['idEmpleado'];
-            $turno->idSucursal  =   $data['idSucursal'];
-            $turno->idServicio  =   $data['idServicio'];
-            $turno->tiempo      =   $data['tiempo'];
-            $turno->turno       =   $turnoSiguiente;
-            $turno->tipoTurno   =   $data['tipoTurno'];
-            $turno->estadoTurno =   "CONFIRMADO";
             $turno->estado      =   "ACTIVO";
             $turno->save();
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));

@@ -5,5 +5,4 @@ $app->put('/servicio/{id}',"ServicioControl:updateservicios");
 $app->put('/servicio/estado/{id}',"ServicioControl:updateestado");
 $app->put('/servicio/estado/desactivar/{id}',"ServicioControl:updateestadodesactivar");
 $app->get('/sucursal/{idSucursal}/servicio',"ServicioControl:getServiciosBySucursal");
-$app->get('/sector/{idSector}/servicio',"ServicioControl:getServiciosBySector");
-$app->get('/empleado/{idEmpleado}/servicio',"ServicioControl:getServiciosByEmpleado");
+$app->get('/getallservicio',"ServicioControl:getAllservis");

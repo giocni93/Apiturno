@@ -65,10 +65,10 @@ class SectorControl{
             $sector->estado		 =  "INACTIVO";
             $sector->save();
 
-            $sectorempresa = new SectorEmpresa;
+            /*$sectorempresa = new SectorEmpresa;
             $sectorempresa->idSector 	= $sector->id;
             $sectorempresa->idEmpresa 	= $data['idEmpresa'];
-            $sectorempresa->save();
+            $sectorempresa->save();*/
 
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
             $response = $response->withStatus(200);

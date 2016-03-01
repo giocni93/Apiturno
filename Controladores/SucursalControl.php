@@ -36,12 +36,12 @@ class SucursalControl{
 	        $admin->email 			=	$data['email'];
 	        $admin->save();
 
-	        for($i=0; $i< count($data['servicios']);$i++){
+	        /*for($i=0; $i< count($data['servicios']);$i++){
 	    		$servicio = new ServiciosSucursal;
 	    		$servicio->idServicio =	 $data['servicios'][$i][0]['idServicio'];
 	    		$servicio->idSucursal =  $val;    					 
 	    		$servicio->save();
-	    	}
+	    	}*/
 
 	        $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
 	        $response = $response->withStatus(200);
@@ -56,7 +56,8 @@ class SucursalControl{
 	function getAllsucursalesId(Request $request, Response $response) {
 	    $response = $response->withHeader('Content-type', 'application/json');
 	    $id = $request->getAttribute("id");
-	    $data = Sucursal::select("*")
+	    $data = Sucursal::select("*","empresa.razonSocial")
+	    				->join('empresa','empresa.id','=','sucursal.idEmpresa')
 	                    ->where("idEmpresa","=",$id)
 	                    ->get();
 	    $response->getBody()->write($data);
@@ -84,21 +85,19 @@ class SucursalControl{
 
 		function getSucursalesByPosicion(Request $request, Response $response){
 				$response = $response->withHeader('Content-type', 'application/json');
-				//$data = Parametros::select("*")->first();
-				//$km = $data["diametro_busqueda"];
-				$idServicio = $request->getAttribute("idServicio");
+				$data = Parametros::select("*")->first();
+				$km = $data["diametro_busqueda"];
+				$idEmpresa = $request->getAttribute("idEmpresa");
 				$lat = $request->getAttribute("latitud");
 				$lng = $request->getAttribute("longitud");
 				$query = "SELECT "
 	                . "(6371 * ACOS( SIN(RADIANS(su.latitud)) * SIN(RADIANS($lat)) + COS(RADIANS(su.longitud - $lng)) * "
-					. "COS(RADIANS(su.latitud)) * COS(RADIANS($lat)))) AS distancia, "
-					. "su.* "
+									. "COS(RADIANS(su.latitud)) * COS(RADIANS($lat)))) AS distancia, "
+									. "su.* "
 	                . "FROM sucursal su "
-	                . "INNER JOIN serviciossucursal ss ON ss.idSucursal = su.id "
-	                . "INNER JOIN servicio se ON se.id = ss.idServicio "
-	                . "WHERE su.Estado = 'ACTIVO' AND se.id= $idServicio "
-					. "HAVING distancia < 2 ORDER BY distancia ASC";
-	      	$data = DB::select(DB::raw($query));
+	                . "WHERE su.Estado = 'ACTIVO' AND su.idEmpresa = $idEmpresa "
+									. "HAVING distancia < $km ORDER BY distancia ASC";
+	      $data = DB::select(DB::raw($query));
 		    $response->getBody()->write(json_encode($data));
 		    return $response;
 		}
@@ -159,7 +158,7 @@ class SucursalControl{
             $sector->estado   	 =   $data['estado'];
             $sector->save();
 
-            $admin = Administrador::select("*")
+            $admin = Empleado::select("*")
                           ->where("idSucursal","=",$id)
                           ->first();
             $admin->estado   =   $data['estado'];
@@ -183,7 +182,7 @@ class SucursalControl{
             $sector = Sucursal::find($id);
             $sector->estado   	 =   $data['estado'];
             $sector->save();
-            $admin = Administrador::select("*")
+            $admin = Empleado::select("*")
                           ->where("idSucursal","=",$id)
                           ->first();
             $admin->estado   =   $data['estado'];
@@ -198,7 +197,28 @@ class SucursalControl{
 	    return $response;
   	}
 
-  	
+  	function sectoresempresa(Request $request, Response $response){
+  		$response = $response->withHeader('Content-type', 'application/json');
+	    $data = json_decode($request->getBody(),true);
+	    $data = Sucursal::select("administrador.id","administrador.nombres","administrador.apellidos","administrador.identificacion","administrador.estado","perfil.nombre as nombreperfil","perfil.id as idperfil","administrador.correo","administrador.idempresa")
+	    				->join("perfil","perfil.id","=","administrador.idperfil")
+	    				->join("perfilpermisos","perfilpermisos.idperfil","=","perfil.id")
+	    				->where("pass","=",sha1($data['pass']))
+	                    ->where("identificacion","=",$data['identificacion'])
+	                    ->where("administrador.estado","=","ACTIVO")
+	                    ->first();
 
+	    $respuesta = json_encode(array('admin' => $data, "std" => 1));
+
+	    if($data == null){
+	      $respuesta = json_encode(array('admin' => null, "std" => 0));
+	      $response = $response->withStatus(404);
+	    }
+
+	    $response->getBody()->write($respuesta);
+	    return $response;
+  	}
+
+  	
 
 }

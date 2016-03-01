@@ -48,7 +48,8 @@ class ServiciosSucursalControl{
 	function getallid(Request $request, Response $response){
 		$response = $response->withHeader('Content-type', 'application/json');
 	    $id = $request->getAttribute("id");
-	    $data = ServiciosSucursal::select("*")
+	    $data = ServiciosSucursal::select("serviciossucursal.*","servicio.nombre")
+	    				->join("servicio","servicio.id","=","serviciossucursal.idServicio")
 	                    ->where("idSucursal","=",$id)
 	                    ->get();
 	    $response->getBody()->write($data);
@@ -71,5 +72,7 @@ class ServiciosSucursalControl{
     		$response->getBody()->write($respuesta);
     		return $response;
 	}
+
+
 
 }

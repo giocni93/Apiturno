@@ -141,6 +141,19 @@ class ServicioControl{
 		    return $response;
   	}
 
+  	public function getServiciosBySector(Request $request, Response $response)
+  	{
+  		$response = $response->withHeader('Content-type', 'application/json');
+        $idSector = $request->getAttribute("idSector");
+        $data = Servicio::select("servicio.*")
+        		->join("serviciossector", "serviciossector.idServicio", "=", "servicio.id")
+        		->join("sector", "serviciossector.idSector", "=", "sector.id")
+        		->where("sector.id", $idSector)
+        		->get();
+        $response->getBody()->write($data);
+		return $response;
+  	}
+
 
 
 }

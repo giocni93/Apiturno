@@ -115,7 +115,7 @@ class TurnoControl{
             $turno->save();
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1, "numeroTurno" => $turnoSiguiente));
             $response = $response->withStatus(200);
-
+            
             //ENVIAR NOTIFICACION AL EMPLEADO Y AL ADMINISTRADOR DE LA SUCURSAL
 
         }catch(Exception $err){

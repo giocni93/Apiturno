@@ -1,6 +1,7 @@
 <?php
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class TurnoControl{
 
@@ -130,6 +131,18 @@ class TurnoControl{
 
     $response->getBody()->write($respuesta);
     return $response;
+  }
+
+  function turnosxservicios(Request $request, Response $response){
+
+      $response = $response->withHeader('Content-type', 'application/json');
+      $id = $request->getAttribute("id");
+      $data = DB::select(DB::raw("Select estadoTurno,idSucursal,COUNT(*) as contador from turno  where   
+        turno.idSucursal = ".$id." and (estadoTurno='SOLICITADO' or estadoTurno='CANCELADO' or estadoTurno='CONFIRMADO' or estadoTurno='TERMINADO') GROUP BY estadoTurno"));
+
+      $response->getBody()->write(json_encode($data));
+      return $response;
+
   }
 
 }

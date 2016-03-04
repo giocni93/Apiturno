@@ -24,5 +24,31 @@ class TipoturnosectorControl{
 	    $response->getBody()->write($data);
 	    return $response;
 	}
+
+	function posttipoturnosector(Request $request, Response $response){
+		$response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        $id = $request->getAttribute("id");
+        try{
+            
+            $tipo = Tipoturnosector::select("*")
+                            ->where("idsector","=",$id)
+                            ->delete();
+
+            $sector = new Tipoturnosector;
+            $sector->idsector  		=  $data['idsector'];
+            $sector->idtipoturno 	=  $data['idtipoturno'];
+            $sector->save();
+
+            
+            $respuesta = json_encode(array('msg' => "modificado correctamente", "std" => 1));
+            $response = $response->withStatus(200);
+        }catch(Exception $err){
+            $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+            $response = $response->withStatus(404);
+        }
+        $response->getBody()->write($respuesta);
+        return $response;
+	}
 	
 }

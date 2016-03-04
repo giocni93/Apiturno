@@ -133,16 +133,108 @@ class TurnoControl{
     return $response;
   }
 
-  function turnosxservicios(Request $request, Response $response){
+  function turnosxestado(Request $request, Response $response){
 
       $response = $response->withHeader('Content-type', 'application/json');
       $id = $request->getAttribute("id");
-      $data = DB::select(DB::raw("Select estadoTurno,idSucursal,COUNT(*) as contador from turno  where   
-        turno.idSucursal = ".$id." and (estadoTurno='SOLICITADO' or estadoTurno='CANCELADO' or estadoTurno='CONFIRMADO' or estadoTurno='TERMINADO') GROUP BY estadoTurno"));
+      $fechainicial = $request->getAttribute("fechainicial");
+      $fechafinal = $request->getAttribute("fechafinal");
+      $date = date("Y-m-d");
+      $data = DB::select(DB::raw("Select id,COUNT(*) as contador,estadoTurno,idSucursal  from turno  where   
+        turno.idSucursal = ".$id." and (estadoTurno='SOLICITADO' or estadoTurno='CANCELADO' or estadoTurno='CONFIRMADO' or estadoTurno='TERMINADO') and fechaSolicitud BETWEEN '".$fechainicial."' and '".$fechafinal."' GROUP BY estadoTurno "));
+          
+          foreach ($data as $row) {
+            $vec2 = $this->categoria(utf8_encode($row->estadoTurno));
+            $vec[] = array(
+              "id" => $row->id,
+              "contador" => $row->contador,
+              "estadoTurno" => $row->estadoTurno,
+              "color" =>  $vec2["color"] 
+            );
+          }
+
+      $response->getBody()->write(json_encode($vec));
+      return $response;
+
+  }
+
+  function turnoxservicio(Request $request, Response $response){
+      $response = $response->withHeader('Content-type', 'application/json');
+      $id = $request->getAttribute("id");
+      $fechainicial = $request->getAttribute("fechainicial");
+      $fechafinal = $request->getAttribute("fechafinal");
+      $data = DB::select(DB::raw("Select turno.id,turno.estadoTurno,turno.idSucursal,COUNT(*) as contador,turno.idServicio,servicio.nombre,sucursal.nombre as sucursal from turno inner join servicio on servicio.id = turno.idServicio inner join sucursal on sucursal.id = turno.idSucursal where   
+        turno.idSucursal = ".$id." and estadoTurno='TERMINADO' and fechaSolicitud BETWEEN '".$fechainicial."' and '".$fechafinal."' GROUP BY idServicio "));
 
       $response->getBody()->write(json_encode($data));
       return $response;
+  }
 
+  function categoria($categoria){
+    $vec = array("color"=>"#ffffff");
+    if($categoria == 'SOLICITADO'){
+      $vec["color"] = "#1ab394";
+      return $vec;
+    }
+    if($categoria == 'CANCELADO'){
+      $vec["color"] = "#EF5350";
+      return $vec;
+    }
+    if($categoria == 'CONFIRMADO'){
+      $vec["color"] = "#BABABA";
+      return $vec;
+    }
+    if($categoria == 'TERMINADO'){
+      $vec["color"] = "#AA00FF";
+      return $vec;
+    }
+    return $vec;
+  }
+
+  function turnosempresa(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $idempresa = $request->getAttribute("id");
+    $fechainicial = $request->getAttribute("fechainicial");
+    $fechafinal = $request->getAttribute("fechafinal");
+    $servi = Sucursal::select('sucursal.nombre','sucursal.id')
+                              ->where('sucursal.idEmpresa','=',$idempresa)
+                              ->get();
+        for($i=0;$i<count($servi);$i++){
+          $data = DB::select(DB::raw("Select turno.id,COUNT(*) as contador,turno.estadoTurno,turno.idSucursal,sucursal.nombre  from turno inner join sucursal on sucursal.id = turno.idSucursal where   
+        turno.idSucursal = ".$servi[$i]->id." and  estadoTurno='TERMINADO' and fechaSolicitud BETWEEN '".$fechainicial."' and '".$fechafinal."' GROUP BY estadoTurno"));
+          $servi[$i]['turno'] = $data;
+        }                
+
+
+    $response->getBody()->write(json_encode($servi));
+      return $response;
+  }
+
+  function turnosempresaxservicios(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $idempresa = $request->getAttribute("id");
+    $fechainicial = $request->getAttribute("fechainicial");
+    $fechafinal = $request->getAttribute("fechafinal");
+    $servi = Sucursal::select('sucursal.nombre','sucursal.id')
+                              ->where('sucursal.idEmpresa','=',$idempresa)
+                              ->get();
+        for($i=0;$i<count($servi);$i++){
+          $data = DB::select(DB::raw("Select turno.id,COUNT(*) as contador,turno.estadoTurno,turno.idSucursal,sucursal.nombre,turno.idServicio as servicio,servicio.nombre as nombreservicio  from turno inner join sucursal on sucursal.id = turno.idSucursal inner join servicio on servicio.id = turno.idServicio where   
+        turno.idSucursal = ".$servi[$i]->id." and  estadoTurno='TERMINADO' and fechaSolicitud BETWEEN '".$fechainicial."' and '".$fechafinal."' GROUP BY turno.idservicio, turno.idSucursal"));
+          $servi[$i]['turno'] = $data;
+        }                
+
+
+    $response->getBody()->write(json_encode($servi));
+    return $response;
+  }
+
+  function getsucursalid(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $id = $request->getAttribute("id");
+    $sucu = Sucursal::find($id);
+    $response->getBody()->write($sucu);
+    return $response;
   }
 
 }

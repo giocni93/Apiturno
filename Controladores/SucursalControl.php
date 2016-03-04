@@ -56,7 +56,7 @@ class SucursalControl{
 	function getAllsucursalesId(Request $request, Response $response) {
 	    $response = $response->withHeader('Content-type', 'application/json');
 	    $id = $request->getAttribute("id");
-	    $data = Sucursal::select("*","empresa.razonSocial")
+	    $data = Sucursal::select("sucursal.*","empresa.razonSocial")
 	    				->join('empresa','empresa.id','=','sucursal.idEmpresa')
 	                    ->where("idEmpresa","=",$id)
 	                    ->get();

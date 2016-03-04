@@ -23,6 +23,19 @@ class ClienteControl{
     $response->getBody()->write($data);
     return $response;
   }
+  
+  function getClienteByemail(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $email = $request->getAttribute("email");
+    $data = Cliente::select("nombres","apellidos")
+                    ->where("email","=",$email)
+                    ->first();
+    if($data == null){
+      $response = $response->withStatus(404);
+    }
+    $response->getBody()->write($data);
+    return $response;
+  }
 
   function post(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');

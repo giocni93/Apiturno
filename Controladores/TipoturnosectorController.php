@@ -14,5 +14,15 @@ class TipoturnosectorControl{
 	    $response->getBody()->write($data);
 	    return $response;
 	}
+
+	function tiposelecionados(Request $request, Response $response){
+		$response = $response->withHeader('Content-type', 'application/json');
+	    $id = $request->getAttribute("id");
+	    $data = Tipoturnosector::select("*")
+                    ->where("idSector","=",$id)
+                    ->get();
+	    $response->getBody()->write($data);
+	    return $response;
+	}
 	
 }

@@ -6,7 +6,7 @@ class TipoTurnoControl{
 
 	function gettipoturnosector(Request $request, Response $response){
 		$response = $response->withHeader('Content-type', 'application/json');
-	    $data = Empleado::all();
+	    $data = TipoTurno::all();
 	    if(count($data) == 0){
 	      $response = $response->withStatus(404);
 	    }

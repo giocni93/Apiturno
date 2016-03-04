@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 04-03-2016 a las 20:36:50
+-- Tiempo de generación: 04-03-2016 a las 20:48:36
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -1606,6 +1606,15 @@ CREATE TABLE `tipoturno` (
   `prioridad` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `tipoturno`
+--
+
+INSERT INTO `tipoturno` (`id`, `nombre`, `estado`, `prioridad`) VALUES
+(1, 'NORMAL', 'ACTIVO', 3),
+(2, 'VIP', 'ACTIVO', 1),
+(3, 'PREFERENCIAL', 'ACTIVO', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -1908,7 +1917,7 @@ ALTER TABLE `sucursal`
 -- AUTO_INCREMENT de la tabla `tipoturno`
 --
 ALTER TABLE `tipoturno`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `tipoturnosector`
 --

@@ -49,6 +49,8 @@ return array(
     'SucursalControl' => $baseDir . '/Controladores/SucursalControl.php',
     'TipoTurno' => $baseDir . '/Modelos/TipoTurno.php',
     'TipoTurnoControl' => $baseDir . '/Controladores/TipoTurnoControl.php',
+    'Tipoturnosector' => $baseDir . '/Modelos/Tipoturnosector.php',
+    'TipoturnosectorControl' => $baseDir . '/Controladores/TipoturnosectorController.php',
     'Turno' => $baseDir . '/Modelos/Turno.php',
     'TurnoControl' => $baseDir . '/Controladores/TurnoControl.php',
 );

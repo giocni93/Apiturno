@@ -129,7 +129,11 @@ class EmpleadoControl{
                           ->first();
       $empleado->estadoOnline   =   $data['estadoOnline'];
       $empleado->save();
-      $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
+      $est = "En linea";
+      if($data['estadoOnline'] == "INACTIVO"){
+          $est = "Desconectado";
+      }
+      $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1, "estadoOnline" => $est));
       $response = $response->withStatus(200);
     } catch (Exception $err) {
       $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));

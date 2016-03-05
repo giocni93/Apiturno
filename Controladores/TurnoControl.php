@@ -328,4 +328,17 @@ class TurnoControl{
       return $response;
   }
 
+  function empleadomasturnos(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $id = $request->getAttribute("id");
+        $fechainicial = $request->getAttribute("fechainicial");
+        $fechafinal = $request->getAttribute("fechafinal");
+        $data = DB::select(DB::raw("Select idEmpleado,COUNT(*) as contador,estadoTurno,idSucursal  from turno where   
+                turno.idSucursal = ".$id." and estadoTurno='TERMINADO' and fechaSolicitud BETWEEN '".$fechainicial."' "
+                . "and '".$fechafinal."' GROUP BY idEmpleado "));
+          
+      $response->getBody()->write(json_encode($data));
+      return $response;
+  }
+
 }

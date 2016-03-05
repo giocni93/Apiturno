@@ -12,3 +12,4 @@ $app->get('/turno/pedidos/servicio/{id}/{fechainicial}/{fechafinal}',"TurnoContr
 $app->get('/turno/empresa/servicio/{id}/{fechainicial}/{fechafinal}',"TurnoControl:turnosempresa");
 $app->get('/turno/empresaxservicio/{id}/{fechainicial}/{fechafinal}',"TurnoControl:turnosempresaxservicios");
 $app->get('/getbysucursal/{id}',"TurnoControl:getsucursalid");
+$app->get('/reporte/empleado/{id}/{fechainicial}/{fechafinal}',"TurnoControl:empleadomasturnos");

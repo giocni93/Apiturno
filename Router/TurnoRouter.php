@@ -2,7 +2,7 @@
 
 $app->get('/empleado/{idEmpleado}/confirmados/turnos', "TurnoControl:getTurnosEnColaByEmpleado");
 $app->get('/empleado/{idEmpleado}/solicitados/turnos', "TurnoControl:getTurnosEnEsperaByEmpleado");
-$app->put('/turno/{id}', "TurnoControl:cambiarEstadoTurno");
+$app->put('/servicio/{idServicio}/empleado/{idEmpleado}/turno/{id}', "TurnoControl:cambiarEstadoTurno");
 $app->post('/turno', "TurnoControl:postTurno");
 $app->get('/cliente/{idCliente}/turnos', "TurnoControl:getTurnosCliente");
 

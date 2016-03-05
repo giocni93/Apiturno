@@ -8,15 +8,21 @@ class TurnoControl{
   public function getTurnosEnColaByEmpleado(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $idEmpleado = $request->getAttribute("idEmpleado");
-    $data = Turno::select("turno.tipoTurno","turno.id as calificacionCliente","turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
+    $data = Turno::select("tipoTurno.prioridad","turno.tipoTurno","turno.id as calificacionCliente","turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
                     ->join("cliente","cliente.id","=","turno.idCliente")
+                    ->join("tipoTurno","tipoTurno.id","=","turno.tipoTurno")
                     ->where("turno.idEmpleado","=",$idEmpleado)
-                    ->where("turno.estadoTurno","=","CONFIRMADO")
-                    ->orwhere("turno.estadoTurno","=","ATENDIENDO")
+                    ->where(function ($query) {
+                        $query->where("turno.estadoTurno","=","CONFIRMADO")
+                              ->orwhere("turno.estadoTurno","=","ATENDIENDO");
+                    })
                     ->where("turno.estado","=","ACTIVO")
-                    ->whereRaw('ABS(TIMESTAMPDIFF(MINUTE,turno.fechaSolicitud,NOW())) >= turno.tiempo', [])
-                    ->orderBy('turno.id', 'asc')
-                    ->orderBy('turno.tiempo', 'asc')
+                    //->whereRaw('ABS(TIMESTAMPDIFF(MINUTE,turno.fechaSolicitud,NOW())) >= turno.tiempo', [])
+                    ->orderBy('turno.avisado', 'desc')
+                    ->orderBy('turno.estadoTurno', 'desc')
+                    ->orderBy('tipoTurno.prioridad', 'asc')
+                    ->orderBy('turno.fechaSolicitud', 'asc')
+                    //->orderBy('turno.tiempo', 'asc')
                     ->get();
     if(count($data) == 0){
       $response = $response->withStatus(404);
@@ -59,6 +65,8 @@ class TurnoControl{
     $response = $response->withHeader('Content-type', 'application/json');
     $data = json_decode($request->getBody(),true);
     $id = $request->getAttribute("id");
+    $idEmpleado = $request->getAttribute("idEmpleado");
+    $idServicio = $request->getAttribute("idServicio");
     $banTerminado = false;
 
     try {
@@ -76,7 +84,60 @@ class TurnoControl{
       $turno->save();
       if($banTerminado){
         //ENVIAR NOTIFICACIONES A LOS CLIENTES
-
+          $turnos = Turno::select("turno.*","cliente.idPush")
+                    ->join("cliente","cliente.id","=","turno.idCliente")
+                    ->where(function ($query) {
+                          $query->where("turno.estadoTurno","=","CONFIRMADO")
+                                ->orwhere("turno.estadoTurno","=","ATENDIENDO");
+                      })
+                    ->where("turno.idEmpleado","=",$idEmpleado)
+                    ->where("turno.idServicio","=",$idServicio)   
+                    ->where("turno.tipoTurno","<>",2)
+                    ->orderBy('turno.fechaSolicitud', 'asc')
+                    ->get();
+          for($i = 0; $i < count($turnos); $i++){
+              $query = "SELECT "
+                        ."(AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes) as tiempoEstimado "
+                        ."FROM "
+                        ."( "
+                        ."  SELECT "
+                        ."    count(t.id) as faltantes "
+                        ."    FROM "
+                        ."    turno as t "
+                        ."    WHERE "
+                        ."    t.idEmpleado = ".$idEmpleado." AND "
+                        ."    t.idServicio = ".$idServicio." AND "
+                        ."    t.fechaSolicitud <= '".$turnos[$i]->fechaSolicitud."' AND "
+                        ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
+                        .") as turnosFaltantes, "
+                        ."turno "
+                        ."WHERE "
+                        ."idEmpleado = ".$idEmpleado." AND "
+                        ."idServicio = ".$idServicio." AND "
+                        ."idCliente = ".$turnos[$i]->idCliente." AND "
+                        ."estadoTurno = 'TERMINADO' LIMIT 1";
+                $dataTiempo = DB::select(DB::raw($query));
+                if(count($dataTiempo) > 0){
+                    //VARIFICAR SI YA PASO UN TIEMPO PARAMETRIZDO PARA AVISARLE
+                    $tiempo = ($dataTiempo[0]->tiempoEstimado / 60);
+                    if($tiempo < 5){
+                        try {
+                            $tu = Turno::select("*")
+                                    ->where("id","=",$turnos[$i]->id)
+                                    ->first();
+                            $tu->avisado     =   1;
+                            $tu->save();
+                          } catch (Exception $err) {
+                          }
+                    }
+                    //ANVIAR NOTIFICACION
+                    $titulo = "Turno movil";
+                    $msg = "Ya esta cerca tu turno, solo falta ".$tiempo." minutos";
+                    $std = 0;
+                    enviarNotificacion(array($turnos[$i]->idPush),$titulo, $msg, $std);
+                    //array_push($vec, $turnos[$i]->idPush);
+                }
+          }
       }
       $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
       $response = $response->withStatus(200);

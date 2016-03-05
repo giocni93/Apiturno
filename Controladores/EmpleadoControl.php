@@ -24,6 +24,19 @@ class EmpleadoControl{
     $response->getBody()->write($data);
     return $response;
   }
+  
+  function getEstadoEmpleado(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $id = $request->getAttribute("idEmpleado");
+    $data = Empleado::select("estadoOnline")
+                  ->where("id","=",$id)
+                  ->first();
+    if($data == null){
+      $response = $response->withStatus(404);
+    }
+    $response->getBody()->write($data);
+    return $response;
+  }
 
   function post(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
@@ -105,6 +118,27 @@ class EmpleadoControl{
     return $response;
   }
 
+  public function updateEstadoEmpleado(Request $request, Response $response)
+  {
+    try {
+      $response = $response->withHeader('Content-type', 'application/json');
+      $data = json_decode($request->getBody(),true);
+      $id = $request->getAttribute("idEmpleado");
+      $empleado = Empleado::select("*")
+                          ->where("id","=",$id)
+                          ->first();
+      $empleado->estadoOnline   =   $data['estadoOnline'];
+      $empleado->save();
+      $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
+      $response = $response->withStatus(200);
+    } catch (Exception $err) {
+      $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+      $response = $response->withStatus(404);
+    }
+    $response->getBody()->write($respuesta);
+    return $response;
+  }
+  
   public function updatePass(Request $request, Response $response)
   {
     try {

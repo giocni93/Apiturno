@@ -132,6 +132,87 @@ class TurnoControl{
     $response->getBody()->write($respuesta);
     return $response;
   }
+  
+  public function postTurnoAnonimo(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $data = json_decode($request->getBody(),true);
+    //VALIDAR SI EL CLIENTE EXISTE
+    $cli = Cliente::select("id")
+            ->where("email","=",$data["email"])
+            ->first();
+    $idCliente = "";
+    if($cli == null){
+        try{
+        $cliente = new Cliente;
+        $cliente->email     =   $data['email'];
+        $cliente->nombres   =   $data['nombres'];
+        $cliente->apellidos =   $data['apellidos'];
+        $cliente->telefono  =   "";
+        $cliente->pass      =   sha1($data['email']);
+        $cliente->idPush    =   "01";//$data['idPush'];
+        $cliente->idFace    =   "01";//$data['idFace'];
+        $cliente->estado    =   "ACTIVO";
+        $cliente->save();
+        $idCliente = $cliente->id;
+    }catch(Exception $err){
+    }
+    }else{
+        $idCliente = $cli->id;
+    }
+    
+    //VALIDAR SI TIENE UN TURNO EN EL SERVICIO DE LA SUCURSAL SOLICITADA
+    $turnoCliente = Turno::select("idCliente")
+                    ->where("idCliente","=",$idCliente)
+                    ->where("idServicio","=",$data["idServicio"])
+                    ->where("idSucursal","=",$data["idSucursal"])
+                    ->where("estadoTurno","<>","TERMINADO")
+                    ->where("estadoTurno","<>","CANCELADO")
+                    ->first();
+    if($turnoCliente == null){
+        //CALCULAR EL SIGUIENTE TURNO
+        $turnoSiguiente = 1;
+        $con_turno = Turno::select("turno")
+                        ->where("idServicio","=",$data["idServicio"])
+                        ->where("idSucursal","=",$data["idSucursal"])
+                        ->where("estadoTurno","<>","TERMINADO")
+                        ->where("estadoTurno","<>","CANCELADO")
+                        ->orderBy('turno', 'desc')
+                        ->first();
+        if($con_turno != null){
+          $turnoSiguiente = $con_turno['turno'] + 1;
+        }
+
+        //INSERTAR TURNO
+        try{
+            $turno = new Turno;
+            $turno->idCliente   =   $idCliente;
+            $turno->idEmpleado  =   $data['idEmpleado'];
+            $turno->idSucursal  =   $data['idSucursal'];
+            $turno->idServicio  =   $data['idServicio'];
+            $turno->tiempo      =   0; //$data['tiempo'];
+            $turno->turno       =   $turnoSiguiente;
+            $turno->tipoTurno   =   $data['tipoTurno'];
+            $turno->estadoTurno =   "SOLICITADO";
+            $turno->estado      =   "ACTIVO";
+            $turno->save();
+            $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1, "numeroTurno" => $turnoSiguiente));
+            $response = $response->withStatus(200);
+            
+            //ENVIAR NOTIFICACION AL EMPLEADO Y AL ADMINISTRADOR DE LA SUCURSAL
+
+        }catch(Exception $err){
+            $respuesta = json_encode(array('msg' => "error al pedir el turno", "std" => 0,"err" => $err->getMessage()));
+            $response = $response->withStatus(404);
+        }
+
+    }else{
+      $respuesta = json_encode(array('msg' => "Ya tienes un turno activo en este servicio", "std" => 0));
+      $response = $response->withStatus(404);
+    }
+
+    $response->getBody()->write($respuesta);
+    return $response;
+  }
 
   function turnosxestado(Request $request, Response $response){
 

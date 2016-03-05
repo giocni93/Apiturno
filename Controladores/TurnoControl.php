@@ -8,7 +8,7 @@ class TurnoControl{
   public function getTurnosEnColaByEmpleado(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $idEmpleado = $request->getAttribute("idEmpleado");
-    $data = Turno::select("turno.id as calificacionCliente","turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
+    $data = Turno::select("turno.tipoTurno","turno.id as calificacionCliente","turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
                     ->join("cliente","cliente.id","=","turno.idCliente")
                     ->where("turno.idEmpleado","=",$idEmpleado)
                     ->where("turno.estadoTurno","=","CONFIRMADO")
@@ -34,7 +34,7 @@ class TurnoControl{
   public function getTurnosEnEsperaByEmpleado(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $idEmpleado = $request->getAttribute("idEmpleado");
-    $data = Turno::select("turno.id as calificacionCliente","turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
+    $data = Turno::select("turno.tipoTurno","turno.id as calificacionCliente","turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
                     ->join("cliente","cliente.id","=","turno.idCliente")
                     ->where("turno.idEmpleado","=",$idEmpleado)
                     ->where("turno.estadoTurno","=","SOLICITADO")

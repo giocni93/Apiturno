@@ -102,7 +102,7 @@ class EmpleadoControl{
       $empleado = Empleado::select("*")
                           ->where("id","=",$id)
                           ->first();
-      $empleado->identificacion   =   $data['identificacion'];
+      //$empleado->identificacion   =   $data['identificacion'];
       $empleado->email            =   $data['email'];
       $empleado->nombres          =   $data['nombres'];
       $empleado->apellidos        =   $data['apellidos'];
@@ -203,7 +203,7 @@ class EmpleadoControl{
   function getEmpleadosBySucursal(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $idSucursal = $request->getAttribute("idSucursal");
-    $query = "SELECT "
+    $query = "SELECT DISTINCT "
               . "emp.id as idEmpleado,"
               . "ser.id as idServicio,"
               . "CONCAT(emp.nombres, ' ', emp.apellidos) AS empleado,"
@@ -216,7 +216,7 @@ class EmpleadoControl{
               . "serviciosempleado seremp ON(seremp.idEmpleado = emp.id) "
               . "INNER JOIN "
               . "servicio ser ON(ser.id = seremp.idServicio) "
-              . "WHERE emp.idSucursal = $idSucursal AND emp.estadoOnline = 'ACTIVO' AND ser.estado = 'ACTIVO'";
+              . "WHERE emp.idSucursal = $idSucursal AND ser.estado = 'ACTIVO'";
     $data = DB::select(DB::raw($query));
     for($i = 0; $i < count($data); $i++){
       //CALCULAR TIEMPO

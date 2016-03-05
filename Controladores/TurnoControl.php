@@ -1,13 +1,14 @@
 <?php
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class TurnoControl{
 
   public function getTurnosEnColaByEmpleado(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $idEmpleado = $request->getAttribute("idEmpleado");
-    $data = Turno::select("turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush")
+    $data = Turno::select("turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
                     ->join("cliente","cliente.id","=","turno.idCliente")
                     ->where("turno.idEmpleado","=",$idEmpleado)
                     ->where("turno.estadoTurno","=","CONFIRMADO")
@@ -130,6 +131,16 @@ class TurnoControl{
 
     $response->getBody()->write($respuesta);
     return $response;
+  }
+
+  public function getTurnosCliente(Request $request, Response $response)
+  {
+    # 
+      $idCliente= $request->getAttribute("idCliente");
+      $query = "SELECT tu.*, su.nombre as sucursal, em.razonSocial as empresa, concat(emp.nombres, ' ', emp.apellidos) as empleado FROM turno tu INNER JOIN sucursal su on su.id = tu.idSucursal INNER JOIN empresa em on em.id = su.idEmpresa INNER JOIN empleado emp on emp.id = tu.idEmpleado where idCliente = '$idCliente' and CAST(fechaSolicitud AS DATE) = curdate() and estadoturno = 'SOLICITADO'";
+      $data = DB::select(DB::raw($query));
+      $response->getBody()->write(json_encode($data));
+      return $response;
   }
 
 }

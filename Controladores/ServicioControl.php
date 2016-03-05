@@ -183,6 +183,21 @@ class ServicioControl{
 		return $response;
   	}
 
+    public function getPreciosByServicioSucursal(Request $request, Response $response)
+    {
+        $response = $response->withHeader('Content-type', 'application/json');
+        $idServicio = $request->getAttribute("idServicio");
+        $idSucursal = $request->getAttribute("idSucursal");
+        $data = ServiciosSucursal::select("*")
+            ->where("idServicio","=", $idServicio)
+            ->where("idSucursal","=", $idSucursal)
+            ->first();
+        if($data == null){
+            $response = $response->withStatus(404);
+        }
+        $response->getBody()->write($data);
+        return $response;
+    }
 
 
 }

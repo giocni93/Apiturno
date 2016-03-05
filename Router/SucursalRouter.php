@@ -17,4 +17,6 @@
 
 	$app->get('/sucursalxempresa',"SucursalControl:getAllsucursalesxempresa");
 
+	$app->get('/empleado/empresa/{id}',"SucursalControl:empleadosporempresa");
+
 	

@@ -23,3 +23,4 @@
   include_once 'Router/ServiciosSectorRouter.php';
   include_once 'Router/SectorEmpresaRouter.php';
   include_once 'Router/TipoturnosectorRouter.php';
+  include_once 'Router/IngresoRouter.php';

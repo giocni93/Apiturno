@@ -137,7 +137,11 @@ class TurnoControl{
                     enviarNotificacion(array($turnos[$i]->idPush),$titulo, $msg, $std);
                     //array_push($vec, $turnos[$i]->idPush);
                 }
+
+                
+
           }
+
       }
       $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
       $response = $response->withStatus(200);
@@ -407,7 +411,7 @@ class TurnoControl{
         $fechainicial = $request->getAttribute("fechainicial");
         $fechafinal = $request->getAttribute("fechafinal");
         $data = DB::select(DB::raw("Select idEmpleado,COUNT(*) as contador,estadoTurno,idSucursal  from turno where   
-                turno.idSucursal = ".$id." and estadoTurno='TERMINADO' and fechaSolicitud BETWEEN '".$fechainicial."' "
+                turno.idEmpleado = ".$id." and estadoTurno='TERMINADO' and fechaSolicitud BETWEEN '".$fechainicial."' "
                 . "and '".$fechafinal."' GROUP BY idEmpleado "));
           
       $response->getBody()->write(json_encode($data));

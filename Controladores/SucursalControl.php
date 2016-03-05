@@ -233,4 +233,23 @@ class SucursalControl{
 	    return $response;
   	}
 
+  	function empleadosporempresa(Request $request, Response $response){
+  		$response = $response->withHeader('Content-type', 'application/json');
+	    $id = $request->getAttribute("id");
+	    $sucursal = Sucursal::select('sucursal.id','sucursal.nombre as sucursal','empresa.razonSocial')
+	    					->join('empresa','empresa.id','=','sucursal.idEmpresa')
+	    					->where('sucursal.idEmpresa','=',$id)
+	    					->get();
+	    			for($i=0;$i<count($sucursal);$i++){
+	    				$empleado = Empleado::select('empleado.nombres','empleado.apellidos',
+	    					'empleado.identificacion','empleado.estado','empleado.id')
+	    					->where('empleado.idSucursal','=',$sucursal[$i]->id)
+	    					->where('empleado.idPerfil','=',2)
+	    					->get();
+	    				$sucursal[$i]['empleados'] = $empleado;
+	    			}
+	    $response->getBody()->write($sucursal);
+	    return $response;					
+  	}
+
 }

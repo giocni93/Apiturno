@@ -156,14 +156,17 @@ class ServicioControl{
                     $tur = Turno::select('turno.turno')
                         ->where('turno.idEmpleado','=',$idEmpleado)
                         ->where('turno.idServicio','=',$data[$i]->idServicio)
-                        ->where('turno.estadoTurno','=','CONFIRMADO')
-                        ->orwhere('turno.estadoTurno','=','ATENDIENDO')
+                        ->where(function($q){
+                           $q ->where('turno.estadoTurno','=','CONFIRMADO')
+                            ->orwhere('turno.estadoTurno','=','ATENDIENDO');
+                        })
                         ->orderBy("turno.fechaSolicitud","Desc")
                         ->first();
                         $turno = 1;
                     if($tur != null){
                         $turno = $tur->turno;
                     }
+                    $data[$i]['turnoActual'] = $turno;
                 }
             }
             $response->getBody()->write($data);

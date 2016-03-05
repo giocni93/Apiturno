@@ -10,6 +10,8 @@ return array(
     'AdministradorControl' => $baseDir . '/Controladores/AdministradorControl.php',
     'Calificacion' => $baseDir . '/Modelos/Calificacion.php',
     'CalificacionControl' => $baseDir . '/Controladores/CalificacionControl.php',
+    'CalificacionCliente' => $baseDir . '/Modelos/CalificacionCliente.php',
+    'CalificacionClienteControl' => $baseDir . '/Controladores/CalificacionClienteControl.php',
     'Cliente' => $baseDir . '/Modelos/Cliente.php',
     'ClienteControl' => $baseDir . '/Controladores/ClienteControl.php',
     'Departamento' => $baseDir . '/Modelos/Departamento.php',

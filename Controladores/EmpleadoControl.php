@@ -210,6 +210,7 @@ class EmpleadoControl{
               . "ser.nombre as servicio, "
               . "'' as cliente, "
               . "'' as tiempoEstimado, "
+              . "'' as numeroTurno, "
               . "'' as turnoActual "
               . "FROM empleado emp "
               . "INNER JOIN "
@@ -222,7 +223,8 @@ class EmpleadoControl{
       //CALCULAR TIEMPO
       $query = "SELECT "
                 ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes)),'%H:%i:%s') as tiempoEstimado, "
-                ."COALESCE(turnoAct.turnoActual,0) as turnoActual "
+                ."COALESCE(turnoAct.turnoActual,0) as turnoActual, "
+                ."COALESCE(numeroTur.numeroTurno,0) as numeroTurno "
                 ."FROM "
                 ."( "
                 ."  SELECT "
@@ -235,6 +237,7 @@ class EmpleadoControl{
                 ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
                 .") as turnosFaltantes, "
                 ."(SELECT MAX(tu.turno) as turnoActual FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND tu.estadoTurno = 'ATENDIENDO') as turnoAct,"
+                ."(SELECT Count(tu.turno) as numeroTurno FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND (tu.estadoTurno <> 'TERMINADO' OR tu.estadoTurno <> 'CANCELADO')) as numeroTur,"
                 ."turno "
                 ."WHERE "
                 ."idEmpleado = ".$data[$i]->idEmpleado." AND "
@@ -246,6 +249,7 @@ class EmpleadoControl{
           $data[$i]->tiempoEstimado = "00:00:00";
         }
         $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
+        $data[$i]->numeroTurno = $dataTiempo[0]->numeroTurno;
         $query = "SELECT "
                   ."COALESCE(tu.turno,0) as turnoActual, "
                   ."COALESCE(CONCAT(cl.nombres,' ',cl.apellidos),'') as cliente "
@@ -279,6 +283,7 @@ class EmpleadoControl{
     }
     $response->getBody()->write(json_encode($data));
     return $response;
+
   }
 
   function sesionlogin(Request $request, Response $response){

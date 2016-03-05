@@ -1,6 +1,7 @@
 <?php
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class CalificacionClienteControl{
 
@@ -22,5 +23,15 @@ class CalificacionClienteControl{
     $response->getBody()->write($respuesta);
     return $response;
   }
+  
+    public function promedio(Request $request, Response $response)
+    {
+        $response = $response->withHeader('Content-type', 'application/json');
+        $idCliente = $request->getAttribute("idCliente");
+        $query = "SELECT COALESCE(AVG(calificacion),0) as promedio FROM calificacioncliente WHERE idCliente = ".$idCliente;
+        $data = DB::select(DB::raw($query));
+        $response->getBody()->write(json_encode($data));
+        return $response;
+    }
     
 }

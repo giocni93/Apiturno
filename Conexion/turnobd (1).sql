@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.2
+-- version 4.5.1
 -- http://www.phpmyadmin.net
 --
--- Servidor: localhost
--- Tiempo de generación: 04-03-2016 a las 20:48:36
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 05-03-2016 a las 15:49:04
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -39,6 +39,20 @@ CREATE TABLE `calificacion` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `calificacioncliente`
+--
+
+CREATE TABLE `calificacioncliente` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `idCliente` int(10) UNSIGNED NOT NULL,
+  `idEmpleado` int(10) UNSIGNED NOT NULL,
+  `calificacion` int(10) UNSIGNED NOT NULL,
+  `fecha` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `cliente`
 --
 
@@ -59,7 +73,9 @@ CREATE TABLE `cliente` (
 --
 
 INSERT INTO `cliente` (`id`, `email`, `nombres`, `apellidos`, `telefono`, `pass`, `idPush`, `idFace`, `estado`) VALUES
-(1, 'fandresoja@gmail.com', 'fabio andres', 'rojas gulloso', '3008388', '223bb78da41f44447ff0ad216d5a49d6b0f1c366', '01', '01', 'ACTIVO');
+(1, 'fandresoja@gmail.com', 'fabio andres', 'rojas gulloso', '3008388', '223bb78da41f44447ff0ad216d5a49d6b0f1c366', '01', '01', 'ACTIVO'),
+(2, 'giocni@gmail.com', 'Gilmar', 'Ocampo Nieves', '', 'a3be0466979911942630a62fb05aa9623b1d68d8', '01', '01', 'ACTIVO'),
+(3, 'prueba@gmail.com', 'prueba', 'prueba', '', '91c031127a6d5333c512da3bf3c1a9eb54300ec4', '01', '01', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -140,11 +156,11 @@ CREATE TABLE `empleado` (
 INSERT INTO `empleado` (`id`, `idSucursal`, `idEmpresa`, `idPerfil`, `identificacion`, `email`, `nombres`, `apellidos`, `telefono`, `pass`, `idPush`, `estado`, `estadoOnline`) VALUES
 (2, NULL, NULL, 1, '1065622719', 'fandresroja@gmail.com', 'Elsy Maria', 'Gomez Gomez', NULL, '5dd634422d39c48f29b9f2b50aa068d51aef2ea7', NULL, 'ACTIVO', 'ACTIVO'),
 (16, NULL, 43, 3, '106572920', 'fandresrojas@outlook.com', 'Fabio Andres', 'Rojas', '30038388', '5dd634422d39c48f29b9f2b50aa068d51aef2ea7', NULL, 'ACTIVO', 'ACTIVO'),
-(17, 5, NULL, 4, '10563778', 'giocni@gmail.com', 'Gilmar Jose', 'Ocampo Nieves', '322030838', 'e5bfe0892de24a28cfda808875dae20892a7ab11', NULL, 'ACTIVO', 'ACTIVO'),
+(17, 5, NULL, 2, '1065650321', 'giocni@gmail.com', 'Gilmar Jose', 'Ocampo Nieves', '322030838', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'APA91bEiXMbd-69LQSFm3bMJMnC7ZE1nWmGAT9j3cli9lgbkbZfpzMLSEW95wwPtOjXcheuFxSfBN2lwRqgTn4E3Ky0g7wp996ts', 'ACTIVO', 'INACTIVO'),
 (22, 9, NULL, 4, '12083832', 'junior@gmail.com', 'Junior', 'Ocampo', '30048833', '9009337cf16333f07109b593405cf7552ed8059a', NULL, 'ACTIVO', 'ACTIVO'),
-(28, 5, NULL, 2, '10653663', 'oswaldo@gmail.com', 'Oswaldo Andres', 'Rojas', '3203993', 'f49607523593ca7bf3fe042098ff1263907a29e6', NULL, 'ACTIVO', 'ACTIVO'),
+(28, 5, NULL, 2, '10653663', 'oswaldo@gmail.com', 'Oswaldo Andres', 'Rojas', '3203993', 'f49607523593ca7bf3fe042098ff1263907a29e6', NULL, 'ACTIVO', 'INACTIVO'),
 (51, NULL, 67, 3, '108837746', 'jeison@gmail.com', 'Jeison', 'Mandon', '30028383', 'b62e8aa3b876befec60319f4b63bf3f187ef0e69', NULL, 'ACTIVO', 'ACTIVO'),
-(52, 10, NULL, 4, '1076635', 'pacho@gmail.com', 'Pacho', 'imenez', '30028838', '76a36f376a5debd20bc54dfa61a0f9f0f994f060', NULL, 'ACTIVO', 'ACTIVO');
+(52, 5, NULL, 4, '1076635', 'pacho@gmail.com', 'Pacho', 'imenez', '30028838', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'APA91bEiXMbd-69LQSFm3bMJMnC7ZE1nWmGAT9j3cli9lgbkbZfpzMLSEW95wwPtOjXcheuFxSfBN2lwRqgTn4E3Ky0g7wp996ts', 'ACTIVO', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -1505,7 +1521,7 @@ CREATE TABLE `serviciosempleado` (
 
 INSERT INTO `serviciosempleado` (`id`, `idEmpleado`, `idServicio`) VALUES
 (6, 28, 16),
-(7, 28, 17),
+(7, 17, 17),
 (8, 28, 16),
 (9, 28, 17),
 (10, 28, 16);
@@ -1639,12 +1655,12 @@ CREATE TABLE `turno` (
   `idServicio` int(10) UNSIGNED NOT NULL,
   `idSucursal` int(10) UNSIGNED NOT NULL,
   `idEmpleado` int(10) UNSIGNED NOT NULL,
-  `fechaSolicitud` date NOT NULL,
+  `fechaSolicitud` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fechaInicio` datetime DEFAULT NULL,
   `fechaFinal` datetime DEFAULT NULL,
   `tiempo` smallint(6) DEFAULT '0',
   `turno` int(10) UNSIGNED NOT NULL,
-  `tipoTurno` enum('NORMAL','VIP') NOT NULL,
+  `tipoTurno` int(10) UNSIGNED NOT NULL,
   `estadoTurno` enum('SOLICITADO','CONFIRMADO','TERMINADO','CANCELADO','ATENDIENDO') NOT NULL,
   `estado` enum('ACTIVO','INACTIVO') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1654,11 +1670,10 @@ CREATE TABLE `turno` (
 --
 
 INSERT INTO `turno` (`id`, `idCliente`, `idServicio`, `idSucursal`, `idEmpleado`, `fechaSolicitud`, `fechaInicio`, `fechaFinal`, `tiempo`, `turno`, `tipoTurno`, `estadoTurno`, `estado`) VALUES
-(6, 1, 16, 5, 28, '2016-03-03', NULL, NULL, 0, 0, 'NORMAL', 'TERMINADO', 'ACTIVO'),
-(7, 1, 20, 9, 28, '2016-03-03', NULL, NULL, 0, 0, 'NORMAL', 'TERMINADO', 'ACTIVO'),
-(8, 1, 17, 5, 28, '2016-03-03', NULL, NULL, 0, 0, 'NORMAL', 'TERMINADO', 'ACTIVO'),
-(10, 1, 17, 10, 28, '2016-03-03', NULL, NULL, 0, 0, 'NORMAL', 'TERMINADO', 'ACTIVO'),
-(11, 1, 16, 5, 28, '2016-03-04', NULL, NULL, 0, 0, 'NORMAL', 'TERMINADO', 'ACTIVO');
+(13, 2, 17, 5, 17, '2016-03-04 16:33:21', NULL, NULL, 0, 1, 3, 'CANCELADO', 'ACTIVO'),
+(14, 2, 17, 5, 17, '2016-03-04 16:36:23', '2016-03-04 11:52:02', '2016-03-04 11:52:08', 0, 1, 2, 'TERMINADO', 'ACTIVO'),
+(15, 3, 17, 5, 17, '2016-03-04 23:54:04', '2016-03-04 11:54:54', '2016-03-04 11:55:02', 0, 1, 3, 'TERMINADO', 'ACTIVO'),
+(16, 3, 17, 5, 17, '2016-03-04 23:56:44', '2016-03-04 11:56:59', '2016-03-04 11:57:02', 0, 1, 1, 'TERMINADO', 'ACTIVO');
 
 --
 -- Índices para tablas volcadas
@@ -1670,6 +1685,14 @@ INSERT INTO `turno` (`id`, `idCliente`, `idServicio`, `idSucursal`, `idEmpleado`
 ALTER TABLE `calificacion`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idTurno` (`idTurno`);
+
+--
+-- Indices de la tabla `calificacioncliente`
+--
+ALTER TABLE `calificacioncliente`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idCliente` (`idCliente`),
+  ADD KEY `idEmpleado` (`idEmpleado`);
 
 --
 -- Indices de la tabla `cliente`
@@ -1817,7 +1840,8 @@ ALTER TABLE `turno`
   ADD KEY `idSucursal` (`idSucursal`),
   ADD KEY `idUsuario` (`idEmpleado`),
   ADD KEY `idTipoTurno` (`tipoTurno`),
-  ADD KEY `idEstadoTurno` (`estadoTurno`);
+  ADD KEY `idEstadoTurno` (`estadoTurno`),
+  ADD KEY `tipoTurno` (`tipoTurno`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -1829,10 +1853,15 @@ ALTER TABLE `turno`
 ALTER TABLE `calificacion`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT de la tabla `calificacioncliente`
+--
+ALTER TABLE `calificacioncliente`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `departamento`
 --
@@ -1927,7 +1956,7 @@ ALTER TABLE `tipoturnosector`
 -- AUTO_INCREMENT de la tabla `turno`
 --
 ALTER TABLE `turno`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- Restricciones para tablas volcadas
 --
@@ -1937,6 +1966,13 @@ ALTER TABLE `turno`
 --
 ALTER TABLE `calificacion`
   ADD CONSTRAINT `calificacion_ibfk_1` FOREIGN KEY (`idTurno`) REFERENCES `turno` (`id`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `calificacioncliente`
+--
+ALTER TABLE `calificacioncliente`
+  ADD CONSTRAINT `calificacioncliente_ibfk_1` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `calificacioncliente_ibfk_2` FOREIGN KEY (`idEmpleado`) REFERENCES `empleado` (`id`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `empleado`
@@ -2009,7 +2045,8 @@ ALTER TABLE `turno`
   ADD CONSTRAINT `turno_ibfk_1` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `turno_ibfk_2` FOREIGN KEY (`idServicio`) REFERENCES `servicio` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `turno_ibfk_3` FOREIGN KEY (`idSucursal`) REFERENCES `sucursal` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `turno_ibfk_4` FOREIGN KEY (`idEmpleado`) REFERENCES `empleado` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `turno_ibfk_4` FOREIGN KEY (`idEmpleado`) REFERENCES `empleado` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `turno_ibfk_5` FOREIGN KEY (`tipoTurno`) REFERENCES `tipoturno` (`id`) ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

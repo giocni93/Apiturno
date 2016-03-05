@@ -221,6 +221,14 @@ class SucursalControl{
 	    return $response;
   	}
 
-  	
+  	function getAllsucursalesxempresa(Request $request, Response $response) {
+	    $response = $response->withHeader('Content-type', 'application/json');
+	    $id = $request->getAttribute("id");
+	    $data = Sucursal::select("sucursal.*","empresa.razonSocial")
+	    				->join('empresa','empresa.id','=','sucursal.idEmpresa')
+	                    ->get();
+	    $response->getBody()->write($data);
+	    return $response;
+  	}
 
 }

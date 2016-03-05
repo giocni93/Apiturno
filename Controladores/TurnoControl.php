@@ -192,7 +192,7 @@ class TurnoControl{
             $turno->tiempo      =   0; //$data['tiempo'];
             $turno->turno       =   $turnoSiguiente;
             $turno->tipoTurno   =   $data['tipoTurno'];
-            $turno->estadoTurno =   "SOLICITADO";
+            $turno->estadoTurno =   "CONFIRMADO";
             $turno->estado      =   "ACTIVO";
             $turno->save();
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1, "numeroTurno" => $turnoSiguiente));

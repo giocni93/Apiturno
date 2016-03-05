@@ -399,8 +399,20 @@ class TurnoControl{
   {
     # 
       $idCliente= $request->getAttribute("idCliente");
-      $query = "SELECT tu.*, su.nombre as sucursal, em.razonSocial as empresa, concat(emp.nombres, ' ', emp.apellidos) as empleado FROM turno tu INNER JOIN sucursal su on su.id = tu.idSucursal INNER JOIN empresa em on em.id = su.idEmpresa INNER JOIN empleado emp on emp.id = tu.idEmpleado where idCliente = '$idCliente' and CAST(fechaSolicitud AS DATE) = curdate() and estadoturno = 'SOLICITADO'";
+      $query = "SELECT tu.*, su.nombre as sucursal, em.razonSocial as empresa, concat(emp.nombres, ' ', emp.apellidos) as empleado, '' as turnoActual FROM turno tu INNER JOIN sucursal su on su.id = tu.idSucursal INNER JOIN empresa em on em.id = su.idEmpresa INNER JOIN empleado emp on emp.id = tu.idEmpleado where idCliente = '$idCliente' and CAST(fechaSolicitud AS DATE) = curdate() and (estadoturno = 'SOLICITADO' OR estadoturno = 'ATENDIENDO')";
       $data = DB::select(DB::raw($query));
+      for($i = 0; $i < count($data); $i++){
+        $query = "SELECT "
+                ."COALESCE(turnoAct.turnoActual,0) as turnoActual "
+                ."FROM "
+                ."(SELECT MAX(tu.turno) as turnoActual FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND tu.estadoTurno = 'ATENDIENDO') as turnoAct,"
+                ."turno "
+                ."WHERE "
+                ."idEmpleado = ".$data[$i]->idEmpleado." AND "
+                ."idServicio = ".$data[$i]->idServicio;
+        $dataTiempo = DB::select(DB::raw($query));
+        $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
+      }
       $response->getBody()->write(json_encode($data));
       return $response;
   }

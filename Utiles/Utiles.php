@@ -18,7 +18,7 @@
   }
 
   function enviarNotificacion($array,$titulo, $msg, $std) {
-      $apiKey = 'AIzaSyB06I21Em2TXSIgam-mYZeqgnIxdOdh4AY';
+      $apiKey = 'AIzaSyCZlGhlftLINks2FNkwbk4Ub-D7sXTiH_4';
       $headers = array('Content-Type:application/json',"Authorization:key=$apiKey");
 
       $payload = array(
@@ -42,4 +42,5 @@
       curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
       $res = curl_exec($ch);
       curl_close($ch);
+      return $res;
   }

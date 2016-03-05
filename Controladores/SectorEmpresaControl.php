@@ -16,6 +16,7 @@ class SectorEmpresaControl{
         			$serviciosector = ServiciosSector::select('serviciossector.idServicio','servicio.nombre','serviciossector.idSector')
         						->join('servicio','servicio.id','=','serviciossector.idServicio')
 								->where('serviciossector.idSector','=',$servi[$i]->idSector)
+                                                                ->where('servicio.estado','=','ACTIVO')
 								->get();
         			$servi[$i]['servicio'] = $serviciosector;	
         		}

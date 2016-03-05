@@ -24,6 +24,19 @@ class EmpleadoControl{
     $response->getBody()->write($data);
     return $response;
   }
+  
+  function getEstadoEmpleado(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $id = $request->getAttribute("idEmpleado");
+    $data = Empleado::select("estadoOnline")
+                  ->where("id","=",$id)
+                  ->first();
+    if($data == null){
+      $response = $response->withStatus(404);
+    }
+    $response->getBody()->write($data);
+    return $response;
+  }
 
   function post(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
@@ -89,7 +102,7 @@ class EmpleadoControl{
       $empleado = Empleado::select("*")
                           ->where("id","=",$id)
                           ->first();
-      $empleado->identificacion   =   $data['identificacion'];
+      //$empleado->identificacion   =   $data['identificacion'];
       $empleado->email            =   $data['email'];
       $empleado->nombres          =   $data['nombres'];
       $empleado->apellidos        =   $data['apellidos'];
@@ -105,6 +118,31 @@ class EmpleadoControl{
     return $response;
   }
 
+  public function updateEstadoEmpleado(Request $request, Response $response)
+  {
+    try {
+      $response = $response->withHeader('Content-type', 'application/json');
+      $data = json_decode($request->getBody(),true);
+      $id = $request->getAttribute("idEmpleado");
+      $empleado = Empleado::select("*")
+                          ->where("id","=",$id)
+                          ->first();
+      $empleado->estadoOnline   =   $data['estadoOnline'];
+      $empleado->save();
+      $est = "En linea";
+      if($data['estadoOnline'] == "INACTIVO"){
+          $est = "Desconectado";
+      }
+      $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1, "estadoOnline" => $est));
+      $response = $response->withStatus(200);
+    } catch (Exception $err) {
+      $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+      $response = $response->withStatus(404);
+    }
+    $response->getBody()->write($respuesta);
+    return $response;
+  }
+  
   public function updatePass(Request $request, Response $response)
   {
     try {
@@ -165,7 +203,7 @@ class EmpleadoControl{
   function getEmpleadosBySucursal(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $idSucursal = $request->getAttribute("idSucursal");
-    $query = "SELECT "
+    $query = "SELECT DISTINCT "
               . "emp.id as idEmpleado,"
               . "ser.id as idServicio,"
               . "CONCAT(emp.nombres, ' ', emp.apellidos) AS empleado,"
@@ -178,7 +216,7 @@ class EmpleadoControl{
               . "serviciosempleado seremp ON(seremp.idEmpleado = emp.id) "
               . "INNER JOIN "
               . "servicio ser ON(ser.id = seremp.idServicio) "
-              . "WHERE emp.idSucursal = $idSucursal AND emp.estadoOnline = 'ACTIVO' AND ser.estado = 'ACTIVO'";
+              . "WHERE emp.idSucursal = $idSucursal AND ser.estado = 'ACTIVO'";
     $data = DB::select(DB::raw($query));
     for($i = 0; $i < count($data); $i++){
       //CALCULAR TIEMPO

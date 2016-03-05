@@ -111,34 +111,63 @@ class ServicioControl{
 		    return $response;
   	}
 
-		function getServiciosBySucursal(Request $request, Response $response){
-  		$response = $response->withHeader('Content-type', 'application/json');
-        $idSucursal = $request->getAttribute("idSucursal");
-				$data = Servicio::select('servicio.*')
-					->join("serviciossucursal","serviciossucursal.idServicio","=","servicio.id")
-		    	->where('serviciossucursal.idSucursal','=',$idSucursal)
-		    	->where('servicio.estado','=','ACTIVO')
-		    	->get();
-		    if(count($data) == 0){
-		      $response = $response->withStatus(404);
-		    }else{
-					for($i = 0; $i < count($data); $i++){
-							$tur = Turno::select('turno.turno')
-										->join("empleado","empleado.id","=","turno.idEmplado")
-							    	->where('turno.idSucursal','=',$idSucursal)
-										->where('turno.idServicio','=',$data[$i]->idServicio)
-							    	->where('turno.estadoTurno','=','CONFIRMADO')
-										->orwhere('turno.estadoTurno','=','ATENDIENDO')
-										->orderBy("turno.fechaSolicitud","Desc")
-							    	->first();
-										$turno = 1;
-							if($tur != null){
-								$turno = $tur->turno;
-							}
-					}
-				}
-		    $response->getBody()->write($data);
-		    return $response;
+        function getServiciosBySucursal(Request $request, Response $response){
+            $response = $response->withHeader('Content-type', 'application/json');
+            $idSucursal = $request->getAttribute("idSucursal");
+            $data = Servicio::select('servicio.*')
+                ->join("serviciossucursal","serviciossucursal.idServicio","=","servicio.id")
+                ->where('serviciossucursal.idSucursal','=',$idSucursal)
+                ->where('servicio.estado','=','ACTIVO')
+                ->get();
+            if(count($data) == 0){
+              $response = $response->withStatus(404);
+            }else{
+                for($i = 0; $i < count($data); $i++){
+                    $tur = Turno::select('turno.turno')
+                        ->join("empleado","empleado.id","=","turno.idEmplado")
+                        ->where('turno.idSucursal','=',$idSucursal)
+                        ->where('turno.idServicio','=',$data[$i]->idServicio)
+                        ->where('turno.estadoTurno','=','CONFIRMADO')
+                        ->orwhere('turno.estadoTurno','=','ATENDIENDO')
+                        ->orderBy("turno.fechaSolicitud","Desc")
+                        ->first();
+                        $turno = 1;
+                    if($tur != null){
+                        $turno = $tur->turno;
+                    }
+                }
+            }
+            $response->getBody()->write($data);
+            return $response;
+  	}
+        
+        function getServiciosByEmpleado(Request $request, Response $response){
+            $response = $response->withHeader('Content-type', 'application/json');
+            $idEmpleado = $request->getAttribute("idEmpleado");
+            $data = Servicio::select('servicio.*')
+                ->join("serviciosempleado","serviciosempleado.idServicio","=","servicio.id")
+                ->where('serviciosempleado.idEmpleado','=',$idEmpleado)
+                ->where('servicio.estado','=','ACTIVO')
+                ->get();
+            if(count($data) == 0){
+              $response = $response->withStatus(404);
+            }else{
+                for($i = 0; $i < count($data); $i++){
+                    $tur = Turno::select('turno.turno')
+                        ->where('turno.idEmpleado','=',$idEmpleado)
+                        ->where('turno.idServicio','=',$data[$i]->idServicio)
+                        ->where('turno.estadoTurno','=','CONFIRMADO')
+                        ->orwhere('turno.estadoTurno','=','ATENDIENDO')
+                        ->orderBy("turno.fechaSolicitud","Desc")
+                        ->first();
+                        $turno = 1;
+                    if($tur != null){
+                        $turno = $tur->turno;
+                    }
+                }
+            }
+            $response->getBody()->write($data);
+            return $response;
   	}
 
   	public function getServiciosBySector(Request $request, Response $response)

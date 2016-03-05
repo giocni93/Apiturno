@@ -10,6 +10,8 @@ return array(
     'AdministradorControl' => $baseDir . '/Controladores/AdministradorControl.php',
     'Calificacion' => $baseDir . '/Modelos/Calificacion.php',
     'CalificacionControl' => $baseDir . '/Controladores/CalificacionControl.php',
+    'CalificacionCliente' => $baseDir . '/Modelos/CalificacionCliente.php',
+    'CalificacionClienteControl' => $baseDir . '/Controladores/CalificacionClienteControl.php',
     'Cliente' => $baseDir . '/Modelos/Cliente.php',
     'ClienteControl' => $baseDir . '/Controladores/ClienteControl.php',
     'Departamento' => $baseDir . '/Modelos/Departamento.php',
@@ -49,6 +51,8 @@ return array(
     'SucursalControl' => $baseDir . '/Controladores/SucursalControl.php',
     'TipoTurno' => $baseDir . '/Modelos/TipoTurno.php',
     'TipoTurnoControl' => $baseDir . '/Controladores/TipoTurnoControl.php',
+    'Tipoturnosector' => $baseDir . '/Modelos/Tipoturnosector.php',
+    'TipoturnosectorControl' => $baseDir . '/Controladores/TipoturnosectorController.php',
     'Turno' => $baseDir . '/Modelos/Turno.php',
     'TurnoControl' => $baseDir . '/Controladores/TurnoControl.php',
 );

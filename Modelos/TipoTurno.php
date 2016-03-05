@@ -3,6 +3,6 @@
 
 	class TipoTurno extends Model{
 	    protected $table = "tipoturno";
-			protected $primaryKey = "id";
+		protected $primaryKey = "id";
 	    public $timestamps = false;
 	}

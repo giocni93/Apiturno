@@ -15,4 +15,6 @@
 
 	$app->get('/servicio/{idServicio}/posicion/{latitud}/{longitud}/sucursal', "SucursalControl:getSucursalesByPosicion");
 
+	$app->get('/sucursalxempresa',"SucursalControl:getAllsucursalesxempresa");
+
 	

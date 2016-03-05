@@ -1,6 +1,7 @@
 <?php
 
   include_once 'Router/CalificacionRouter.php';
+  include_once 'Router/CalificacionClienteRouter.php';
   include_once 'Router/ClienteRouter.php';
   include_once 'Router/DepartamentoRouter.php';
   include_once 'Router/EmpleadoRouter.php';
@@ -21,3 +22,4 @@
   include_once 'Router/ModuloRouter.php';
   include_once 'Router/ServiciosSectorRouter.php';
   include_once 'Router/SectorEmpresaRouter.php';
+  include_once 'Router/TipoturnosectorRouter.php';

@@ -65,10 +65,16 @@ class SectorControl{
             $sector->estado		 =  "INACTIVO";
             $sector->save();
 
-            /*$sectorempresa = new SectorEmpresa;
-            $sectorempresa->idSector 	= $sector->id;
-            $sectorempresa->idEmpresa 	= $data['idEmpresa'];
-            $sectorempresa->save();*/
+            
+
+            for($i=0; $i< count($data['tipoturno']);$i++){
+                $tipo = new Tipoturnosector;
+                $tipo->idsector   =    $sector->id;
+                $tipo->idtipoturno  =  $data['tipoturno'][$i]['id'];
+                $tipo->save();
+            }
+
+            
 
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
             $response = $response->withStatus(200);
@@ -89,6 +95,15 @@ class SectorControl{
             $sector->nombre   	 	=   $data['nombre'];
             $sector->descripcion   =   $data['descripcion'];
             $sector->save();
+
+            
+            /*for($i=0; $i< count($data['tipoturno']);$i++){
+                $tipo = new Tipoturnosector;
+                $tipo->idsector   =    $id;
+                $tipo->idtipoturno  =  $data['tipoturno'][$i]['id'];
+                $tipo->save();
+            }*/
+
             $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
       		$response = $response->withStatus(200);
 		} catch (Exception $err) {

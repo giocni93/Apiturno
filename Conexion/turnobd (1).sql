@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-02-2016 a las 22:22:17
+-- Tiempo de generación: 05-03-2016 a las 15:49:04
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -39,6 +39,20 @@ CREATE TABLE `calificacion` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `calificacioncliente`
+--
+
+CREATE TABLE `calificacioncliente` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `idCliente` int(10) UNSIGNED NOT NULL,
+  `idEmpleado` int(10) UNSIGNED NOT NULL,
+  `calificacion` int(10) UNSIGNED NOT NULL,
+  `fecha` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `cliente`
 --
 
@@ -53,6 +67,15 @@ CREATE TABLE `cliente` (
   `idFace` varchar(200) DEFAULT NULL,
   `estado` enum('ACTIVO','INACTIVO') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `cliente`
+--
+
+INSERT INTO `cliente` (`id`, `email`, `nombres`, `apellidos`, `telefono`, `pass`, `idPush`, `idFace`, `estado`) VALUES
+(1, 'fandresoja@gmail.com', 'fabio andres', 'rojas gulloso', '3008388', '223bb78da41f44447ff0ad216d5a49d6b0f1c366', '01', '01', 'ACTIVO'),
+(2, 'giocni@gmail.com', 'Gilmar', 'Ocampo Nieves', '', 'a3be0466979911942630a62fb05aa9623b1d68d8', '01', '01', 'ACTIVO'),
+(3, 'prueba@gmail.com', 'prueba', 'prueba', '', '91c031127a6d5333c512da3bf3c1a9eb54300ec4', '01', '01', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -131,7 +154,13 @@ CREATE TABLE `empleado` (
 --
 
 INSERT INTO `empleado` (`id`, `idSucursal`, `idEmpresa`, `idPerfil`, `identificacion`, `email`, `nombres`, `apellidos`, `telefono`, `pass`, `idPush`, `estado`, `estadoOnline`) VALUES
-(1, 13, NULL, 3, '1065650321', 'giocni@gmail.com', 'Gilmar', 'Ocampo nieves', NULL, '40bd001563085fc35165329ea1ff5c5ecbdbbeef', NULL, 'ACTIVO', 'ACTIVO');
+(2, NULL, NULL, 1, '1065622719', 'fandresroja@gmail.com', 'Elsy Maria', 'Gomez Gomez', NULL, '5dd634422d39c48f29b9f2b50aa068d51aef2ea7', NULL, 'ACTIVO', 'ACTIVO'),
+(16, NULL, 43, 3, '106572920', 'fandresrojas@outlook.com', 'Fabio Andres', 'Rojas', '30038388', '5dd634422d39c48f29b9f2b50aa068d51aef2ea7', NULL, 'ACTIVO', 'ACTIVO'),
+(17, 5, NULL, 2, '1065650321', 'giocni@gmail.com', 'Gilmar Jose', 'Ocampo Nieves', '322030838', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'APA91bEiXMbd-69LQSFm3bMJMnC7ZE1nWmGAT9j3cli9lgbkbZfpzMLSEW95wwPtOjXcheuFxSfBN2lwRqgTn4E3Ky0g7wp996ts', 'ACTIVO', 'INACTIVO'),
+(22, 9, NULL, 4, '12083832', 'junior@gmail.com', 'Junior', 'Ocampo', '30048833', '9009337cf16333f07109b593405cf7552ed8059a', NULL, 'ACTIVO', 'ACTIVO'),
+(28, 5, NULL, 2, '10653663', 'oswaldo@gmail.com', 'Oswaldo Andres', 'Rojas', '3203993', 'f49607523593ca7bf3fe042098ff1263907a29e6', NULL, 'ACTIVO', 'INACTIVO'),
+(51, NULL, 67, 3, '108837746', 'jeison@gmail.com', 'Jeison', 'Mandon', '30028383', 'b62e8aa3b876befec60319f4b63bf3f187ef0e69', NULL, 'ACTIVO', 'ACTIVO'),
+(52, 5, NULL, 4, '1076635', 'pacho@gmail.com', 'Pacho', 'imenez', '30028838', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'APA91bEiXMbd-69LQSFm3bMJMnC7ZE1nWmGAT9j3cli9lgbkbZfpzMLSEW95wwPtOjXcheuFxSfBN2lwRqgTn4E3Ky0g7wp996ts', 'ACTIVO', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -157,7 +186,8 @@ CREATE TABLE `empresa` (
 --
 
 INSERT INTO `empresa` (`id`, `nit`, `razonSocial`, `email`, `telefono`, `contacto`, `promedio`, `logo`, `estado`, `pass`) VALUES
-(26, '10737', 'Sena', 'sena.edu.co', '543534', 'Jose Perez', 4, '../Apiturno/imagenes/sena.png', 'ACTIVO', 'sena1234');
+(43, '10677385', 'El fortin', 'fortin@gmail.com', '3203094', 'Fabio', 3, '/imagenes/empresa_43.jpg', 'ACTIVO', '5dd634422d39c48f29b9f2b50aa068d51aef2ea7'),
+(67, '108747', 'Peluquria 9a', 'pelu@gmail.com', '3002388', 'Jeison', 3, '/imagenes/empresa_67.jpg', 'ACTIVO', 'b62e8aa3b876befec60319f4b63bf3f187ef0e69');
 
 -- --------------------------------------------------------
 
@@ -1370,8 +1400,10 @@ INSERT INTO `perfilpermisos` (`id`, `idperfil`, `idpermiso`, `idmodulo`) VALUES
 (5, 3, 3, 2),
 (6, 3, 4, 2),
 (8, 3, 7, 5),
-(9, 3, 5, 3),
-(10, 4, 6, 4);
+(10, 4, 6, 4),
+(11, 1, 5, 3),
+(12, 1, 7, 5),
+(13, 4, 6, 4);
 
 -- --------------------------------------------------------
 
@@ -1409,16 +1441,19 @@ CREATE TABLE `sector` (
   `id` int(10) UNSIGNED NOT NULL,
   `nombre` varchar(30) NOT NULL,
   `descripcion` varchar(128) DEFAULT NULL,
-  `estado` enum('ACTIVO','INACTIVO') NOT NULL
+  `estado` enum('ACTIVO','INACTIVO') NOT NULL,
+  `logo` varchar(40) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `sector`
 --
 
-INSERT INTO `sector` (`id`, `nombre`, `descripcion`, `estado`) VALUES
-(1, 'Peluquerias', NULL, 'ACTIVO'),
-(2, 'Lavaderos', NULL, 'ACTIVO');
+INSERT INTO `sector` (`id`, `nombre`, `descripcion`, `estado`, `logo`) VALUES
+(1, 'Peluquerias', 'Sector de arreglo', 'ACTIVO', '/imagenes/empresa_1.png'),
+(2, 'Lavaderos', 'Lavadero de autos', 'ACTIVO', '/imagenes/sector_2.png'),
+(3, 'Canchas', 'Sector de alquiler de canchas', 'ACTIVO', '/imagenes/empresa_3.png'),
+(6, 'Bancos', 'Sector bancos', 'ACTIVO', '/imagenes/empresa_6.png');
 
 -- --------------------------------------------------------
 
@@ -1431,6 +1466,15 @@ CREATE TABLE `sectorempresa` (
   `idSector` int(10) UNSIGNED NOT NULL,
   `idEmpresa` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `sectorempresa`
+--
+
+INSERT INTO `sectorempresa` (`id`, `idSector`, `idEmpresa`) VALUES
+(10, 2, 43),
+(11, 3, 43),
+(32, 1, 67);
 
 -- --------------------------------------------------------
 
@@ -1450,9 +1494,14 @@ CREATE TABLE `servicio` (
 --
 
 INSERT INTO `servicio` (`id`, `nombre`, `descripcion`, `estado`) VALUES
-(5, 'Corte de cabello', 'Servicios agropecuario', 'ACTIVO'),
-(6, 'Uñas', 'Servicio Informatico', 'ACTIVO'),
-(7, 'Lavada estandar', 'Servicio salud', 'ACTIVO');
+(14, 'Arreglar uñas', 'arreglo de uñas', 'ACTIVO'),
+(15, 'motilar', 'corte de cabello', 'ACTIVO'),
+(16, 'Lavar carros', 'Lavadero de carros', 'ACTIVO'),
+(17, 'alquiler de canchas', 'alquiler de canchas', 'ACTIVO'),
+(18, 'Cepillado', 'Cepillado de cabello', 'ACTIVO'),
+(19, 'Enguage extra', 'súper enguage', 'ACTIVO'),
+(20, 'Poner arbitros', 'agregar arbitros', 'INACTIVO'),
+(21, 'Dar agua', 'agregar bolsa de agua', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -1471,7 +1520,11 @@ CREATE TABLE `serviciosempleado` (
 --
 
 INSERT INTO `serviciosempleado` (`id`, `idEmpleado`, `idServicio`) VALUES
-(1, 1, 5);
+(6, 28, 16),
+(7, 17, 17),
+(8, 28, 16),
+(9, 28, 17),
+(10, 28, 16);
 
 -- --------------------------------------------------------
 
@@ -1490,9 +1543,14 @@ CREATE TABLE `serviciossector` (
 --
 
 INSERT INTO `serviciossector` (`id`, `idSector`, `idServicio`) VALUES
-(1, 1, 5),
-(2, 1, 6),
-(3, 2, 7);
+(7, 1, 14),
+(8, 1, 15),
+(9, 2, 16),
+(10, 3, 17),
+(11, 1, 18),
+(12, 2, 19),
+(13, 3, 20),
+(14, 3, 21);
 
 -- --------------------------------------------------------
 
@@ -1513,10 +1571,13 @@ CREATE TABLE `serviciossucursal` (
 --
 
 INSERT INTO `serviciossucursal` (`id`, `idServicio`, `idSucursal`, `precio`, `precioVIP`) VALUES
-(37, 7, 26, NULL, NULL),
-(60, 6, 13, NULL, NULL),
-(61, 5, 13, NULL, NULL),
-(62, 7, 13, NULL, NULL);
+(37, 16, 5, NULL, NULL),
+(38, 19, 5, NULL, NULL),
+(39, 17, 5, NULL, NULL),
+(40, 20, 9, NULL, NULL),
+(41, 19, 9, NULL, NULL),
+(42, 16, 9, NULL, NULL),
+(45, 17, 10, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1535,7 +1596,7 @@ CREATE TABLE `sucursal` (
   `longitud` varchar(12) NOT NULL,
   `promedio` float DEFAULT NULL,
   `estado` enum('ACTIVO','INACTIVO') NOT NULL,
-  `usuario` varchar(40) NOT NULL,
+  `usuario` varchar(40) DEFAULT NULL,
   `pass` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -1544,10 +1605,9 @@ CREATE TABLE `sucursal` (
 --
 
 INSERT INTO `sucursal` (`id`, `idEmpresa`, `idMunicipio`, `nombre`, `direccion`, `telefono`, `latitud`, `longitud`, `promedio`, `estado`, `usuario`, `pass`) VALUES
-(13, 26, 458, 'Sena Central', 'calle falsa 123', '30084747', '10.472113684', '-73.25091361', 5, 'ACTIVO', 'central', 'b42fc41ce3f0ecdb0de79f5cf2f45ecfeef9d188'),
-(24, 26, 458, 'Sena agropecuario', '', '30277483', '10.463504658', '-73.25881004', 2, 'ACTIVO', 'agropecuario', 'b4fd0d5b4ef1d0855f94ea10dd482b85281f9d83'),
-(25, 26, 458, 'Sena informatico', '', '30847732', '10.459453269', '-73.26078414', 3, 'ACTIVO', 'informatico', 'fd760a08e5f13d22e23b58f6b156460f8605d087'),
-(26, 26, 458, 'Sena salud', '', '30877373', '10.476333708', '-73.27606201', 3, 'ACTIVO', 'salud', '682f7e1a5938305a39470d19970604b33753daf7');
+(5, 43, 458, 'Fortín la 4ta', 'carrera 4 calle 16', '3232323', '10.472662291', '-73.23876857', 6, 'ACTIVO', NULL, ''),
+(9, 43, 458, 'Lavado la 4ta', '', '3004883', '10.475489708', '-73.24147224', 3, 'ACTIVO', NULL, ''),
+(10, 43, 458, 'Fortín la 23', 'carrera 23 calle 12', '3007373', '10.472788892', '-73.26773643', 3, 'ACTIVO', NULL, '');
 
 -- --------------------------------------------------------
 
@@ -1558,7 +1618,29 @@ INSERT INTO `sucursal` (`id`, `idEmpresa`, `idMunicipio`, `nombre`, `direccion`,
 CREATE TABLE `tipoturno` (
   `id` int(10) UNSIGNED NOT NULL,
   `nombre` varchar(15) NOT NULL,
-  `estado` enum('ACTIVO','INACTIVO') NOT NULL
+  `estado` enum('ACTIVO','INACTIVO') NOT NULL,
+  `prioridad` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tipoturno`
+--
+
+INSERT INTO `tipoturno` (`id`, `nombre`, `estado`, `prioridad`) VALUES
+(1, 'NORMAL', 'ACTIVO', 3),
+(2, 'VIP', 'ACTIVO', 1),
+(3, 'PREFERENCIAL', 'ACTIVO', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipoturnosector`
+--
+
+CREATE TABLE `tipoturnosector` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `idsector` int(10) UNSIGNED NOT NULL,
+  `idtipoturno` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -1578,10 +1660,20 @@ CREATE TABLE `turno` (
   `fechaFinal` datetime DEFAULT NULL,
   `tiempo` smallint(6) DEFAULT '0',
   `turno` int(10) UNSIGNED NOT NULL,
-  `tipoTurno` enum('NORMAL','VIP') NOT NULL,
+  `tipoTurno` int(10) UNSIGNED NOT NULL,
   `estadoTurno` enum('SOLICITADO','CONFIRMADO','TERMINADO','CANCELADO','ATENDIENDO') NOT NULL,
   `estado` enum('ACTIVO','INACTIVO') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `turno`
+--
+
+INSERT INTO `turno` (`id`, `idCliente`, `idServicio`, `idSucursal`, `idEmpleado`, `fechaSolicitud`, `fechaInicio`, `fechaFinal`, `tiempo`, `turno`, `tipoTurno`, `estadoTurno`, `estado`) VALUES
+(13, 2, 17, 5, 17, '2016-03-04 16:33:21', NULL, NULL, 0, 1, 3, 'CANCELADO', 'ACTIVO'),
+(14, 2, 17, 5, 17, '2016-03-04 16:36:23', '2016-03-04 11:52:02', '2016-03-04 11:52:08', 0, 1, 2, 'TERMINADO', 'ACTIVO'),
+(15, 3, 17, 5, 17, '2016-03-04 23:54:04', '2016-03-04 11:54:54', '2016-03-04 11:55:02', 0, 1, 3, 'TERMINADO', 'ACTIVO'),
+(16, 3, 17, 5, 17, '2016-03-04 23:56:44', '2016-03-04 11:56:59', '2016-03-04 11:57:02', 0, 1, 1, 'TERMINADO', 'ACTIVO');
 
 --
 -- Índices para tablas volcadas
@@ -1593,6 +1685,14 @@ CREATE TABLE `turno` (
 ALTER TABLE `calificacion`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idTurno` (`idTurno`);
+
+--
+-- Indices de la tabla `calificacioncliente`
+--
+ALTER TABLE `calificacioncliente`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idCliente` (`idCliente`),
+  ADD KEY `idEmpleado` (`idEmpleado`);
 
 --
 -- Indices de la tabla `cliente`
@@ -1723,6 +1823,14 @@ ALTER TABLE `tipoturno`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `tipoturnosector`
+--
+ALTER TABLE `tipoturnosector`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idsector` (`idsector`),
+  ADD KEY `idtipoturno` (`idtipoturno`);
+
+--
 -- Indices de la tabla `turno`
 --
 ALTER TABLE `turno`
@@ -1732,7 +1840,8 @@ ALTER TABLE `turno`
   ADD KEY `idSucursal` (`idSucursal`),
   ADD KEY `idUsuario` (`idEmpleado`),
   ADD KEY `idTipoTurno` (`tipoTurno`),
-  ADD KEY `idEstadoTurno` (`estadoTurno`);
+  ADD KEY `idEstadoTurno` (`estadoTurno`),
+  ADD KEY `tipoTurno` (`tipoTurno`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -1744,10 +1853,15 @@ ALTER TABLE `turno`
 ALTER TABLE `calificacion`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT de la tabla `calificacioncliente`
+--
+ALTER TABLE `calificacioncliente`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `departamento`
 --
@@ -1757,12 +1871,12 @@ ALTER TABLE `departamento`
 -- AUTO_INCREMENT de la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 --
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 --
 -- AUTO_INCREMENT de la tabla `estadoturno`
 --
@@ -1787,7 +1901,7 @@ ALTER TABLE `perfil`
 -- AUTO_INCREMENT de la tabla `perfilpermisos`
 --
 ALTER TABLE `perfilpermisos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT de la tabla `permisos`
 --
@@ -1797,47 +1911,52 @@ ALTER TABLE `permisos`
 -- AUTO_INCREMENT de la tabla `sector`
 --
 ALTER TABLE `sector`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `sectorempresa`
 --
 ALTER TABLE `sectorempresa`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT de la tabla `servicio`
 --
 ALTER TABLE `servicio`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT de la tabla `serviciosempleado`
 --
 ALTER TABLE `serviciosempleado`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `serviciossector`
 --
 ALTER TABLE `serviciossector`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT de la tabla `serviciossucursal`
 --
 ALTER TABLE `serviciossucursal`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 --
 -- AUTO_INCREMENT de la tabla `sucursal`
 --
 ALTER TABLE `sucursal`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `tipoturno`
 --
 ALTER TABLE `tipoturno`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT de la tabla `tipoturnosector`
+--
+ALTER TABLE `tipoturnosector`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `turno`
 --
 ALTER TABLE `turno`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- Restricciones para tablas volcadas
 --
@@ -1847,6 +1966,13 @@ ALTER TABLE `turno`
 --
 ALTER TABLE `calificacion`
   ADD CONSTRAINT `calificacion_ibfk_1` FOREIGN KEY (`idTurno`) REFERENCES `turno` (`id`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `calificacioncliente`
+--
+ALTER TABLE `calificacioncliente`
+  ADD CONSTRAINT `calificacioncliente_ibfk_1` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `calificacioncliente_ibfk_2` FOREIGN KEY (`idEmpleado`) REFERENCES `empleado` (`id`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `empleado`
@@ -1906,13 +2032,21 @@ ALTER TABLE `sucursal`
   ADD CONSTRAINT `sucursal_ibfk_2` FOREIGN KEY (`idMunicipio`) REFERENCES `municipio` (`id`) ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `tipoturnosector`
+--
+ALTER TABLE `tipoturnosector`
+  ADD CONSTRAINT `tipoturnosector_ibfk_1` FOREIGN KEY (`idsector`) REFERENCES `sector` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `tipoturnosector_ibfk_2` FOREIGN KEY (`idtipoturno`) REFERENCES `tipoturno` (`id`);
+
+--
 -- Filtros para la tabla `turno`
 --
 ALTER TABLE `turno`
   ADD CONSTRAINT `turno_ibfk_1` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `turno_ibfk_2` FOREIGN KEY (`idServicio`) REFERENCES `servicio` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `turno_ibfk_3` FOREIGN KEY (`idSucursal`) REFERENCES `sucursal` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `turno_ibfk_4` FOREIGN KEY (`idEmpleado`) REFERENCES `empleado` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `turno_ibfk_4` FOREIGN KEY (`idEmpleado`) REFERENCES `empleado` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `turno_ibfk_5` FOREIGN KEY (`tipoTurno`) REFERENCES `tipoturno` (`id`) ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

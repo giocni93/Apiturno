@@ -217,7 +217,7 @@ class EmpleadoControl{
               . "serviciosempleado seremp ON(seremp.idEmpleado = emp.id) "
               . "INNER JOIN "
               . "servicio ser ON(ser.id = seremp.idServicio) "
-              . "WHERE emp.idSucursal = $idSucursal AND ser.estado = 'ACTIVO'";
+              . "WHERE emp.idSucursal = $idSucursal AND ser.estado = 'ACTIVO' AND emp.estadoOnline = 'ACTIVO'";
     $data = DB::select(DB::raw($query));
     for($i = 0; $i < count($data); $i++){
       //CALCULAR TIEMPO
@@ -237,7 +237,7 @@ class EmpleadoControl{
                 ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
                 .") as turnosFaltantes, "
                 ."(SELECT MAX(tu.turno) as turnoActual FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND tu.estadoTurno = 'ATENDIENDO') as turnoAct,"
-                ."(SELECT Count(tu.turno) as numeroTurno FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND (tu.estadoTurno <> 'TERMINADO' OR tu.estadoTurno <> 'CANCELADO')) as numeroTur,"
+                ."(SELECT Count(tu.turno) as numeroTurno FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND (tu.estadoTurno <> 'TERMINADO' AND tu.estadoTurno <> 'CANCELADO')) as numeroTur,"
                 ."turno "
                 ."WHERE "
                 ."idEmpleado = ".$data[$i]->idEmpleado." AND "

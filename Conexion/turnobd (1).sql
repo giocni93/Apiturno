@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-03-2016 a las 15:49:04
+-- Tiempo de generación: 06-03-2016 a las 03:51:22
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -50,6 +50,19 @@ CREATE TABLE `calificacioncliente` (
   `fecha` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `calificacioncliente`
+--
+
+INSERT INTO `calificacioncliente` (`id`, `idCliente`, `idEmpleado`, `calificacion`, `fecha`) VALUES
+(2, 4, 56, 4, '2016-03-05 19:47:41'),
+(3, 2, 56, 4, '2016-03-05 19:48:41'),
+(4, 2, 56, 1, '2016-03-05 20:00:06'),
+(5, 6, 56, 2, '2016-03-05 20:00:55'),
+(6, 4, 56, 4, '2016-03-05 20:01:08'),
+(7, 8, 56, 4, '2016-03-05 20:03:05'),
+(8, 4, 56, 5, '2016-03-05 20:06:16');
+
 -- --------------------------------------------------------
 
 --
@@ -75,7 +88,12 @@ CREATE TABLE `cliente` (
 INSERT INTO `cliente` (`id`, `email`, `nombres`, `apellidos`, `telefono`, `pass`, `idPush`, `idFace`, `estado`) VALUES
 (1, 'fandresoja@gmail.com', 'fabio andres', 'rojas gulloso', '3008388', '223bb78da41f44447ff0ad216d5a49d6b0f1c366', '01', '01', 'ACTIVO'),
 (2, 'giocni@gmail.com', 'Gilmar', 'Ocampo Nieves', '', 'a3be0466979911942630a62fb05aa9623b1d68d8', '01', '01', 'ACTIVO'),
-(3, 'prueba@gmail.com', 'prueba', 'prueba', '', '91c031127a6d5333c512da3bf3c1a9eb54300ec4', '01', '01', 'ACTIVO');
+(3, 'prueba@gmail.com', 'prueba', 'prueba', '', '91c031127a6d5333c512da3bf3c1a9eb54300ec4', '01', '01', 'ACTIVO'),
+(4, 'tazedwin@gmail.com', 'edwin', 'Díaz', '3008982322', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '01', '01', 'ACTIVO'),
+(5, 'fabio@gmail.com', 'fabio andres', 'rojas gulloso', '3001234567', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '01', '01', 'ACTIVO'),
+(6, 'pepe@pep.com', 'pepe', 'mojica', '', '29caeaffce8c030bdae13f5be31d0359a10aecf1', '01', '01', 'ACTIVO'),
+(7, 'ahhah', 'andres', 'pedro', '', 'a1ee6b12376ddce22796734d2d9ae6d3c14bd3c9', '01', '01', 'ACTIVO'),
+(8, 'prueba', 'pppppp', 'ppppppp', '', '711383a59fda05336fd2ccf70c8059d1523eb41a', '01', '01', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -156,11 +174,15 @@ CREATE TABLE `empleado` (
 INSERT INTO `empleado` (`id`, `idSucursal`, `idEmpresa`, `idPerfil`, `identificacion`, `email`, `nombres`, `apellidos`, `telefono`, `pass`, `idPush`, `estado`, `estadoOnline`) VALUES
 (2, NULL, NULL, 1, '1065622719', 'fandresroja@gmail.com', 'Elsy Maria', 'Gomez Gomez', NULL, '5dd634422d39c48f29b9f2b50aa068d51aef2ea7', NULL, 'ACTIVO', 'ACTIVO'),
 (16, NULL, 43, 3, '106572920', 'fandresrojas@outlook.com', 'Fabio Andres', 'Rojas', '30038388', '5dd634422d39c48f29b9f2b50aa068d51aef2ea7', NULL, 'ACTIVO', 'ACTIVO'),
-(17, 5, NULL, 2, '1065650321', 'giocni@gmail.com', 'Gilmar Jose', 'Ocampo Nieves', '322030838', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'APA91bEiXMbd-69LQSFm3bMJMnC7ZE1nWmGAT9j3cli9lgbkbZfpzMLSEW95wwPtOjXcheuFxSfBN2lwRqgTn4E3Ky0g7wp996ts', 'ACTIVO', 'INACTIVO'),
+(17, 5, NULL, 2, '1065650321', 'giocni@gmail.com', 'Gilmar Jose', 'Ocampo Nieves', '322030838', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'APA91bHv-oMRs9T1Vv8bXnz9guTN8A1peWyXjjEPyPm-qlxQABWJpEQup-0GffGyMTidTdoUWilL8bFiQtyQ4AmpgPdghKnkSOgO', 'ACTIVO', 'INACTIVO'),
 (22, 9, NULL, 4, '12083832', 'junior@gmail.com', 'Junior', 'Ocampo', '30048833', '9009337cf16333f07109b593405cf7552ed8059a', NULL, 'ACTIVO', 'ACTIVO'),
 (28, 5, NULL, 2, '10653663', 'oswaldo@gmail.com', 'Oswaldo Andres', 'Rojas', '3203993', 'f49607523593ca7bf3fe042098ff1263907a29e6', NULL, 'ACTIVO', 'INACTIVO'),
 (51, NULL, 67, 3, '108837746', 'jeison@gmail.com', 'Jeison', 'Mandon', '30028383', 'b62e8aa3b876befec60319f4b63bf3f187ef0e69', NULL, 'ACTIVO', 'ACTIVO'),
-(52, 5, NULL, 4, '1076635', 'pacho@gmail.com', 'Pacho', 'imenez', '30028838', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'APA91bEiXMbd-69LQSFm3bMJMnC7ZE1nWmGAT9j3cli9lgbkbZfpzMLSEW95wwPtOjXcheuFxSfBN2lwRqgTn4E3Ky0g7wp996ts', 'ACTIVO', 'ACTIVO');
+(52, 5, NULL, 4, '1076635', 'pacho@gmail.com', 'Pacho', 'imenez', '30028838', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'APA91bEiXMbd-69LQSFm3bMJMnC7ZE1nWmGAT9j3cli9lgbkbZfpzMLSEW95wwPtOjXcheuFxSfBN2lwRqgTn4E3Ky0g7wp996ts', 'ACTIVO', 'ACTIVO'),
+(53, NULL, 68, 3, '1082838383', 'jose@gmail.com', 'Jose', 'Perez', '(309) 983-88', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', NULL, 'ACTIVO', 'ACTIVO'),
+(54, NULL, 69, 3, '1028388333', 'biblo@jjss', 'biblos', 'admin', '(393) 900-30', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', NULL, 'INACTIVO', 'ACTIVO'),
+(55, 11, NULL, 4, '1065123321', 'fandresroja@gmail.com', 'Fabio', 'Rojas', '(213) 231-23', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', NULL, 'ACTIVO', 'ACTIVO'),
+(56, 11, NULL, 2, '1065000000', 'gio', 'gilmar', 'Ocampo', '(322) 131-23', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'APA91bHv-oMRs9T1Vv8bXnz9guTN8A1peWyXjjEPyPm-qlxQABWJpEQup-0GffGyMTidTdoUWilL8bFiQtyQ4AmpgPdghKnkSOgO', 'ACTIVO', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -187,7 +209,9 @@ CREATE TABLE `empresa` (
 
 INSERT INTO `empresa` (`id`, `nit`, `razonSocial`, `email`, `telefono`, `contacto`, `promedio`, `logo`, `estado`, `pass`) VALUES
 (43, '10677385', 'El fortin', 'fortin@gmail.com', '3203094', 'Fabio', 3, '/imagenes/empresa_43.jpg', 'ACTIVO', '5dd634422d39c48f29b9f2b50aa068d51aef2ea7'),
-(67, '108747', 'Peluquria 9a', 'pelu@gmail.com', '3002388', 'Jeison', 3, '/imagenes/empresa_67.jpg', 'ACTIVO', 'b62e8aa3b876befec60319f4b63bf3f187ef0e69');
+(67, '108747', 'Peluquria 9a', 'pelu@gmail.com', '3002388', 'Jeison', 3, '/imagenes/empresa_67.jpg', 'ACTIVO', 'b62e8aa3b876befec60319f4b63bf3f187ef0e69'),
+(68, '1283 838-747', 'Biblos car wash', 'car@gmail.com', '(302) 939-39', 'Jose', 3, NULL, 'ACTIVO', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
+(69, '1233 432-342', 'Biblos', 'dasd', '(432) 423-42', 'biblos', 3, '/imagenes/empresa_69.png', 'INACTIVO', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220');
 
 -- --------------------------------------------------------
 
@@ -1474,7 +1498,9 @@ CREATE TABLE `sectorempresa` (
 INSERT INTO `sectorempresa` (`id`, `idSector`, `idEmpresa`) VALUES
 (10, 2, 43),
 (11, 3, 43),
-(32, 1, 67);
+(32, 1, 67),
+(33, 2, 68),
+(34, 2, 69);
 
 -- --------------------------------------------------------
 
@@ -1524,7 +1550,9 @@ INSERT INTO `serviciosempleado` (`id`, `idEmpleado`, `idServicio`) VALUES
 (7, 17, 17),
 (8, 28, 16),
 (9, 28, 17),
-(10, 28, 16);
+(10, 28, 16),
+(11, 56, 16),
+(12, 56, 19);
 
 -- --------------------------------------------------------
 
@@ -1577,7 +1605,9 @@ INSERT INTO `serviciossucursal` (`id`, `idServicio`, `idSucursal`, `precio`, `pr
 (40, 20, 9, NULL, NULL),
 (41, 19, 9, NULL, NULL),
 (42, 16, 9, NULL, NULL),
-(45, 17, 10, NULL, NULL);
+(45, 17, 10, NULL, NULL),
+(46, 19, 11, NULL, NULL),
+(47, 16, 11, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1607,7 +1637,8 @@ CREATE TABLE `sucursal` (
 INSERT INTO `sucursal` (`id`, `idEmpresa`, `idMunicipio`, `nombre`, `direccion`, `telefono`, `latitud`, `longitud`, `promedio`, `estado`, `usuario`, `pass`) VALUES
 (5, 43, 458, 'Fortín la 4ta', 'carrera 4 calle 16', '3232323', '10.472662291', '-73.23876857', 6, 'ACTIVO', NULL, ''),
 (9, 43, 458, 'Lavado la 4ta', '', '3004883', '10.475489708', '-73.24147224', 3, 'ACTIVO', NULL, ''),
-(10, 43, 458, 'Fortín la 23', 'carrera 23 calle 12', '3007373', '10.472788892', '-73.26773643', 3, 'ACTIVO', NULL, '');
+(10, 43, 458, 'Fortín la 23', 'carrera 23 calle 12', '3007373', '10.472788892', '-73.26773643', 3, 'ACTIVO', NULL, ''),
+(11, 68, 458, 'Biblos', '', '(322) 234-23', '10.469328437', '-73.26292857', 3, 'ACTIVO', NULL, '');
 
 -- --------------------------------------------------------
 
@@ -1660,6 +1691,7 @@ CREATE TABLE `turno` (
   `fechaFinal` datetime DEFAULT NULL,
   `tiempo` smallint(6) DEFAULT '0',
   `turno` int(10) UNSIGNED NOT NULL,
+  `avisado` tinyint(1) NOT NULL DEFAULT '0',
   `tipoTurno` int(10) UNSIGNED NOT NULL,
   `estadoTurno` enum('SOLICITADO','CONFIRMADO','TERMINADO','CANCELADO','ATENDIENDO') NOT NULL,
   `estado` enum('ACTIVO','INACTIVO') NOT NULL
@@ -1669,11 +1701,22 @@ CREATE TABLE `turno` (
 -- Volcado de datos para la tabla `turno`
 --
 
-INSERT INTO `turno` (`id`, `idCliente`, `idServicio`, `idSucursal`, `idEmpleado`, `fechaSolicitud`, `fechaInicio`, `fechaFinal`, `tiempo`, `turno`, `tipoTurno`, `estadoTurno`, `estado`) VALUES
-(13, 2, 17, 5, 17, '2016-03-04 16:33:21', NULL, NULL, 0, 1, 3, 'CANCELADO', 'ACTIVO'),
-(14, 2, 17, 5, 17, '2016-03-04 16:36:23', '2016-03-04 11:52:02', '2016-03-04 11:52:08', 0, 1, 2, 'TERMINADO', 'ACTIVO'),
-(15, 3, 17, 5, 17, '2016-03-04 23:54:04', '2016-03-04 11:54:54', '2016-03-04 11:55:02', 0, 1, 3, 'TERMINADO', 'ACTIVO'),
-(16, 3, 17, 5, 17, '2016-03-04 23:56:44', '2016-03-04 11:56:59', '2016-03-04 11:57:02', 0, 1, 1, 'TERMINADO', 'ACTIVO');
+INSERT INTO `turno` (`id`, `idCliente`, `idServicio`, `idSucursal`, `idEmpleado`, `fechaSolicitud`, `fechaInicio`, `fechaFinal`, `tiempo`, `turno`, `avisado`, `tipoTurno`, `estadoTurno`, `estado`) VALUES
+(13, 2, 17, 5, 17, '2016-03-04 16:33:21', NULL, NULL, 0, 1, 0, 3, 'CANCELADO', 'ACTIVO'),
+(14, 2, 17, 5, 17, '2016-03-04 16:36:23', '2016-03-04 11:52:02', '2016-03-04 11:52:08', 0, 1, 0, 2, 'TERMINADO', 'ACTIVO'),
+(15, 3, 17, 5, 17, '2016-03-04 23:54:04', '2016-03-04 11:54:54', '2016-03-04 11:55:02', 0, 1, 0, 3, 'TERMINADO', 'ACTIVO'),
+(16, 3, 17, 5, 17, '2016-03-04 23:56:44', '2016-03-04 11:56:59', '2016-03-04 11:57:02', 0, 1, 0, 1, 'TERMINADO', 'ACTIVO'),
+(17, 2, 17, 5, 17, '2016-03-05 19:13:46', NULL, NULL, 0, 1, 0, 1, 'CANCELADO', 'ACTIVO'),
+(18, 4, 16, 11, 56, '2016-03-05 19:34:42', '2016-03-05 07:44:18', '2016-03-05 07:47:36', 0, 1, 0, 1, 'TERMINADO', 'ACTIVO'),
+(19, 2, 19, 11, 56, '2016-03-05 19:46:26', '2016-03-05 07:48:36', '2016-03-05 07:48:38', 0, 1, 1, 1, 'TERMINADO', 'ACTIVO'),
+(20, 6, 16, 11, 56, '2016-03-05 19:46:30', '2016-03-05 07:58:46', '2016-03-05 08:00:52', 0, 2, 0, 1, 'TERMINADO', 'ACTIVO'),
+(21, 4, 16, 11, 56, '2016-03-05 19:47:50', '2016-03-05 08:01:00', '2016-03-05 08:01:06', 0, 3, 1, 1, 'TERMINADO', 'ACTIVO'),
+(22, 2, 19, 11, 56, '2016-03-05 19:59:32', '2016-03-05 07:59:52', '2016-03-05 07:59:55', 0, 1, 0, 1, 'TERMINADO', 'ACTIVO'),
+(23, 2, 16, 11, 56, '2016-03-05 20:00:45', NULL, NULL, 0, 4, 0, 1, 'CANCELADO', 'ACTIVO'),
+(24, 4, 16, 11, 56, '2016-03-05 20:01:29', '2016-03-05 08:03:13', '2016-03-05 08:06:12', 0, 1, 1, 1, 'TERMINADO', 'ACTIVO'),
+(25, 2, 16, 11, 56, '2016-03-05 20:01:42', NULL, NULL, 0, 2, 1, 1, 'CONFIRMADO', 'ACTIVO'),
+(26, 7, 16, 11, 56, '2016-03-05 20:01:48', NULL, NULL, 0, 3, 1, 1, 'CONFIRMADO', 'ACTIVO'),
+(27, 8, 16, 11, 56, '2016-03-05 20:02:35', '2016-03-05 08:02:58', '2016-03-05 08:03:01', 0, 4, 0, 2, 'TERMINADO', 'ACTIVO');
 
 --
 -- Índices para tablas volcadas
@@ -1856,12 +1899,12 @@ ALTER TABLE `calificacion`
 -- AUTO_INCREMENT de la tabla `calificacioncliente`
 --
 ALTER TABLE `calificacioncliente`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT de la tabla `departamento`
 --
@@ -1871,12 +1914,12 @@ ALTER TABLE `departamento`
 -- AUTO_INCREMENT de la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 --
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 --
 -- AUTO_INCREMENT de la tabla `estadoturno`
 --
@@ -1916,7 +1959,7 @@ ALTER TABLE `sector`
 -- AUTO_INCREMENT de la tabla `sectorempresa`
 --
 ALTER TABLE `sectorempresa`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 --
 -- AUTO_INCREMENT de la tabla `servicio`
 --
@@ -1926,7 +1969,7 @@ ALTER TABLE `servicio`
 -- AUTO_INCREMENT de la tabla `serviciosempleado`
 --
 ALTER TABLE `serviciosempleado`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT de la tabla `serviciossector`
 --
@@ -1936,12 +1979,12 @@ ALTER TABLE `serviciossector`
 -- AUTO_INCREMENT de la tabla `serviciossucursal`
 --
 ALTER TABLE `serviciossucursal`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 --
 -- AUTO_INCREMENT de la tabla `sucursal`
 --
 ALTER TABLE `sucursal`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT de la tabla `tipoturno`
 --
@@ -1956,7 +1999,7 @@ ALTER TABLE `tipoturnosector`
 -- AUTO_INCREMENT de la tabla `turno`
 --
 ALTER TABLE `turno`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 --
 -- Restricciones para tablas volcadas
 --

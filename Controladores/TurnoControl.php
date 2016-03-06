@@ -8,10 +8,12 @@ class TurnoControl{
   public function getTurnosEnColaByEmpleado(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $idEmpleado = $request->getAttribute("idEmpleado");
+    $idServicio = $request->getAttribute("idServicio");
     $data = Turno::select("tipoTurno.prioridad","turno.tipoTurno","turno.id as calificacionCliente","turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
                     ->join("cliente","cliente.id","=","turno.idCliente")
                     ->join("tipoTurno","tipoTurno.id","=","turno.tipoTurno")
                     ->where("turno.idEmpleado","=",$idEmpleado)
+                    ->where("turno.idServicio","=",$idServicio)
                     ->where(function ($query) {
                         $query->where("turno.estadoTurno","=","CONFIRMADO")
                               ->orwhere("turno.estadoTurno","=","ATENDIENDO");
@@ -40,9 +42,11 @@ class TurnoControl{
   public function getTurnosEnEsperaByEmpleado(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $idEmpleado = $request->getAttribute("idEmpleado");
+    $idServicio = $request->getAttribute("idServicio");
     $data = Turno::select("turno.tipoTurno","turno.id as calificacionCliente","turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
                     ->join("cliente","cliente.id","=","turno.idCliente")
                     ->where("turno.idEmpleado","=",$idEmpleado)
+                    ->where("turno.idServicio","=",$idServicio)
                     ->where("turno.estadoTurno","=","SOLICITADO")
                     ->where("turno.estado","=","ACTIVO")
                     ->orderBy('turno.id', 'asc')
@@ -97,7 +101,7 @@ class TurnoControl{
                     ->get();
           for($i = 0; $i < count($turnos); $i++){
               $query = "SELECT "
-                        ."(AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes) as tiempoEstimado "
+                        ."COALESCE((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes),0) as tiempoEstimado "
                         ."FROM "
                         ."( "
                         ."  SELECT "
@@ -410,7 +414,7 @@ class TurnoControl{
   {
     # 
       $idCliente= $request->getAttribute("idCliente");
-      $query = "SELECT tu.*, su.nombre as sucursal, em.razonSocial as empresa, concat(emp.nombres, ' ', emp.apellidos) as empleado, '' as turnoActual FROM turno tu INNER JOIN sucursal su on su.id = tu.idSucursal INNER JOIN empresa em on em.id = su.idEmpresa INNER JOIN empleado emp on emp.id = tu.idEmpleado where idCliente = '$idCliente' and CAST(fechaSolicitud AS DATE) = curdate() and (estadoturno = 'SOLICITADO' OR estadoturno = 'ATENDIENDO')";
+      $query = "SELECT tu.*, su.nombre as sucursal, em.razonSocial as empresa, concat(emp.nombres, ' ', emp.apellidos) as empleado, '' as turnoActual FROM turno tu INNER JOIN sucursal su on su.id = tu.idSucursal INNER JOIN empresa em on em.id = su.idEmpresa INNER JOIN empleado emp on emp.id = tu.idEmpleado where idCliente = '$idCliente' and CAST(fechaSolicitud AS DATE) = curdate() and (estadoturno = 'SOLICITADO' OR estadoturno = 'ATENDIENDO' OR estadoturno = 'CONFIRMADO')";
       $data = DB::select(DB::raw($query));
       for($i = 0; $i < count($data); $i++){
         $query = "SELECT "

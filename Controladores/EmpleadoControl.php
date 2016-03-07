@@ -217,6 +217,92 @@ class EmpleadoControl{
               . "serviciosempleado seremp ON(seremp.idEmpleado = emp.id) "
               . "INNER JOIN "
               . "servicio ser ON(ser.id = seremp.idServicio) "
+              . "WHERE emp.idSucursal = $idSucursal AND ser.estado = 'ACTIVO' AND emp.estadoOnline = 'ACTIVO'";
+    $data = DB::select(DB::raw($query));
+    for($i = 0; $i < count($data); $i++){
+      //CALCULAR TIEMPO
+      $query = "SELECT "
+                ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes)),'%H:%i:%s') as tiempoEstimado, "
+                ."COALESCE(turnoAct.turnoActual,0) as turnoActual, "
+                ."COALESCE(numeroTur.numeroTurno,0) as numeroTurno "
+                ."FROM "
+                ."( "
+                ."  SELECT "
+                ."    count(t.id) as faltantes "
+                ."    FROM "
+                ."    turno as t "
+                ."    WHERE "
+                ."    t.idEmpleado = ".$data[$i]->idEmpleado." AND "
+                ."    t.idServicio = ".$data[$i]->idServicio." AND "
+                ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
+                .") as turnosFaltantes, "
+                ."(SELECT MAX(tu.turno) as turnoActual FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND tu.estadoTurno = 'ATENDIENDO') as turnoAct,"
+                ."(SELECT Count(tu.turno) as numeroTurno FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND (tu.estadoTurno <> 'TERMINADO' AND tu.estadoTurno <> 'CANCELADO')) as numeroTur,"
+                ."turno "
+                ."WHERE "
+                ."idEmpleado = ".$data[$i]->idEmpleado." AND "
+                ."idServicio = ".$data[$i]->idServicio." AND "
+                ."estadoTurno = 'TERMINADO' LIMIT 1";
+        $dataTiempo = DB::select(DB::raw($query));
+        $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
+        if($data[$i]->tiempoEstimado == null){
+          $data[$i]->tiempoEstimado = "00:00:00";
+        }
+        $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
+        $data[$i]->numeroTurno = $dataTiempo[0]->numeroTurno;
+        $query = "SELECT "
+                  ."COALESCE(tu.turno,0) as turnoActual, "
+                  ."COALESCE(CONCAT(cl.nombres,' ',cl.apellidos),'') as cliente "
+                  ."FROM turno as tu "
+                  ."INNER JOIN "
+                  ."cliente as cl "
+                  ."ON(cl.id = tu.idCliente) "
+                  ."WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND "
+                  ."tu.idServicio = ".$data[$i]->idServicio." AND "
+                  ."(tu.estadoTurno = 'ATENDIENDO' OR "
+                  ."tu.estadoTurno = 'CONFIRMADO') ORDER BY tu.fechaSolicitud Asc LIMIT 1";
+        $dataCliente = DB::select(DB::raw($query));
+        if(count($dataTiempo) > 0){
+          $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
+        }
+        if(count($dataCliente) > 0){
+          $data[$i]->turnoActual = $dataCliente[0]->turnoActual;
+          $data[$i]->cliente = $dataCliente[0]->cliente;
+        }
+        if($data[$i]->tiempoEstimado == null){
+          $data[$i]->tiempoEstimado = "00:00:00";
+        }
+        
+        if($data[$i]->turnoActual == null){
+          $data[$i]->turnoActual = 0;
+        }
+        
+        if($data[$i]->cliente == null){
+          $data[$i]->cliente = "";
+        }
+    }
+    $response->getBody()->write(json_encode($data));
+    return $response;
+
+  }
+  
+  function getEmpleadosBySucursal2(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $idSucursal = $request->getAttribute("idSucursal");
+    $query = "SELECT DISTINCT "
+              . "emp.id as idEmpleado,"
+              . "ser.id as idServicio,"
+              . "CONCAT(emp.nombres, ' ', emp.apellidos) AS empleado,"
+              . "ser.nombre as servicio, "
+              . "'' as cliente, "
+              . "'' as tiempoEstimado, "
+              . "'' as numeroTurno, "
+              . "'' as turnoActual "
+              . "FROM empleado emp "
+              . "INNER JOIN "
+              . "serviciosempleado seremp ON(seremp.idEmpleado = emp.id) "
+              . "INNER JOIN "
+              . "servicio ser ON(ser.id = seremp.idServicio) "
               . "WHERE emp.idSucursal = $idSucursal AND ser.estado = 'ACTIVO'";
     $data = DB::select(DB::raw($query));
     for($i = 0; $i < count($data); $i++){

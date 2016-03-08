@@ -464,7 +464,7 @@ class TurnoControl{
         $query = "SELECT "
                 ."COALESCE(turnoAct.turnoActual,0) as turnoActual "
                 ."FROM "
-                ."(SELECT MAX(tu.turno) as turnoActual FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND tu.estadoTurno = 'ATENDIENDO') as turnoAct,"
+                ."(SELECT MAX(tu.turno) as turnoActual FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND (tu.estadoTurno = 'ATENDIENDO' OR tu.estadoTurno = 'CONFIRMADO')) as turnoAct,"
                 ."turno "
                 ."WHERE "
                 ."idEmpleado = ".$data[$i]->idEmpleado." AND "

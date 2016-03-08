@@ -9,9 +9,9 @@ class TurnoControl{
     $response = $response->withHeader('Content-type', 'application/json');
     $idEmpleado = $request->getAttribute("idEmpleado");
     $idServicio = $request->getAttribute("idServicio");
-    $data = Turno::select("tipoTurno.prioridad","turno.tipoTurno","turno.id as calificacionCliente","turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
+    $data = Turno::select("tipoturno.prioridad","turno.tipoTurno","turno.id as calificacionCliente","turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
                     ->join("cliente","cliente.id","=","turno.idCliente")
-                    ->join("tipoTurno","tipoTurno.id","=","turno.tipoTurno")
+                    ->join("tipoturno","tipoturno.id","=","turno.tipoTurno")
                     ->where("turno.idEmpleado","=",$idEmpleado)
                     ->where("turno.idServicio","=",$idServicio)
                     ->where(function ($query) {

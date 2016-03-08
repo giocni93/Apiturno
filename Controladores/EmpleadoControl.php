@@ -302,11 +302,7 @@ class EmpleadoControl{
     for($i = 0; $i < count($data); $i++){
       //CALCULAR TIEMPO
       $query = "SELECT "
-                ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes)),'%H:%i:%s') as tiempoEstimado, "
-                ."COALESCE(turnoAct.turnoActual,0) as turnoActual, "
-                ."COALESCE(turnoAct.tipoTur,1) as tipoTurno, "
-                ."turnoAct.cliente as cliente, "
-                ."COALESCE(numeroTur.numeroTurno,0) as numeroTurno "
+                ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes)),'%H:%i:%s') as tiempoEstimado "
                 ."FROM "
                 ."( "
                 ."  SELECT "
@@ -318,38 +314,50 @@ class EmpleadoControl{
                 ."    t.idServicio = ".$data[$i]->idServicio." AND "
                 ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
                 .") as turnosFaltantes, "
-                ."(SELECT "
-                    . "tu.turno as turnoActual,"
-                    . "COALESCE(CONCAT(cl.nombres,' ',cl.apellidos),'') as cliente, "
-                    . "tu.tipoTurno as tipoTur "
-                    . "FROM turno as tu "
-                    . "INNER JOIN tipoTurno tt "
-                    . "ON (tt.id = tu.tipoTurno) "
-                    . "INNER JOIN cliente cl "
-                    . "ON(cl.id = tu.idCliente) "
-                    . "WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND "
-                    . "(tu.estadoTurno = 'ATENDIENDO' OR "
-                    . "tu.estadoTurno = 'CONFIRMADO') "
-                    . "ORDER BY "
-                    . "tu.turnoReal ASC "
-                    . "LIMIT 1) as turnoAct,"
-                ."(SELECT Count(tu.turno) as numeroTurno FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND (tu.estadoTurno <> 'TERMINADO' AND tu.estadoTurno <> 'CANCELADO')) as numeroTur,"
                 ."turno "
                 ."WHERE "
                 ."idEmpleado = ".$data[$i]->idEmpleado." AND "
                 ."idServicio = ".$data[$i]->idServicio." AND "
                 ."estadoTurno = 'TERMINADO' LIMIT 1";
         $dataTiempo = DB::select(DB::raw($query));
+        $query = "SELECT "
+                . "Count(tu.turno) as numeroTurno,"
+                . "COALESCE(turnoCliente.turnoActual,0) as turnoActual,"
+                . "COALESCE(turnoCliente.cliente,'') as cliente, "
+                . "COALESCE(turnoCliente.tipoTurno,1) as tipoTurno "
+                . "FROM "
+                . "(SELECT "
+                    . "COALESCE(tu.turno,0) as turnoActual, "
+                    . "COALESCE(CONCAT(cl.nombres,' ',cl.apellidos),'') as cliente, "
+                    . "COALESCE(tu.tipoTurno,1) as tipoTurno "
+                    . "FROM turno as tu "
+                    . "INNER JOIN tipoTurno tt "
+                    . "ON (tt.id = tu.tipoTurno) "
+                    . "INNER JOIN cliente cl "
+                    . "ON(cl.id = tu.idCliente) "
+                    . "WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND "
+                    . "tu.idServicio = ".$data[$i]->idServicio." AND "
+                    . "(tu.estadoTurno = 'ATENDIENDO' OR "
+                    . "tu.estadoTurno = 'CONFIRMADO') "
+                    . "ORDER BY "
+                    . "tu.turnoReal ASC "
+                    . "LIMIT 1) as turnoCliente, "
+                . "turno as tu "
+                . "WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND "
+                . "tu.idServicio = ".$data[$i]->idServicio." AND "
+                . "(tu.estadoTurno <> 'TERMINADO' AND tu.estadoTurno <> 'CANCELADO')";
+        $dataNumeroTurno = DB::select(DB::raw($query));
         if(count($dataTiempo) > 0){
           $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
         }
         if($data[$i]->tiempoEstimado == null){
           $data[$i]->tiempoEstimado = "00:00:00";
         }
-        $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
-        $data[$i]->numeroTurno = $dataTiempo[0]->numeroTurno;
-        $data[$i]->TipoTurno = $dataTiempo[0]->tipoTurno;
-        $data[$i]->cliente = $dataTiempo[0]->cliente;
+        //echo json_encode($dataNumeroTurno);
+        $data[$i]->turnoActual = $dataNumeroTurno[0]->turnoActual;
+        $data[$i]->numeroTurno = $dataNumeroTurno[0]->numeroTurno;
+        $data[$i]->TipoTurno = $dataNumeroTurno[0]->tipoTurno;
+        $data[$i]->cliente = $dataNumeroTurno[0]->cliente;
         if($data[$i]->cliente == null){
           $data[$i]->cliente = "";
         }

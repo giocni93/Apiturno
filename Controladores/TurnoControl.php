@@ -250,6 +250,7 @@ class TurnoControl{
     $turnoCliente = Turno::select("idCliente")
                     ->where("idCliente","=",$idCliente)
                     ->where("idServicio","=",$data["idServicio"])
+                    ->where("idServicio","=",$data["idEmpleado"])
                     ->where("idSucursal","=",$data["idSucursal"])
                     ->where("estadoTurno","<>","TERMINADO")
                     ->where("estadoTurno","<>","CANCELADO")
@@ -260,6 +261,7 @@ class TurnoControl{
         $turnoReal = 0;
         $lista = Turno::select("*")
                         ->where("idServicio","=",$data["idServicio"])
+                        ->where("idServicio","=",$data["idEmpleado"])
                         ->where("idSucursal","=",$data["idSucursal"])
                         ->where("estadoTurno","<>","TERMINADO")
                         ->where("estadoTurno","<>","CANCELADO")
@@ -283,10 +285,16 @@ class TurnoControl{
                 if($lista[$i]->avisado == 0 && $ban == false){
                     //VALIDAR SI EL ANTERIOR ES VIP
                     $inew = $i + 1;
-                    if($inew < count($lista)){
-                        if($lista[$inew]->tipoTurno == 2 && (count($lista) - $i) < 3){
-                            $banCont = false;
+                    $contVIP = 0;
+                    while($contVIP < 4){
+                        if($inew < count($lista)){
+                            if($lista[$inew]->tipoTurno == 2){
+                                $banCont = false;
+                                break;
+                            }
                         }
+                        $inew ++;
+                        $contVIP ++;
                     }
                     $inew = $i;
                     if($banCont){

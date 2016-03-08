@@ -215,8 +215,8 @@ class TurnoControl{
       $response = $response->withStatus(404);
     }
 
-    //$response->getBody()->write($respuesta);
-    //return $response;
+    $response->getBody()->write($respuesta);
+    return $response;
   }
   
   public function postTurnoAnonimo(Request $request, Response $response){

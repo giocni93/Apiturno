@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.2
+-- version 4.5.1
 -- http://www.phpmyadmin.net
 --
--- Servidor: localhost
--- Tiempo de generación: 08-03-2016 a las 14:53:03
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 08-03-2016 a las 16:06:34
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -76,8 +76,8 @@ CREATE TABLE `cliente` (
   `apellidos` varchar(30) NOT NULL,
   `telefono` varchar(10) DEFAULT NULL,
   `pass` varchar(50) NOT NULL,
-  `idPush` varchar(200) DEFAULT NULL,
-  `idFace` varchar(200) DEFAULT NULL,
+  `idPush` varchar(250) DEFAULT NULL,
+  `idFace` varchar(250) DEFAULT NULL,
   `estado` enum('ACTIVO','INACTIVO') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -162,7 +162,7 @@ CREATE TABLE `empleado` (
   `apellidos` varchar(30) NOT NULL,
   `telefono` varchar(12) DEFAULT NULL,
   `pass` varchar(50) NOT NULL,
-  `idPush` varchar(100) DEFAULT NULL,
+  `idPush` varchar(250) DEFAULT NULL,
   `estado` enum('ACTIVO','INACTIVO') NOT NULL,
   `estadoOnline` enum('ACTIVO','INACTIVO') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

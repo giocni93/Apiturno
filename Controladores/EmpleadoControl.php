@@ -203,7 +203,7 @@ class EmpleadoControl{
   function getEmpleadosBySucursal(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $idSucursal = $request->getAttribute("idSucursal");
-    $idServicio = $request->getAttribute("idSucursal");
+    $idServicio = $request->getAttribute("idServicio");
     $query = "SELECT DISTINCT "
               . "emp.id as idEmpleado,"
               . "ser.id as idServicio,"

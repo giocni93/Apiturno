@@ -195,17 +195,15 @@ class TurnoControl{
             $response = $response->withStatus(200);
             
             //ENVIAR NOTIFICACION AL EMPLEADO Y AL ADMINISTRADOR DE LA SUCURSAL
-                 $dataEmple = Empleado::select("idPush")
-                    ->where("id","=",$data['idEmpleado'])
-                    ->first();
+            $dataEmple = Empleado::select("idPush")
+               ->where("id","=",$data['idEmpleado'])
+               ->first();
             if($dataEmple != null){
                 $titulo = "Turno movil";
                 $msg = "Te han solicitado un turno";
                 $std = 1;
                 enviarNotificacion(array($dataEmple->idPush),$titulo, $msg, $std);
             }
-            
-            
 
         }catch(Exception $err){
             $respuesta = json_encode(array('msg' => "error al pedir el turno", "std" => 0,"err" => $err->getMessage()));

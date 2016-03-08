@@ -1705,6 +1705,7 @@ CREATE TABLE `turno` (
   `fechaFinal` datetime DEFAULT NULL,
   `tiempo` smallint(6) DEFAULT '0',
   `turno` int(10) UNSIGNED NOT NULL,
+  `turnoReal` int(10) UNSIGNED DEFAULT '0',
   `avisado` tinyint(1) NOT NULL DEFAULT '0',
   `tipoTurno` int(10) UNSIGNED NOT NULL,
   `estadoTurno` enum('SOLICITADO','CONFIRMADO','TERMINADO','CANCELADO','ATENDIENDO') NOT NULL,

@@ -19,12 +19,7 @@ class TurnoControl{
                               ->orwhere("turno.estadoTurno","=","ATENDIENDO");
                     })
                     ->where("turno.estado","=","ACTIVO")
-                    ->orderBy('turno.fechaSolicitud', 'asc')
-                    ->orderBy('tipoTurno.prioridad', 'asc')
-                    
-                    
-                    
-                    
+                    ->orderBy('turno.turnoReal', 'asc')
                     ->get();
     if(count($data) == 0){
       $response = $response->withStatus(404);
@@ -191,6 +186,7 @@ class TurnoControl{
             $turno->idServicio  =   $data['idServicio'];
             $turno->tiempo      =   0; //$data['tiempo'];
             $turno->turno       =   $turnoSiguiente;
+            $turno->turnoReal   =   $turnoSiguiente;
             $turno->tipoTurno   =   1;
             $turno->estadoTurno =   "SOLICITADO";
             $turno->estado      =   "ACTIVO";
@@ -241,8 +237,6 @@ class TurnoControl{
         $cliente->apellidos =   $data['apellidos'];
         $cliente->telefono  =   "";
         $cliente->pass      =   sha1($data['email']);
-        $cliente->idPush    =   "01";//$data['idPush'];
-        $cliente->idFace    =   "01";//$data['idFace'];
         $cliente->estado    =   "ACTIVO";
         $cliente->save();
         $idCliente = $cliente->id;
@@ -262,18 +256,60 @@ class TurnoControl{
                     ->first();
     if($turnoCliente == null){
         //CALCULAR EL SIGUIENTE TURNO
-        $turnoSiguiente = 1;
-        $con_turno = Turno::select("turno")
+        $turnoSiguiente = 0;
+        $turnoReal = 0;
+        $lista = Turno::select("*")
                         ->where("idServicio","=",$data["idServicio"])
                         ->where("idSucursal","=",$data["idSucursal"])
                         ->where("estadoTurno","<>","TERMINADO")
                         ->where("estadoTurno","<>","CANCELADO")
                         ->orderBy('turno', 'desc')
-                        ->first();
-        if($con_turno != null){
-          $turnoSiguiente = $con_turno['turno'] + 1;
+                        ->get();
+        if(count($lista) > 0){
+          $turnoSiguiente = $lista[0]->turno;
         }
-
+        
+        $turnoSiguiente ++;
+        $turnoReal = $turnoSiguiente;
+        
+        //VERIFICO QUE TIPO DE TURNO ES
+        if($data['tipoTurno'] == 2){
+            //SI ES VIP
+            $ban = false;
+            $cont = 0;
+            $ind = 0;
+            for($i = count($lista) - 1; $i >= 0; $i--){
+                $banCont = true;
+                if($lista[$i]->avisado == 0 && $ban == false){
+                    //VALIDAR SI EL ANTERIOR ES VIP
+                    $inew = $i + 1;
+                    if($inew < count($lista)){
+                        if($lista[$inew]->tipoTurno == 2 && (count($lista) - $i) < 3){
+                            $banCont = false;
+                        }
+                    }
+                    $inew = $i;
+                    if($banCont){
+                        $ban = true;
+                        $turnoReal = $lista[$inew]->turno;
+                        $ind = $inew;
+                        break;
+                    }
+                }
+            }
+            if($ban){
+                //ACTUALIZAR TURNOS REALES
+                for($j = $ind; $j >= 0; $j--){
+                    $cont = $lista[$j]->turno + 1;
+                    $turUp = Turno::select("*")
+                                    ->where("id","=",$lista[$j]->id)
+                                    ->first();
+                    $turUp->turnoReal = $cont;
+                    $turUp->save();
+                }
+                }
+        }
+        
         //INSERTAR TURNO
         try{
             $turno = new Turno;
@@ -283,6 +319,7 @@ class TurnoControl{
             $turno->idServicio  =   $data['idServicio'];
             $turno->tiempo      =   0; //$data['tiempo'];
             $turno->turno       =   $turnoSiguiente;
+            $turno->turnoReal   =   $turnoReal;
             $turno->tipoTurno   =   $data['tipoTurno'];
             $turno->avisado     =   1;
             $turno->estadoTurno =   "CONFIRMADO";

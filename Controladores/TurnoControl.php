@@ -215,8 +215,8 @@ class TurnoControl{
       $response = $response->withStatus(404);
     }
 
-    $response->getBody()->write($respuesta);
-    return $response;
+    //$response->getBody()->write($respuesta);
+    //return $response;
   }
   
   public function postTurnoAnonimo(Request $request, Response $response){
@@ -464,7 +464,7 @@ class TurnoControl{
         $query = "SELECT "
                 ."COALESCE(turnoAct.turnoActual,0) as turnoActual "
                 ."FROM "
-                ."(SELECT MAX(tu.turno) as turnoActual FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND (tu.estadoTurno = 'ATENDIENDO' OR tu.estadoTurno = 'CONFIRMADO')) as turnoAct,"
+                ."(SELECT tu.turno as turnoActual FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND (tu.estadoTurno = 'ATENDIENDO' OR tu.estadoTurno = 'CONFIRMADO') ORDER BY tu.turnoReal ASC LIMIT 1) as turnoAct,"
                 ."turno "
                 ."WHERE "
                 ."idEmpleado = ".$data[$i]->idEmpleado." AND "

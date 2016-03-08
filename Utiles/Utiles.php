@@ -23,7 +23,7 @@
 
       $payload = array(
           'title'     	=> $titulo,
-          'message'   	=> $msg,
+          'msg'   	=> $msg,
           'std'       	=> $std
       );
 

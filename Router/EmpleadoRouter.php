@@ -6,7 +6,7 @@ $app->delete('/empleado/{id}', "EmpleadoControl:delete");
 $app->put('/empleado/{id}',"EmpleadoControl:update");
 $app->post('/empleado/sesion', "EmpleadoControl:sesion");
 $app->put('/empleado/{id}/idpush', "EmpleadoControl:updatePush");
-$app->get('/sucursal/{idSucursal}/empleado', "EmpleadoControl:getEmpleadosBySucursal");
+$app->get('/sucursal/{idSucursal}/{idServicio}/empleado', "EmpleadoControl:getEmpleadosBySucursal");
 $app->get('/sucursal/{idSucursal}/empleados/turnos', "EmpleadoControl:getEmpleadosBySucursal2");
 $app->put('/empleado/{id}/pass',"EmpleadoControl:updatePass");
 $app->post('/empleado/login', "EmpleadoControl:sesionlogin");

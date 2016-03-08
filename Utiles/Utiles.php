@@ -17,15 +17,9 @@
       }
   }
 
-  function enviarNotificacion($array,$titulo, $msg, $std) {
+  function enviarNotificacion($array,$payload) {
       $apiKey = 'AIzaSyCZlGhlftLINks2FNkwbk4Ub-D7sXTiH_4';
       $headers = array('Content-Type:application/json',"Authorization:key=$apiKey");
-
-      $payload = array(
-          'title'     	=> $titulo,
-          'msg'   	=> $msg,
-          'std'       	=> $std
-      );
 
       $data = array(
           'data' => $payload,

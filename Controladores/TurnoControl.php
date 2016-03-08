@@ -199,10 +199,13 @@ class TurnoControl{
                ->where("id","=",$data['idEmpleado'])
                ->first();
             if($dataEmple != null){
-                $titulo = "Turno movil";
-                $msg = "Te han solicitado un turno";
-                $std = 1;
-                enviarNotificacion(array($dataEmple->idPush),$titulo, $msg, $std);
+                $payload = array(
+                    'title'         => "Turno movil",
+                    'msg'           => "Te han solicitado un turno",
+                    'std'           => 1,
+                    'idServicio'    => $data['idServicio']
+                );
+                enviarNotificacion(array($dataEmple->idPush),$payload);
             }
 
         }catch(Exception $err){

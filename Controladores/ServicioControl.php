@@ -202,5 +202,29 @@ class ServicioControl{
         return $response;
     }
 
+    function serviciossucursales(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $idempresa = $request->getAttribute("idempresa");
+
+        $empresa = SectorEmpresa::select('sectorempresa.idSector')
+                            ->where('sectorempresa.idEmpresa','=',$idempresa)
+                            ->get();
+        for ($i=0;$i<count($empresa);$i++) {
+            $servi = ServiciosSector::select('serviciossector.idServicio','servicio.nombre',
+                                    'servicio.descripcion','servicio.estado',
+                                    'sector.nombre as sector')
+                            ->join('servicio','servicio.id','=','serviciossector.idServicio')
+                            ->join('sector','sector.id','=','serviciossector.idSector')
+                            ->where('serviciossector.idSector','=',$empresa[$i]->idSector)
+                            ->get();
+            $empresa[$i]['servicio'] = $servi;                
+        }            
+        
+
+        $response->getBody()->write($empresa);
+        return $response;
+
+    }
+
 
 }

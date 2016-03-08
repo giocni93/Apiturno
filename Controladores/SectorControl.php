@@ -67,12 +67,12 @@ class SectorControl{
 
             
 
-            for($i=0; $i< count($data['tipoturno']);$i++){
-                $tipo = new Tipoturnosector;
-                $tipo->idsector   =    $sector->id;
+            /*for($i=0; $i< count($data['tipoturno']);$i++){
+                $tipo = new Tipoturnosucursal;
+                $tipo->idsucursal   =  $sector->id;
                 $tipo->idtipoturno  =  $data['tipoturno'][$i]['id'];
                 $tipo->save();
-            }
+            }*/
 
             
 

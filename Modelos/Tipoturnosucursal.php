@@ -1,8 +1,8 @@
 <?php
 	use Illuminate\Database\Eloquent\Model;
 
-	class Tipoturnosector extends Model{
-	    protected $table = "tipoturnosector";
+	class Tipoturnosucursal extends Model{
+	    protected $table = "tipoturnosucursal";
 		protected $primaryKey = "id";
 	    public $timestamps = false;
 	}

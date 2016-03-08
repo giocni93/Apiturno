@@ -3,11 +3,11 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Illuminate\Database\Capsule\Manager as DB;
 
-class TipoturnosectorControl{
+class TipoturnosucursalControl{
 
 	function gettipoturnosector(Request $request, Response $response){
 		$response = $response->withHeader('Content-type', 'application/json');
-	    $data = Tipoturnosector::all();
+	    $data = Tipoturnosucursal::all();
 	    if(count($data) == 0){
 	      $response = $response->withStatus(404);
 	    }
@@ -18,25 +18,25 @@ class TipoturnosectorControl{
 	function tiposelecionados(Request $request, Response $response){
 		$response = $response->withHeader('Content-type', 'application/json');
 	    $id = $request->getAttribute("id");
-	    $data = Tipoturnosector::select("*")
-                    ->where("idSector","=",$id)
+	    $data = Tipoturnosucursal::select("*")
+                    ->where("idsucursal","=",$id)
                     ->get();
 	    $response->getBody()->write($data);
 	    return $response;
 	}
 
-	function posttipoturnosector(Request $request, Response $response){
+	function posttipoturnosucursal(Request $request, Response $response){
 		$response = $response->withHeader('Content-type', 'application/json');
         $data = json_decode($request->getBody(),true);
         $id = $request->getAttribute("id");
         try{
             
-            $tipo = Tipoturnosector::select("*")
-                            ->where("idsector","=",$id)
+            $tipo = Tipoturnosucursal::select("*")
+                            ->where("idsucursal","=",$id)
                             ->delete();
 
-            $sector = new Tipoturnosector;
-            $sector->idsector  		=  $data['idsector'];
+            $sector = new Tipoturnosucursal;
+            $sector->idsucursal  		=  $data['idsucursal'];
             $sector->idtipoturno 	=  $data['idtipoturno'];
             $sector->save();
 

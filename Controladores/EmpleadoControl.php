@@ -211,6 +211,7 @@ class EmpleadoControl{
               . "'' as cliente, "
               . "'' as tiempoEstimado, "
               . "'' as numeroTurno, "
+              . "'' as TipoTurno, "
               . "'' as turnoActual "
               . "FROM empleado emp "
               . "INNER JOIN "
@@ -224,6 +225,8 @@ class EmpleadoControl{
       $query = "SELECT "
                 ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes)),'%H:%i:%s') as tiempoEstimado, "
                 ."COALESCE(turnoAct.turnoActual,0) as turnoActual, "
+                ."COALESCE(turnoAct.tipoTur,1) as tipoTurno, "
+                ."turnoAct.cliente as cliente, "
                 ."COALESCE(numeroTur.numeroTurno,0) as numeroTurno "
                 ."FROM "
                 ."( "
@@ -236,7 +239,24 @@ class EmpleadoControl{
                 ."    t.idServicio = ".$data[$i]->idServicio." AND "
                 ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
                 .") as turnosFaltantes, "
-                ."(SELECT MAX(tu.turno) as turnoActual FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND tu.estadoTurno = 'ATENDIENDO') as turnoAct,"
+                ."(SELECT "
+                    . "tu.turno as turnoActual,"
+                    . "COALESCE(CONCAT(cl.nombres,' ',cl.apellidos),'') as cliente, "
+                    . "tu.tipoTurno as tipoTur "
+                    . "FROM turno as tu "
+                    . "INNER JOIN tipoTurno tt "
+                    . "ON (tt.id = tu.tipoTurno) "
+                    . "INNER JOIN cliente cl "
+                    . "ON(cl.id = tu.idCliente) "
+                    . "WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND "
+                    . "(tu.estadoTurno = 'ATENDIENDO' OR "
+                    . "tu.estadoTurno = 'CONFIRMADO') "
+                    . "ORDER BY "
+                    . "tu.avisado ASC, "
+                    . "tt.prioridad ASC,"
+                    . "tu.fechaSolicitud ASC,"
+                    . "tu.estadoTurno ASC "
+                    . "LIMIT 1) as turnoAct,"
                 ."(SELECT Count(tu.turno) as numeroTurno FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND (tu.estadoTurno <> 'TERMINADO' AND tu.estadoTurno <> 'CANCELADO')) as numeroTur,"
                 ."turno "
                 ."WHERE "
@@ -244,46 +264,22 @@ class EmpleadoControl{
                 ."idServicio = ".$data[$i]->idServicio." AND "
                 ."estadoTurno = 'TERMINADO' LIMIT 1";
         $dataTiempo = DB::select(DB::raw($query));
-        $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
+        if(count($dataTiempo) > 0){
+          $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
+        }
         if($data[$i]->tiempoEstimado == null){
           $data[$i]->tiempoEstimado = "00:00:00";
         }
         $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
         $data[$i]->numeroTurno = $dataTiempo[0]->numeroTurno;
-        $query = "SELECT "
-                  ."COALESCE(tu.turno,0) as turnoActual, "
-                  ."COALESCE(CONCAT(cl.nombres,' ',cl.apellidos),'') as cliente "
-                  ."FROM turno as tu "
-                  ."INNER JOIN "
-                  ."cliente as cl "
-                  ."ON(cl.id = tu.idCliente) "
-                  ."WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND "
-                  ."tu.idServicio = ".$data[$i]->idServicio." AND "
-                  ."(tu.estadoTurno = 'ATENDIENDO' OR "
-                  ."tu.estadoTurno = 'CONFIRMADO') ORDER BY tu.fechaSolicitud Asc LIMIT 1";
-        $dataCliente = DB::select(DB::raw($query));
-        if(count($dataTiempo) > 0){
-          $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
-        }
-        if(count($dataCliente) > 0){
-          $data[$i]->turnoActual = $dataCliente[0]->turnoActual;
-          $data[$i]->cliente = $dataCliente[0]->cliente;
-        }
-        if($data[$i]->tiempoEstimado == null){
-          $data[$i]->tiempoEstimado = "00:00:00";
-        }
-        
-        if($data[$i]->turnoActual == null){
-          $data[$i]->turnoActual = 0;
-        }
-        
+        $data[$i]->TipoTurno = $dataTiempo[0]->tipoTurno;
+        $data[$i]->cliente = $dataTiempo[0]->cliente;
         if($data[$i]->cliente == null){
           $data[$i]->cliente = "";
         }
     }
     $response->getBody()->write(json_encode($data));
     return $response;
-
   }
   
   function getEmpleadosBySucursal2(Request $request, Response $response){
@@ -297,6 +293,7 @@ class EmpleadoControl{
               . "'' as cliente, "
               . "'' as tiempoEstimado, "
               . "'' as numeroTurno, "
+              . "'' as TipoTurno, "
               . "'' as turnoActual "
               . "FROM empleado emp "
               . "INNER JOIN "
@@ -310,6 +307,8 @@ class EmpleadoControl{
       $query = "SELECT "
                 ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes)),'%H:%i:%s') as tiempoEstimado, "
                 ."COALESCE(turnoAct.turnoActual,0) as turnoActual, "
+                ."COALESCE(turnoAct.tipoTur,1) as tipoTurno, "
+                ."turnoAct.cliente as cliente, "
                 ."COALESCE(numeroTur.numeroTurno,0) as numeroTurno "
                 ."FROM "
                 ."( "
@@ -322,7 +321,23 @@ class EmpleadoControl{
                 ."    t.idServicio = ".$data[$i]->idServicio." AND "
                 ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
                 .") as turnosFaltantes, "
-                ."(SELECT MAX(tu.turno) as turnoActual FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND tu.estadoTurno = 'ATENDIENDO') as turnoAct,"
+                ."(SELECT "
+                    . "tu.turno as turnoActual,"
+                    . "COALESCE(CONCAT(cl.nombres,' ',cl.apellidos),'') as cliente, "
+                    . "tu.tipoTurno as tipoTur "
+                    . "FROM turno as tu "
+                    . "INNER JOIN tipoTurno tt "
+                    . "ON (tt.id = tu.tipoTurno) "
+                    . "INNER JOIN cliente cl "
+                    . "ON(cl.id = tu.idCliente) "
+                    . "WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND "
+                    . "(tu.estadoTurno = 'ATENDIENDO' OR "
+                    . "tu.estadoTurno = 'CONFIRMADO') "
+                    . "ORDER BY "
+                    . "tu.avisado DESC, "
+                    . "tt.prioridad ASC,"
+                    . "tu.fechaSolicitud ASC "
+                    . "LIMIT 1) as turnoAct,"
                 ."(SELECT Count(tu.turno) as numeroTurno FROM turno as tu WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND (tu.estadoTurno <> 'TERMINADO' AND tu.estadoTurno <> 'CANCELADO')) as numeroTur,"
                 ."turno "
                 ."WHERE "
@@ -330,39 +345,16 @@ class EmpleadoControl{
                 ."idServicio = ".$data[$i]->idServicio." AND "
                 ."estadoTurno = 'TERMINADO' LIMIT 1";
         $dataTiempo = DB::select(DB::raw($query));
-        $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
+        if(count($dataTiempo) > 0){
+          $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
+        }
         if($data[$i]->tiempoEstimado == null){
           $data[$i]->tiempoEstimado = "00:00:00";
         }
         $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
         $data[$i]->numeroTurno = $dataTiempo[0]->numeroTurno;
-        $query = "SELECT "
-                  ."COALESCE(tu.turno,0) as turnoActual, "
-                  ."COALESCE(CONCAT(cl.nombres,' ',cl.apellidos),'') as cliente "
-                  ."FROM turno as tu "
-                  ."INNER JOIN "
-                  ."cliente as cl "
-                  ."ON(cl.id = tu.idCliente) "
-                  ."WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND "
-                  ."tu.idServicio = ".$data[$i]->idServicio." AND "
-                  ."(tu.estadoTurno = 'ATENDIENDO' OR "
-                  ."tu.estadoTurno = 'CONFIRMADO') ORDER BY tu.fechaSolicitud Asc LIMIT 1";
-        $dataCliente = DB::select(DB::raw($query));
-        if(count($dataTiempo) > 0){
-          $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
-        }
-        if(count($dataCliente) > 0){
-          $data[$i]->turnoActual = $dataCliente[0]->turnoActual;
-          $data[$i]->cliente = $dataCliente[0]->cliente;
-        }
-        if($data[$i]->tiempoEstimado == null){
-          $data[$i]->tiempoEstimado = "00:00:00";
-        }
-        
-        if($data[$i]->turnoActual == null){
-          $data[$i]->turnoActual = 0;
-        }
-        
+        $data[$i]->TipoTurno = $dataTiempo[0]->tipoTurno;
+        $data[$i]->cliente = $dataTiempo[0]->cliente;
         if($data[$i]->cliente == null){
           $data[$i]->cliente = "";
         }

@@ -19,12 +19,12 @@ class TurnoControl{
                               ->orwhere("turno.estadoTurno","=","ATENDIENDO");
                     })
                     ->where("turno.estado","=","ACTIVO")
-                    //->whereRaw('ABS(TIMESTAMPDIFF(MINUTE,turno.fechaSolicitud,NOW())) >= turno.tiempo', [])
-                    ->orderBy('turno.avisado', 'desc')
-                    ->orderBy('turno.estadoTurno', 'desc')
-                    ->orderBy('tipoTurno.prioridad', 'asc')
                     ->orderBy('turno.fechaSolicitud', 'asc')
-                    //->orderBy('turno.tiempo', 'asc')
+                    ->orderBy('tipoTurno.prioridad', 'asc')
+                    
+                    
+                    
+                    
                     ->get();
     if(count($data) == 0){
       $response = $response->withStatus(404);
@@ -284,6 +284,7 @@ class TurnoControl{
             $turno->tiempo      =   0; //$data['tiempo'];
             $turno->turno       =   $turnoSiguiente;
             $turno->tipoTurno   =   $data['tipoTurno'];
+            $turno->avisado     =   1;
             $turno->estadoTurno =   "CONFIRMADO";
             $turno->estado      =   "ACTIVO";
             $turno->save();

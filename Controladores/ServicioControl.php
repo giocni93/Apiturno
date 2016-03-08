@@ -1,6 +1,7 @@
 <?php
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class ServicioControl{
 
@@ -153,20 +154,16 @@ class ServicioControl{
               $response = $response->withStatus(404);
             }else{
                 for($i = 0; $i < count($data); $i++){
-                    $tur = Turno::select('turno.turno')
-                        ->where('turno.idEmpleado','=',$idEmpleado)
-                        ->where('turno.idServicio','=',$data[$i]->idServicio)
-                        ->where(function($q){
-                           $q ->where('turno.estadoTurno','=','CONFIRMADO')
-                            ->orwhere('turno.estadoTurno','=','ATENDIENDO');
-                        })
-                        ->orderBy("turno.fechaSolicitud","Desc")
-                        ->first();
-                        $turno = 1;
-                    if($tur != null){
-                        $turno = $tur->turno;
-                    }
-                    $data[$i]['turnoActual'] = $turno;
+                    $query = "SELECT "
+                    . "Count(tu.turno) as numeroTurno "
+                    . "FROM "
+                    . "turno as tu "
+                    . "WHERE tu.idEmpleado = ".$idEmpleado." AND "
+                    . "tu.idServicio = ".$data[$i]->id." AND "
+                    . "(tu.estadoTurno <> 'TERMINADO' AND tu.estadoTurno <> 'CANCELADO')";
+                    $dataNumeroTurno = DB::select(DB::raw($query));
+                    $data[$i]['numeroTurno'] = $dataNumeroTurno[0]->numeroTurno;
+                    $data[$i]['turnoActual'] = 0;
                 }
             }
             $response->getBody()->write($data);

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
+-- version 4.5.2
 -- http://www.phpmyadmin.net
 --
--- Servidor: 127.0.0.1
--- Tiempo de generaciÃ³n: 07-03-2016 a las 20:58:00
--- VersiÃ³n del servidor: 10.1.9-MariaDB
--- VersiÃ³n de PHP: 5.6.15
+-- Servidor: localhost
+-- Tiempo de generación: 08-03-2016 a las 14:53:03
+-- Versión del servidor: 10.1.9-MariaDB
+-- Versión de PHP: 5.6.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -103,7 +103,7 @@ INSERT INTO `cliente` (`id`, `email`, `nombres`, `apellidos`, `telefono`, `pass`
 
 CREATE TABLE `departamento` (
   `id` int(10) UNSIGNED NOT NULL,
-  `nombre` varchar(30) NOT NULL,
+  `nombre` varchar(30) CHARACTER SET utf8 NOT NULL,
   `estado` enum('ACTIVO','INACTIVO') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -115,34 +115,34 @@ INSERT INTO `departamento` (`id`, `nombre`, `estado`) VALUES
 (1, 'AMAZONAS', 'ACTIVO'),
 (2, 'ANTIOQUIA', 'ACTIVO'),
 (3, 'ARAUCA', 'ACTIVO'),
-(4, 'ATLÃ�NTICO', 'ACTIVO'),
-(5, 'BOLÃ�VAR', 'ACTIVO'),
-(6, 'BOYACÃ�', 'ACTIVO'),
+(4, 'ATL??NTICO', 'ACTIVO'),
+(5, 'BOL??VAR', 'ACTIVO'),
+(6, 'BOYAC??', 'ACTIVO'),
 (7, 'CALDAS', 'ACTIVO'),
-(8, 'CAQUETÃ�', 'ACTIVO'),
+(8, 'CAQUET??', 'ACTIVO'),
 (9, 'CASANARE', 'ACTIVO'),
 (10, 'CAUCA', 'ACTIVO'),
 (11, 'CESAR', 'ACTIVO'),
-(12, 'CHOCÃ“', 'ACTIVO'),
-(13, 'CÃ“RDOBA', 'ACTIVO'),
+(12, 'CHOCÓ', 'ACTIVO'),
+(13, 'CÓRDOBA', 'ACTIVO'),
 (14, 'CUNDINAMARCA', 'ACTIVO'),
-(15, 'GUAINÃ�A', 'ACTIVO'),
+(15, 'GUAIN??A', 'ACTIVO'),
 (16, 'GUAVIARE', 'ACTIVO'),
 (17, 'HUILA', 'ACTIVO'),
 (18, 'LA GUAJIRA', 'ACTIVO'),
 (19, 'MAGDALENA', 'ACTIVO'),
 (20, 'META', 'ACTIVO'),
-(21, 'NARIÃ‘O', 'ACTIVO'),
+(21, 'NARIÑO', 'ACTIVO'),
 (22, 'NORTE DE SANTANDER', 'ACTIVO'),
 (23, 'PUTUMAYO', 'ACTIVO'),
-(24, 'QUINDÃ�O', 'ACTIVO'),
+(24, 'QUIND??O', 'ACTIVO'),
 (25, 'RISARALDA', 'ACTIVO'),
-(26, 'SAN ANDRÃ‰S Y ROVIDENCIA', 'ACTIVO'),
+(26, 'SAN ANDRÉS Y ROVIDENCIA', 'ACTIVO'),
 (27, 'SANTANDER', 'ACTIVO'),
 (28, 'SUCRE', 'ACTIVO'),
 (29, 'TOLIMA', 'ACTIVO'),
 (30, 'VALLE DEL CAUCA', 'ACTIVO'),
-(31, 'VAUPÃ‰S', 'ACTIVO'),
+(31, 'VAUPÉS', 'ACTIVO'),
 (32, 'VICHADA', 'ACTIVO');
 
 -- --------------------------------------------------------
@@ -182,7 +182,9 @@ INSERT INTO `empleado` (`id`, `idSucursal`, `idEmpresa`, `idPerfil`, `identifica
 (53, NULL, 68, 3, '1082838383', 'jose@gmail.com', 'Jose', 'Perez', '(309) 983-88', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', NULL, 'ACTIVO', 'ACTIVO'),
 (54, NULL, 69, 3, '1028388333', 'biblo@jjss', 'biblos', 'admin', '(393) 900-30', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', NULL, 'INACTIVO', 'ACTIVO'),
 (55, 11, NULL, 4, '1065123321', 'fandresroja@gmail.com', 'Fabio', 'Rojas', '(213) 231-23', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', NULL, 'ACTIVO', 'ACTIVO'),
-(56, 11, NULL, 2, '1065000000', 'gio', 'gilmar', 'Ocampo', '(322) 131-23', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'APA91bHv-oMRs9T1Vv8bXnz9guTN8A1peWyXjjEPyPm-qlxQABWJpEQup-0GffGyMTidTdoUWilL8bFiQtyQ4AmpgPdghKnkSOgO', 'ACTIVO', 'ACTIVO');
+(56, 11, NULL, 2, '1065000000', 'gio', 'gilmar', 'Ocampo', '(322) 131-23', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'APA91bHv-oMRs9T1Vv8bXnz9guTN8A1peWyXjjEPyPm-qlxQABWJpEQup-0GffGyMTidTdoUWilL8bFiQtyQ4AmpgPdghKnkSOgO', 'ACTIVO', 'ACTIVO'),
+(57, 12, NULL, 4, '1231232331', 'wer', 'rew', 'wer', '(123) 123-21', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', NULL, 'ACTIVO', 'ACTIVO'),
+(58, 13, NULL, 4, '1321343311', 'wrw', 'eqe', 'qwe', '(424) 234-23', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', NULL, 'ACTIVO', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -259,7 +261,8 @@ INSERT INTO `modulos` (`id`, `nombre`) VALUES
 (2, 'SUCURSALES'),
 (3, 'SECTOR'),
 (4, 'EMPLEADOS'),
-(5, 'SERVICIOS');
+(5, 'SERVICIOS'),
+(6, 'REPORTES');
 
 -- --------------------------------------------------------
 
@@ -500,25 +503,25 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (219, 6, 'BERBEO', 'ACTIVO'),
 (220, 6, 'BETÃ‰ITIVA', 'ACTIVO'),
 (221, 6, 'BOAVITA', 'ACTIVO'),
-(222, 6, 'BOYACÃ�', 'ACTIVO'),
+(222, 6, 'BOYACÃ?', 'ACTIVO'),
 (223, 6, 'BRICEÃ‘O', 'ACTIVO'),
 (224, 6, 'BUENAVISTA', 'ACTIVO'),
-(225, 6, 'BUSBANZÃ�', 'ACTIVO'),
+(225, 6, 'BUSBANZÃ?', 'ACTIVO'),
 (226, 6, 'CALDAS', 'ACTIVO'),
 (227, 6, 'CAMPO HERMOSO', 'ACTIVO'),
 (228, 6, 'CERINZA', 'ACTIVO'),
 (229, 6, 'CHINAVITA', 'ACTIVO'),
-(230, 6, 'CHIQUINQUIRÃ�', 'ACTIVO'),
-(231, 6, 'CHÃ�QUIZA', 'ACTIVO'),
+(230, 6, 'CHIQUINQUIRÃ?', 'ACTIVO'),
+(231, 6, 'CHÃ?QUIZA', 'ACTIVO'),
 (232, 6, 'CHISCAS', 'ACTIVO'),
 (233, 6, 'CHITA', 'ACTIVO'),
 (234, 6, 'CHITARAQUE', 'ACTIVO'),
-(235, 6, 'CHIVATÃ�', 'ACTIVO'),
+(235, 6, 'CHIVATÃ?', 'ACTIVO'),
 (236, 6, 'CIÃ‰NEGA', 'ACTIVO'),
 (237, 6, 'CÃ“MBITA', 'ACTIVO'),
 (238, 6, 'COPER', 'ACTIVO'),
 (239, 6, 'CORRALES', 'ACTIVO'),
-(240, 6, 'COVARACHÃ�A', 'ACTIVO'),
+(240, 6, 'COVARACHÃ?A', 'ACTIVO'),
 (241, 6, 'CUBARA', 'ACTIVO'),
 (242, 6, 'CUCAITA', 'ACTIVO'),
 (243, 6, 'CUITIVA', 'ACTIVO'),
@@ -527,11 +530,11 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (246, 6, 'EL ESPINO', 'ACTIVO'),
 (247, 6, 'FIRAVITOBA', 'ACTIVO'),
 (248, 6, 'FLORESTA', 'ACTIVO'),
-(249, 6, 'GACHANTIVÃ�', 'ACTIVO'),
-(250, 6, 'GÃ�MEZA', 'ACTIVO'),
+(249, 6, 'GACHANTIVÃ?', 'ACTIVO'),
+(250, 6, 'GÃ?MEZA', 'ACTIVO'),
 (251, 6, 'GARAGOA', 'ACTIVO'),
 (252, 6, 'GUACAMAYAS', 'ACTIVO'),
-(253, 6, 'GÃœICÃ�N', 'ACTIVO'),
+(253, 6, 'GÃœICÃ?N', 'ACTIVO'),
 (254, 6, 'IZA', 'ACTIVO'),
 (255, 6, 'JENESANO', 'ACTIVO'),
 (256, 6, 'JERICÃ“', 'ACTIVO'),
@@ -539,81 +542,81 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (258, 6, 'LA VICTORIA', 'ACTIVO'),
 (259, 6, 'LABRANZA GRANDE', 'ACTIVO'),
 (260, 6, 'MACANAL', 'ACTIVO'),
-(261, 6, 'MARIPÃ�', 'ACTIVO'),
+(261, 6, 'MARIPÃ?', 'ACTIVO'),
 (262, 6, 'MIRAFLORES', 'ACTIVO'),
 (263, 6, 'MONGUA', 'ACTIVO'),
-(264, 6, 'MONGUÃ�', 'ACTIVO'),
-(265, 6, 'MONIQUIRÃ�', 'ACTIVO'),
+(264, 6, 'MONGUÃ?', 'ACTIVO'),
+(265, 6, 'MONIQUIRÃ?', 'ACTIVO'),
 (266, 6, 'MOTAVITA', 'ACTIVO'),
 (267, 6, 'MUZO', 'ACTIVO'),
 (268, 6, 'NOBSA', 'ACTIVO'),
 (269, 6, 'NUEVO COLÃ“N', 'ACTIVO'),
-(270, 6, 'OICATÃ�', 'ACTIVO'),
+(270, 6, 'OICATÃ?', 'ACTIVO'),
 (271, 6, 'OTANCHE', 'ACTIVO'),
 (272, 6, 'PACHAVITA', 'ACTIVO'),
-(273, 6, 'PÃ�EZ', 'ACTIVO'),
+(273, 6, 'PÃ?EZ', 'ACTIVO'),
 (274, 6, 'PAIPA', 'ACTIVO'),
 (275, 6, 'PAJARITO', 'ACTIVO'),
 (276, 6, 'PANQUEBA', 'ACTIVO'),
 (277, 6, 'PAUNA', 'ACTIVO'),
 (278, 6, 'PAYA', 'ACTIVO'),
-(279, 6, 'PAZ DE RÃ�O', 'ACTIVO'),
+(279, 6, 'PAZ DE RÃ?O', 'ACTIVO'),
 (280, 6, 'PESCA', 'ACTIVO'),
 (281, 6, 'PISBA', 'ACTIVO'),
 (282, 6, 'PUERTO BOYACA', 'ACTIVO'),
-(283, 6, 'QUÃ�PAMA', 'ACTIVO'),
-(284, 6, 'RAMIRIQUÃ�', 'ACTIVO'),
-(285, 6, 'RÃ�QUIRA', 'ACTIVO'),
+(283, 6, 'QUÃ?PAMA', 'ACTIVO'),
+(284, 6, 'RAMIRIQUÃ?', 'ACTIVO'),
+(285, 6, 'RÃ?QUIRA', 'ACTIVO'),
 (286, 6, 'RONDÃ“N', 'ACTIVO'),
-(287, 6, 'SABOYÃ�', 'ACTIVO'),
-(288, 6, 'SÃ�CHICA', 'ACTIVO'),
-(289, 6, 'SAMACÃ�', 'ACTIVO'),
+(287, 6, 'SABOYÃ?', 'ACTIVO'),
+(288, 6, 'SÃ?CHICA', 'ACTIVO'),
+(289, 6, 'SAMACÃ?', 'ACTIVO'),
 (290, 6, 'SAN EDUARDO', 'ACTIVO'),
 (291, 6, 'SAN JOSÃ‰ DE PARE', 'ACTIVO'),
-(292, 6, 'SAN LUÃ�S DE GACENO', 'ACTIVO'),
+(292, 6, 'SAN LUÃ?S DE GACENO', 'ACTIVO'),
 (293, 6, 'SAN MATEO', 'ACTIVO'),
 (294, 6, 'SAN MIGUEL DE SEMA', 'ACTIVO'),
 (295, 6, 'SAN PABLO DE BORBUR', 'ACTIVO'),
-(296, 6, 'SANTA MARÃ�A', 'ACTIVO'),
+(296, 6, 'SANTA MARÃ?A', 'ACTIVO'),
 (297, 6, 'SANTA ROSA DE VITERBO', 'ACTIVO'),
-(298, 6, 'SANTA SOFÃ�A', 'ACTIVO'),
+(298, 6, 'SANTA SOFÃ?A', 'ACTIVO'),
 (299, 6, 'SANTANA', 'ACTIVO'),
 (300, 6, 'SATIVANORTE', 'ACTIVO'),
 (301, 6, 'SATIVASUR', 'ACTIVO'),
 (302, 6, 'SIACHOQUE', 'ACTIVO'),
-(303, 6, 'SOATÃ�', 'ACTIVO'),
+(303, 6, 'SOATÃ?', 'ACTIVO'),
 (304, 6, 'SOCHA', 'ACTIVO'),
-(305, 6, 'SOCOTÃ�', 'ACTIVO'),
+(305, 6, 'SOCOTÃ?', 'ACTIVO'),
 (306, 6, 'SOGAMOSO', 'ACTIVO'),
 (307, 6, 'SORA', 'ACTIVO'),
-(308, 6, 'SORACÃ�', 'ACTIVO'),
-(309, 6, 'SOTAQUIRÃ�', 'ACTIVO'),
+(308, 6, 'SORACÃ?', 'ACTIVO'),
+(309, 6, 'SOTAQUIRÃ?', 'ACTIVO'),
 (310, 6, 'SUSACÃ“N', 'ACTIVO'),
-(311, 6, 'SUTARMACHÃ�N', 'ACTIVO'),
+(311, 6, 'SUTARMACHÃ?N', 'ACTIVO'),
 (312, 6, 'TASCO', 'ACTIVO'),
-(313, 6, 'TIBANÃ�', 'ACTIVO'),
+(313, 6, 'TIBANÃ?', 'ACTIVO'),
 (314, 6, 'TIBASOSA', 'ACTIVO'),
-(315, 6, 'TINJACÃ�', 'ACTIVO'),
+(315, 6, 'TINJACÃ?', 'ACTIVO'),
 (316, 6, 'TIPACOQUE', 'ACTIVO'),
 (317, 6, 'TOCA', 'ACTIVO'),
-(318, 6, 'TOGÃœÃ�', 'ACTIVO'),
+(318, 6, 'TOGÃœÃ?', 'ACTIVO'),
 (319, 6, 'TÃ“PAGA', 'ACTIVO'),
 (320, 6, 'TOTA', 'ACTIVO'),
 (321, 6, 'TUNJA', 'ACTIVO'),
-(322, 6, 'TUNUNGUÃ�', 'ACTIVO'),
+(322, 6, 'TUNUNGUÃ?', 'ACTIVO'),
 (323, 6, 'TURMEQUÃ‰', 'ACTIVO'),
 (324, 6, 'TUTA', 'ACTIVO'),
-(325, 6, 'TUTAZÃ�', 'ACTIVO'),
+(325, 6, 'TUTAZÃ?', 'ACTIVO'),
 (326, 6, 'UMBITA', 'ACTIVO'),
 (327, 6, 'VENTA QUEMADA', 'ACTIVO'),
 (328, 6, 'VILLA DE LEYVA', 'ACTIVO'),
-(329, 6, 'VIRACACHÃ�', 'ACTIVO'),
+(329, 6, 'VIRACACHÃ?', 'ACTIVO'),
 (330, 6, 'ZETAQUIRA', 'ACTIVO'),
 (331, 7, 'AGUADAS', 'ACTIVO'),
 (332, 7, 'ANSERMA', 'ACTIVO'),
 (333, 7, 'ARANZAZU', 'ACTIVO'),
 (334, 7, 'BELALCAZAR', 'ACTIVO'),
-(335, 7, 'CHINCHINÃ�', 'ACTIVO'),
+(335, 7, 'CHINCHINÃ?', 'ACTIVO'),
 (336, 7, 'FILADELFIA', 'ACTIVO'),
 (337, 7, 'LA DORADA', 'ACTIVO'),
 (338, 7, 'LA MERCED', 'ACTIVO'),
@@ -632,9 +635,9 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (351, 7, 'SALAMINA', 'ACTIVO'),
 (352, 7, 'SAMANA', 'ACTIVO'),
 (353, 7, 'SAN JOSE', 'ACTIVO'),
-(354, 7, 'SUPÃ�A', 'ACTIVO'),
+(354, 7, 'SUPÃ?A', 'ACTIVO'),
 (355, 7, 'VICTORIA', 'ACTIVO'),
-(356, 7, 'VILLAMARÃ�A', 'ACTIVO'),
+(356, 7, 'VILLAMARÃ?A', 'ACTIVO'),
 (357, 7, 'VITERBO', 'ACTIVO'),
 (358, 8, 'ALBANIA', 'ACTIVO'),
 (359, 8, 'BELÃ‰N ANDAQUIES', 'ACTIVO'),
@@ -644,19 +647,19 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (363, 8, 'EL PAUJIL', 'ACTIVO'),
 (364, 8, 'FLORENCIA', 'ACTIVO'),
 (365, 8, 'LA MONTAÃ‘ITA', 'ACTIVO'),
-(366, 8, 'MILÃ�N', 'ACTIVO'),
+(366, 8, 'MILÃ?N', 'ACTIVO'),
 (367, 8, 'MORELIA', 'ACTIVO'),
 (368, 8, 'PUERTO RICO', 'ACTIVO'),
 (369, 8, 'SAN  VICENTE DEL CAGUAN', 'ACTIVO'),
 (370, 8, 'SAN JOSÃ‰ DE FRAGUA', 'ACTIVO'),
 (371, 8, 'SOLANO', 'ACTIVO'),
 (372, 8, 'SOLITA', 'ACTIVO'),
-(373, 8, 'VALPARAÃ�SO', 'ACTIVO'),
+(373, 8, 'VALPARAÃ?SO', 'ACTIVO'),
 (374, 9, 'AGUAZUL', 'ACTIVO'),
 (375, 9, 'CHAMEZA', 'ACTIVO'),
 (376, 9, 'HATO COROZAL', 'ACTIVO'),
 (377, 9, 'LA SALINA', 'ACTIVO'),
-(378, 9, 'MANÃ�', 'ACTIVO'),
+(378, 9, 'MANÃ?', 'ACTIVO'),
 (379, 9, 'MONTERREY', 'ACTIVO'),
 (380, 9, 'NUNCHIA', 'ACTIVO'),
 (381, 9, 'OROCUE', 'ACTIVO'),
@@ -674,7 +677,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (393, 10, 'ALMAGUER', 'ACTIVO'),
 (394, 10, 'ARGELIA', 'ACTIVO'),
 (395, 10, 'BALBOA', 'ACTIVO'),
-(396, 10, 'BOLÃ�VAR', 'ACTIVO'),
+(396, 10, 'BOLÃ?VAR', 'ACTIVO'),
 (397, 10, 'BUENOS AIRES', 'ACTIVO'),
 (398, 10, 'CAJIBIO', 'ACTIVO'),
 (399, 10, 'CALDONO', 'ACTIVO'),
@@ -692,49 +695,49 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (411, 10, 'MIRANDA', 'ACTIVO'),
 (412, 10, 'MORALES', 'ACTIVO'),
 (413, 10, 'PADILLA', 'ACTIVO'),
-(414, 10, 'PÃ�EZ', 'ACTIVO'),
+(414, 10, 'PÃ?EZ', 'ACTIVO'),
 (415, 10, 'PATIA (EL BORDO)', 'ACTIVO'),
 (416, 10, 'PIAMONTE', 'ACTIVO'),
 (417, 10, 'PIENDAMO', 'ACTIVO'),
-(418, 10, 'POPAYÃ�N', 'ACTIVO'),
+(418, 10, 'POPAYÃ?N', 'ACTIVO'),
 (419, 10, 'PUERTO TEJADA', 'ACTIVO'),
 (420, 10, 'PURACE', 'ACTIVO'),
 (421, 10, 'ROSAS', 'ACTIVO'),
-(422, 10, 'SAN SEBASTIÃ�N', 'ACTIVO'),
+(422, 10, 'SAN SEBASTIÃ?N', 'ACTIVO'),
 (423, 10, 'SANTA ROSA', 'ACTIVO'),
 (424, 10, 'SANTANDER DE QUILICHAO', 'ACTIVO'),
 (425, 10, 'SILVIA', 'ACTIVO'),
 (426, 10, 'SOTARA', 'ACTIVO'),
-(427, 10, 'SUÃ�REZ', 'ACTIVO'),
+(427, 10, 'SUÃ?REZ', 'ACTIVO'),
 (428, 10, 'SUCRE', 'ACTIVO'),
-(429, 10, 'TIMBÃ�O', 'ACTIVO'),
-(430, 10, 'TIMBIQUÃ�', 'ACTIVO'),
+(429, 10, 'TIMBÃ?O', 'ACTIVO'),
+(430, 10, 'TIMBIQUÃ?', 'ACTIVO'),
 (431, 10, 'TORIBIO', 'ACTIVO'),
 (432, 10, 'TOTORO', 'ACTIVO'),
 (433, 10, 'VILLA RICA', 'ACTIVO'),
 (434, 11, 'AGUACHICA', 'ACTIVO'),
-(435, 11, 'AGUSTÃ�N CODAZZI', 'ACTIVO'),
+(435, 11, 'AGUSTÃ?N CODAZZI', 'ACTIVO'),
 (436, 11, 'ASTREA', 'ACTIVO'),
 (437, 11, 'BECERRIL', 'ACTIVO'),
 (438, 11, 'BOSCONIA', 'ACTIVO'),
 (439, 11, 'CHIMICHAGUA', 'ACTIVO'),
-(440, 11, 'CHIRIGUANÃ�', 'ACTIVO'),
-(441, 11, 'CURUMANÃ�', 'ACTIVO'),
+(440, 11, 'CHIRIGUANÃ?', 'ACTIVO'),
+(441, 11, 'CURUMANÃ?', 'ACTIVO'),
 (442, 11, 'EL COPEY', 'ACTIVO'),
 (443, 11, 'EL PASO', 'ACTIVO'),
 (444, 11, 'GAMARRA', 'ACTIVO'),
-(445, 11, 'GONZÃ�LEZ', 'ACTIVO'),
+(445, 11, 'GONZÃ?LEZ', 'ACTIVO'),
 (446, 11, 'LA GLORIA', 'ACTIVO'),
 (447, 11, 'LA JAGUA IBIRICO', 'ACTIVO'),
 (448, 11, 'MANAURE BALCÃ“N DEL CESAR', 'ACTIVO'),
 (449, 11, 'PAILITAS', 'ACTIVO'),
 (450, 11, 'PELAYA', 'ACTIVO'),
 (451, 11, 'PUEBLO BELLO', 'ACTIVO'),
-(452, 11, 'RÃ�O DE ORO', 'ACTIVO'),
+(452, 11, 'RÃ?O DE ORO', 'ACTIVO'),
 (453, 11, 'ROBLES (LA PAZ)', 'ACTIVO'),
 (454, 11, 'SAN ALBERTO', 'ACTIVO'),
 (455, 11, 'SAN DIEGO', 'ACTIVO'),
-(456, 11, 'SAN MARTÃ�N', 'ACTIVO'),
+(456, 11, 'SAN MARTÃ?N', 'ACTIVO'),
 (457, 11, 'TAMALAMEQUE', 'ACTIVO'),
 (458, 11, 'VALLEDUPAR', 'ACTIVO'),
 (459, 12, 'ACANDI', 'ACTIVO'),
@@ -779,14 +782,14 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (498, 13, 'LORICA', 'ACTIVO'),
 (499, 13, 'LOS CÃ“RDOBAS', 'ACTIVO'),
 (500, 13, 'MOMIL', 'ACTIVO'),
-(501, 13, 'MONTELÃ�BANO', 'ACTIVO'),
-(502, 13, 'MONTERÃ�A', 'ACTIVO'),
+(501, 13, 'MONTELÃ?BANO', 'ACTIVO'),
+(502, 13, 'MONTERÃ?A', 'ACTIVO'),
 (503, 13, 'MOÃ‘ITOS', 'ACTIVO'),
 (504, 13, 'PLANETA RICA', 'ACTIVO'),
 (505, 13, 'PUEBLO NUEVO', 'ACTIVO'),
 (506, 13, 'PUERTO ESCONDIDO', 'ACTIVO'),
 (507, 13, 'PUERTO LIBERTADOR', 'ACTIVO'),
-(508, 13, 'PURÃ�SIMA', 'ACTIVO'),
+(508, 13, 'PURÃ?SIMA', 'ACTIVO'),
 (509, 13, 'SAHAGÃšN', 'ACTIVO'),
 (510, 13, 'SAN ANDRÃ‰S SOTAVENTO', 'ACTIVO'),
 (511, 13, 'SAN ANTERO', 'ACTIVO'),
@@ -800,24 +803,24 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (519, 14, 'ANAPOIMA', 'ACTIVO'),
 (520, 14, 'ANOLAIMA', 'ACTIVO'),
 (521, 14, 'ARBELAEZ', 'ACTIVO'),
-(522, 14, 'BELTRÃ�N', 'ACTIVO'),
+(522, 14, 'BELTRÃ?N', 'ACTIVO'),
 (523, 14, 'BITUIMA', 'ACTIVO'),
-(524, 14, 'BOGOTÃ� DC', 'ACTIVO'),
-(525, 14, 'BOJACÃ�', 'ACTIVO'),
+(524, 14, 'BOGOTÃ? DC', 'ACTIVO'),
+(525, 14, 'BOJACÃ?', 'ACTIVO'),
 (526, 14, 'CABRERA', 'ACTIVO'),
 (527, 14, 'CACHIPAY', 'ACTIVO'),
-(528, 14, 'CAJICÃ�', 'ACTIVO'),
-(529, 14, 'CAPARRAPÃ�', 'ACTIVO'),
+(528, 14, 'CAJICÃ?', 'ACTIVO'),
+(529, 14, 'CAPARRAPÃ?', 'ACTIVO'),
 (530, 14, 'CAQUEZA', 'ACTIVO'),
 (531, 14, 'CARMEN DE CARUPA', 'ACTIVO'),
-(532, 14, 'CHAGUANÃ�', 'ACTIVO'),
+(532, 14, 'CHAGUANÃ?', 'ACTIVO'),
 (533, 14, 'CHIA', 'ACTIVO'),
 (534, 14, 'CHIPAQUE', 'ACTIVO'),
-(535, 14, 'CHOACHÃ�', 'ACTIVO'),
-(536, 14, 'CHOCONTÃ�', 'ACTIVO'),
+(535, 14, 'CHOACHÃ?', 'ACTIVO'),
+(536, 14, 'CHOCONTÃ?', 'ACTIVO'),
 (537, 14, 'COGUA', 'ACTIVO'),
 (538, 14, 'COTA', 'ACTIVO'),
-(539, 14, 'CUCUNUBÃ�', 'ACTIVO'),
+(539, 14, 'CUCUNUBÃ?', 'ACTIVO'),
 (540, 14, 'EL COLEGIO', 'ACTIVO'),
 (541, 14, 'EL PEÃ‘Ã“N', 'ACTIVO'),
 (542, 14, 'EL ROSAL1', 'ACTIVO'),
@@ -827,29 +830,29 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (546, 14, 'FUNZA', 'ACTIVO'),
 (547, 14, 'FÃšQUENE', 'ACTIVO'),
 (548, 14, 'FUSAGASUGA', 'ACTIVO'),
-(549, 14, 'GACHALÃ�', 'ACTIVO'),
-(550, 14, 'GACHANCIPÃ�', 'ACTIVO'),
+(549, 14, 'GACHALÃ?', 'ACTIVO'),
+(550, 14, 'GACHANCIPÃ?', 'ACTIVO'),
 (551, 14, 'GACHETA', 'ACTIVO'),
 (552, 14, 'GAMA', 'ACTIVO'),
 (553, 14, 'GIRARDOT', 'ACTIVO'),
 (554, 14, 'GRANADA2', 'ACTIVO'),
-(555, 14, 'GUACHETÃ�', 'ACTIVO'),
+(555, 14, 'GUACHETÃ?', 'ACTIVO'),
 (556, 14, 'GUADUAS', 'ACTIVO'),
 (557, 14, 'GUASCA', 'ACTIVO'),
-(558, 14, 'GUATAQUÃ�', 'ACTIVO'),
+(558, 14, 'GUATAQUÃ?', 'ACTIVO'),
 (559, 14, 'GUATAVITA', 'ACTIVO'),
 (560, 14, 'GUAYABAL DE SIQUIMA', 'ACTIVO'),
 (561, 14, 'GUAYABETAL', 'ACTIVO'),
 (562, 14, 'GUTIÃ‰RREZ', 'ACTIVO'),
 (563, 14, 'JERUSALÃ‰N', 'ACTIVO'),
-(564, 14, 'JUNÃ�N', 'ACTIVO'),
+(564, 14, 'JUNÃ?N', 'ACTIVO'),
 (565, 14, 'LA CALERA', 'ACTIVO'),
 (566, 14, 'LA MESA', 'ACTIVO'),
 (567, 14, 'LA PALMA', 'ACTIVO'),
 (568, 14, 'LA PEÃ‘A', 'ACTIVO'),
 (569, 14, 'LA VEGA', 'ACTIVO'),
 (570, 14, 'LENGUAZAQUE', 'ACTIVO'),
-(571, 14, 'MACHETÃ�', 'ACTIVO'),
+(571, 14, 'MACHETÃ?', 'ACTIVO'),
 (572, 14, 'MADRID', 'ACTIVO'),
 (573, 14, 'MANTA', 'ACTIVO'),
 (574, 14, 'MEDINA', 'ACTIVO'),
@@ -866,7 +869,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (585, 14, 'PARATEBUENO', 'ACTIVO'),
 (586, 14, 'PASCA', 'ACTIVO'),
 (587, 14, 'PUERTO SALGAR', 'ACTIVO'),
-(588, 14, 'PULÃ�', 'ACTIVO'),
+(588, 14, 'PULÃ?', 'ACTIVO'),
 (589, 14, 'QUEBRADANEGRA', 'ACTIVO'),
 (590, 14, 'QUETAME', 'ACTIVO'),
 (591, 14, 'QUIPILE', 'ACTIVO'),
@@ -886,7 +889,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (605, 14, 'SOPO', 'ACTIVO'),
 (606, 14, 'SUBACHOQUE', 'ACTIVO'),
 (607, 14, 'SUESCA', 'ACTIVO'),
-(608, 14, 'SUPATÃ�', 'ACTIVO'),
+(608, 14, 'SUPATÃ?', 'ACTIVO'),
 (609, 14, 'SUSA', 'ACTIVO'),
 (610, 14, 'SUTATAUSA', 'ACTIVO'),
 (611, 14, 'TABIO', 'ACTIVO'),
@@ -896,9 +899,9 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (615, 14, 'TIBACUY', 'ACTIVO'),
 (616, 14, 'TIBIRITA', 'ACTIVO'),
 (617, 14, 'TOCAIMA', 'ACTIVO'),
-(618, 14, 'TOCANCIPÃ�', 'ACTIVO'),
-(619, 14, 'TOPAIPÃ�', 'ACTIVO'),
-(620, 14, 'UBALÃ�', 'ACTIVO'),
+(618, 14, 'TOCANCIPÃ?', 'ACTIVO'),
+(619, 14, 'TOPAIPÃ?', 'ACTIVO'),
+(620, 14, 'UBALÃ?', 'ACTIVO'),
 (621, 14, 'UBAQUE', 'ACTIVO'),
 (622, 14, 'UBATÃ‰', 'ACTIVO'),
 (623, 14, 'UNE', 'ACTIVO'),
@@ -909,12 +912,12 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (628, 14, 'VILLA PINZÃ“N', 'ACTIVO'),
 (629, 14, 'VILLETA', 'ACTIVO'),
 (630, 14, 'VIOTA', 'ACTIVO'),
-(631, 14, 'YACOPÃ�', 'ACTIVO'),
+(631, 14, 'YACOPÃ?', 'ACTIVO'),
 (632, 14, 'ZIPACÃ“N', 'ACTIVO'),
-(633, 14, 'ZIPAQUIRÃ�', 'ACTIVO'),
+(633, 14, 'ZIPAQUIRÃ?', 'ACTIVO'),
 (634, 15, 'BARRANCO MINAS', 'ACTIVO'),
 (635, 15, 'CACAHUAL', 'ACTIVO'),
-(636, 15, 'INÃ�RIDA', 'ACTIVO'),
+(636, 15, 'INÃ?RIDA', 'ACTIVO'),
 (637, 15, 'LA GUADALUPE', 'ACTIVO'),
 (638, 15, 'MAPIRIPANA', 'ACTIVO'),
 (639, 15, 'MORICHAL', 'ACTIVO'),
@@ -952,7 +955,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (671, 17, 'PITALITO', 'ACTIVO'),
 (672, 17, 'RIVERA', 'ACTIVO'),
 (673, 17, 'SALADO BLANCO', 'ACTIVO'),
-(674, 17, 'SAN AGUSTÃ�N', 'ACTIVO'),
+(674, 17, 'SAN AGUSTÃ?N', 'ACTIVO'),
 (675, 17, 'SANTA MARIA', 'ACTIVO'),
 (676, 17, 'SUAZA', 'ACTIVO'),
 (677, 17, 'TARQUI', 'ACTIVO'),
@@ -1021,11 +1024,11 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (740, 20, 'GUAMAL', 'ACTIVO'),
 (741, 20, 'LA MACARENA', 'ACTIVO'),
 (742, 20, 'LA URIBE', 'ACTIVO'),
-(743, 20, 'LEJANÃ�AS', 'ACTIVO'),
-(744, 20, 'MAPIRIPÃ�N', 'ACTIVO'),
+(743, 20, 'LEJANÃ?AS', 'ACTIVO'),
+(744, 20, 'MAPIRIPÃ?N', 'ACTIVO'),
 (745, 20, 'MESETAS', 'ACTIVO'),
 (746, 20, 'PUERTO CONCORDIA', 'ACTIVO'),
-(747, 20, 'PUERTO GAITÃ�N', 'ACTIVO'),
+(747, 20, 'PUERTO GAITÃ?N', 'ACTIVO'),
 (748, 20, 'PUERTO LLERAS', 'ACTIVO'),
 (749, 20, 'PUERTO LÃ“PEZ', 'ACTIVO'),
 (750, 20, 'PUERTO RICO', 'ACTIVO'),
@@ -1033,7 +1036,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (752, 20, 'SAN  JUAN DE ARAMA', 'ACTIVO'),
 (753, 20, 'SAN CARLOS GUAROA', 'ACTIVO'),
 (754, 20, 'SAN JUANITO', 'ACTIVO'),
-(755, 20, 'SAN MARTÃ�N', 'ACTIVO'),
+(755, 20, 'SAN MARTÃ?N', 'ACTIVO'),
 (756, 20, 'VILLAVICENCIO', 'ACTIVO'),
 (757, 20, 'VISTA HERMOSA', 'ACTIVO'),
 (758, 21, 'ALBAN', 'ACTIVO'),
@@ -1104,10 +1107,10 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (823, 22, 'ARBOLEDAS', 'ACTIVO'),
 (824, 22, 'BOCHALEMA', 'ACTIVO'),
 (825, 22, 'BUCARASICA', 'ACTIVO'),
-(826, 22, 'CÃ�CHIRA', 'ACTIVO'),
-(827, 22, 'CÃ�COTA', 'ACTIVO'),
-(828, 22, 'CHINÃ�COTA', 'ACTIVO'),
-(829, 22, 'CHITAGÃ�', 'ACTIVO'),
+(826, 22, 'CÃ?CHIRA', 'ACTIVO'),
+(827, 22, 'CÃ?COTA', 'ACTIVO'),
+(828, 22, 'CHINÃ?COTA', 'ACTIVO'),
+(829, 22, 'CHITAGÃ?', 'ACTIVO'),
 (830, 22, 'CONVENCIÃ“N', 'ACTIVO'),
 (831, 22, 'CÃšCUTA', 'ACTIVO'),
 (832, 22, 'CUCUTILLA', 'ACTIVO'),
@@ -1117,7 +1120,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (836, 22, 'EL ZULIA', 'ACTIVO'),
 (837, 22, 'GRAMALOTE', 'ACTIVO'),
 (838, 22, 'HACARI', 'ACTIVO'),
-(839, 22, 'HERRÃ�N', 'ACTIVO'),
+(839, 22, 'HERRÃ?N', 'ACTIVO'),
 (840, 22, 'LA ESPERANZA', 'ACTIVO'),
 (841, 22, 'LA PLAYA', 'ACTIVO'),
 (842, 22, 'LABATECA', 'ACTIVO'),
@@ -1143,10 +1146,10 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (862, 23, 'COLÃ“N', 'ACTIVO'),
 (863, 23, 'MOCOA', 'ACTIVO'),
 (864, 23, 'ORITO', 'ACTIVO'),
-(865, 23, 'PUERTO ASÃ�S', 'ACTIVO'),
+(865, 23, 'PUERTO ASÃ?S', 'ACTIVO'),
 (866, 23, 'PUERTO CAYCEDO', 'ACTIVO'),
-(867, 23, 'PUERTO GUZMÃ�N', 'ACTIVO'),
-(868, 23, 'PUERTO LEGUÃ�ZAMO', 'ACTIVO'),
+(867, 23, 'PUERTO GUZMÃ?N', 'ACTIVO'),
+(868, 23, 'PUERTO LEGUÃ?ZAMO', 'ACTIVO'),
 (869, 23, 'SAN FRANCISCO', 'ACTIVO'),
 (870, 23, 'SAN MIGUEL', 'ACTIVO'),
 (871, 23, 'SANTIAGO', 'ACTIVO'),
@@ -1155,7 +1158,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (874, 23, 'VILLAGARZÃ“N', 'ACTIVO'),
 (875, 24, 'ARMENIA', 'ACTIVO'),
 (876, 24, 'BUENAVISTA', 'ACTIVO'),
-(877, 24, 'CALARCÃ�', 'ACTIVO'),
+(877, 24, 'CALARCÃ?', 'ACTIVO'),
 (878, 24, 'CIRCASIA', 'ACTIVO'),
 (879, 24, 'CÃ“RDOBA', 'ACTIVO'),
 (880, 24, 'FILANDIA', 'ACTIVO'),
@@ -1167,7 +1170,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (886, 24, 'SALENTO', 'ACTIVO'),
 (887, 25, 'APIA', 'ACTIVO'),
 (888, 25, 'BALBOA', 'ACTIVO'),
-(889, 25, 'BELÃ‰N DE UMBRÃ�A', 'ACTIVO'),
+(889, 25, 'BELÃ‰N DE UMBRÃ?A', 'ACTIVO'),
 (890, 25, 'DOS QUEBRADAS', 'ACTIVO'),
 (891, 25, 'GUATICA', 'ACTIVO'),
 (892, 25, 'LA CELIA', 'ACTIVO'),
@@ -1176,7 +1179,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (895, 25, 'MISTRATO', 'ACTIVO'),
 (896, 25, 'PEREIRA', 'ACTIVO'),
 (897, 25, 'PUEBLO RICO', 'ACTIVO'),
-(898, 25, 'QUINCHÃ�A', 'ACTIVO'),
+(898, 25, 'QUINCHÃ?A', 'ACTIVO'),
 (899, 25, 'SANTA ROSA DE CABAL', 'ACTIVO'),
 (900, 25, 'SANTUARIO', 'ACTIVO'),
 (901, 26, 'PROVIDENCIA', 'ACTIVO'),
@@ -1189,7 +1192,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (908, 27, 'BARICHARA', 'ACTIVO'),
 (909, 27, 'BARRANCABERMEJA', 'ACTIVO'),
 (910, 27, 'BETULIA', 'ACTIVO'),
-(911, 27, 'BOLÃ�VAR', 'ACTIVO'),
+(911, 27, 'BOLÃ?VAR', 'ACTIVO'),
 (912, 27, 'BUCARAMANGA', 'ACTIVO'),
 (913, 27, 'CABRERA', 'ACTIVO'),
 (914, 27, 'CALIFORNIA', 'ACTIVO'),
@@ -1197,42 +1200,42 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (916, 27, 'CARCASI', 'ACTIVO'),
 (917, 27, 'CEPITA', 'ACTIVO'),
 (918, 27, 'CERRITO', 'ACTIVO'),
-(919, 27, 'CHARALÃ�', 'ACTIVO'),
+(919, 27, 'CHARALÃ?', 'ACTIVO'),
 (920, 27, 'CHARTA', 'ACTIVO'),
 (921, 27, 'CHIMA', 'ACTIVO'),
-(922, 27, 'CHIPATÃ�', 'ACTIVO'),
+(922, 27, 'CHIPATÃ?', 'ACTIVO'),
 (923, 27, 'CIMITARRA', 'ACTIVO'),
 (924, 27, 'CONCEPCIÃ“N', 'ACTIVO'),
 (925, 27, 'CONFINES', 'ACTIVO'),
 (926, 27, 'CONTRATACIÃ“N', 'ACTIVO'),
 (927, 27, 'COROMORO', 'ACTIVO'),
-(928, 27, 'CURITÃ�', 'ACTIVO'),
+(928, 27, 'CURITÃ?', 'ACTIVO'),
 (929, 27, 'EL CARMEN', 'ACTIVO'),
 (930, 27, 'EL GUACAMAYO', 'ACTIVO'),
 (931, 27, 'EL PEÃ‘Ã“N', 'ACTIVO'),
 (932, 27, 'EL PLAYÃ“N', 'ACTIVO'),
 (933, 27, 'ENCINO', 'ACTIVO'),
 (934, 27, 'ENCISO', 'ACTIVO'),
-(935, 27, 'FLORIÃ�N', 'ACTIVO'),
+(935, 27, 'FLORIÃ?N', 'ACTIVO'),
 (936, 27, 'FLORIDABLANCA', 'ACTIVO'),
-(937, 27, 'GALÃ�N', 'ACTIVO'),
+(937, 27, 'GALÃ?N', 'ACTIVO'),
 (938, 27, 'GAMBITA', 'ACTIVO'),
 (939, 27, 'GIRÃ“N', 'ACTIVO'),
 (940, 27, 'GUACA', 'ACTIVO'),
 (941, 27, 'GUADALUPE', 'ACTIVO'),
 (942, 27, 'GUAPOTA', 'ACTIVO'),
-(943, 27, 'GUAVATÃ�', 'ACTIVO'),
+(943, 27, 'GUAVATÃ?', 'ACTIVO'),
 (944, 27, 'GUEPSA', 'ACTIVO'),
 (945, 27, 'HATO', 'ACTIVO'),
 (946, 27, 'JESÃšS MARIA', 'ACTIVO'),
-(947, 27, 'JORDÃ�N', 'ACTIVO'),
+(947, 27, 'JORDÃ?N', 'ACTIVO'),
 (948, 27, 'LA BELLEZA', 'ACTIVO'),
 (949, 27, 'LA PAZ', 'ACTIVO'),
 (950, 27, 'LANDAZURI', 'ACTIVO'),
 (951, 27, 'LEBRIJA', 'ACTIVO'),
 (952, 27, 'LOS SANTOS', 'ACTIVO'),
 (953, 27, 'MACARAVITA', 'ACTIVO'),
-(954, 27, 'MÃ�LAGA', 'ACTIVO'),
+(954, 27, 'MÃ?LAGA', 'ACTIVO'),
 (955, 27, 'MATANZA', 'ACTIVO'),
 (956, 27, 'MOGOTES', 'ACTIVO'),
 (957, 27, 'MOLAGAVITA', 'ACTIVO'),
@@ -1241,7 +1244,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (960, 27, 'ONZAGA', 'ACTIVO'),
 (961, 27, 'PALMAR', 'ACTIVO'),
 (962, 27, 'PALMAS DEL SOCORRO', 'ACTIVO'),
-(963, 27, 'PÃ�RAMO', 'ACTIVO'),
+(963, 27, 'PÃ?RAMO', 'ACTIVO'),
 (964, 27, 'PIEDECUESTA', 'ACTIVO'),
 (965, 27, 'PINCHOTE', 'ACTIVO'),
 (966, 27, 'PUENTE NACIONAL', 'ACTIVO'),
@@ -1252,11 +1255,11 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (971, 27, 'SAN ANDRÃ‰S', 'ACTIVO'),
 (972, 27, 'SAN BENITO', 'ACTIVO'),
 (973, 27, 'SAN GIL', 'ACTIVO'),
-(974, 27, 'SAN JOAQUÃ�N', 'ACTIVO'),
+(974, 27, 'SAN JOAQUÃ?N', 'ACTIVO'),
 (975, 27, 'SAN JOSÃ‰ DE MIRANDA', 'ACTIVO'),
 (976, 27, 'SAN MIGUEL', 'ACTIVO'),
-(977, 27, 'SAN VICENTE DE CHUCURÃ�', 'ACTIVO'),
-(978, 27, 'SANTA BÃ�RBARA', 'ACTIVO'),
+(977, 27, 'SAN VICENTE DE CHUCURÃ?', 'ACTIVO'),
+(978, 27, 'SANTA BÃ?RBARA', 'ACTIVO'),
 (979, 27, 'SANTA HELENA', 'ACTIVO'),
 (980, 27, 'SIMACOTA', 'ACTIVO'),
 (981, 27, 'SOCORRO', 'ACTIVO'),
@@ -1271,7 +1274,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (990, 27, 'ZAPATOCA', 'ACTIVO'),
 (991, 28, 'BUENAVISTA', 'ACTIVO'),
 (992, 28, 'CAIMITO', 'ACTIVO'),
-(993, 28, 'CHALÃ�N', 'ACTIVO'),
+(993, 28, 'CHALÃ?N', 'ACTIVO'),
 (994, 28, 'COLOSO', 'ACTIVO'),
 (995, 28, 'COROZAL', 'ACTIVO'),
 (996, 28, 'EL ROBLE', 'ACTIVO'),
@@ -1301,7 +1304,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (1020, 29, 'ARMERO (GUAYABAL)', 'ACTIVO'),
 (1021, 29, 'ATACO', 'ACTIVO'),
 (1022, 29, 'CAJAMARCA', 'ACTIVO'),
-(1023, 29, 'CARMEN DE APICALÃ�', 'ACTIVO'),
+(1023, 29, 'CARMEN DE APICALÃ?', 'ACTIVO'),
 (1024, 29, 'CASABIANCA', 'ACTIVO'),
 (1025, 29, 'CHAPARRAL', 'ACTIVO'),
 (1026, 29, 'COELLO', 'ACTIVO'),
@@ -1309,7 +1312,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (1028, 29, 'CUNDAY', 'ACTIVO'),
 (1029, 29, 'DOLORES', 'ACTIVO'),
 (1030, 29, 'ESPINAL', 'ACTIVO'),
-(1031, 29, 'FALÃ�N', 'ACTIVO'),
+(1031, 29, 'FALÃ?N', 'ACTIVO'),
 (1032, 29, 'FLANDES', 'ACTIVO'),
 (1033, 29, 'FRESNO', 'ACTIVO'),
 (1034, 29, 'GUAMO', 'ACTIVO'),
@@ -1318,7 +1321,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (1037, 29, 'IBAGUÃ‰', 'ACTIVO'),
 (1038, 29, 'ICONONZO', 'ACTIVO'),
 (1039, 29, 'LÃ‰RIDA', 'ACTIVO'),
-(1040, 29, 'LÃ�BANO', 'ACTIVO'),
+(1040, 29, 'LÃ?BANO', 'ACTIVO'),
 (1041, 29, 'MARIQUITA', 'ACTIVO'),
 (1042, 29, 'MELGAR', 'ACTIVO'),
 (1043, 29, 'MURILLO', 'ACTIVO'),
@@ -1335,16 +1338,16 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (1054, 29, 'SAN ANTONIO', 'ACTIVO'),
 (1055, 29, 'SAN LUIS', 'ACTIVO'),
 (1056, 29, 'SANTA ISABEL', 'ACTIVO'),
-(1057, 29, 'SUÃ�REZ', 'ACTIVO'),
+(1057, 29, 'SUÃ?REZ', 'ACTIVO'),
 (1058, 29, 'VALLE DE SAN JUAN', 'ACTIVO'),
 (1059, 29, 'VENADILLO', 'ACTIVO'),
 (1060, 29, 'VILLAHERMOSA', 'ACTIVO'),
 (1061, 29, 'VILLARRICA', 'ACTIVO'),
-(1062, 30, 'ALCALÃ�', 'ACTIVO'),
-(1063, 30, 'ANDALUCÃ�A', 'ACTIVO'),
+(1062, 30, 'ALCALÃ?', 'ACTIVO'),
+(1063, 30, 'ANDALUCÃ?A', 'ACTIVO'),
 (1064, 30, 'ANSERMA NUEVO', 'ACTIVO'),
 (1065, 30, 'ARGELIA', 'ACTIVO'),
-(1066, 30, 'BOLÃ�VAR', 'ACTIVO'),
+(1066, 30, 'BOLÃ?VAR', 'ACTIVO'),
 (1067, 30, 'BUENAVENTURA', 'ACTIVO'),
 (1068, 30, 'BUGA', 'ACTIVO'),
 (1069, 30, 'BUGALAGRANDE', 'ACTIVO'),
@@ -1360,7 +1363,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (1079, 30, 'EL DOVIO', 'ACTIVO'),
 (1080, 30, 'FLORIDA', 'ACTIVO'),
 (1081, 30, 'GINEBRA GUACARI', 'ACTIVO'),
-(1082, 30, 'JAMUNDÃ�', 'ACTIVO'),
+(1082, 30, 'JAMUNDÃ?', 'ACTIVO'),
 (1083, 30, 'LA CUMBRE', 'ACTIVO'),
 (1084, 30, 'LA UNIÃ“N', 'ACTIVO'),
 (1085, 30, 'LA VICTORIA', 'ACTIVO'),
@@ -1368,7 +1371,7 @@ INSERT INTO `municipio` (`id`, `idDepartamento`, `nombre`, `estado`) VALUES
 (1087, 30, 'PALMIRA', 'ACTIVO'),
 (1088, 30, 'PRADERA', 'ACTIVO'),
 (1089, 30, 'RESTREPO', 'ACTIVO'),
-(1090, 30, 'RIO FRÃ�O', 'ACTIVO'),
+(1090, 30, 'RIO FRÃ?O', 'ACTIVO'),
 (1091, 30, 'ROLDANILLO', 'ACTIVO'),
 (1092, 30, 'SAN PEDRO', 'ACTIVO'),
 (1093, 30, 'SEVILLA', 'ACTIVO'),
@@ -1432,16 +1435,22 @@ CREATE TABLE `perfilpermisos` (
 --
 
 INSERT INTO `perfilpermisos` (`id`, `idperfil`, `idpermiso`, `idmodulo`) VALUES
-(1, 1, 1, 1),
-(2, 1, 2, 1),
-(4, 1, 4, 2),
-(5, 3, 3, 2),
-(6, 3, 4, 2),
-(8, 3, 7, 5),
-(10, 4, 6, 4),
-(11, 1, 5, 3),
-(12, 1, 7, 5),
-(13, 4, 6, 4);
+(30, 1, 1, 1),
+(31, 1, 2, 1),
+(32, 1, 4, 2),
+(33, 3, 3, 2),
+(34, 3, 4, 2),
+(35, 4, 6, 4),
+(36, 1, 5, 3),
+(37, 1, 7, 5),
+(38, 4, 6, 4),
+(39, 1, 8, 6),
+(40, 1, 9, 6),
+(41, 3, 9, 6),
+(42, 3, 10, 6),
+(43, 4, 10, 6),
+(46, 4, 9, 6),
+(47, 3, 11, 5);
 
 -- --------------------------------------------------------
 
@@ -1467,7 +1476,11 @@ INSERT INTO `permisos` (`id`, `nombre`, `modulo`, `estado`) VALUES
 (4, 'LISTA SUCURSALES', 'CONFIGURACION', 'ACTIVO'),
 (5, 'REGISTRAR SECTORES', 'CONFIGURACION', 'ACTIVO'),
 (6, 'REGISTRAR EMPLEADOS', 'CONFIGURACION', 'ACTIVO'),
-(7, 'REGISTRAR SERVICIOS', 'CONFIGURACION', 'ACTIVO');
+(7, 'REGISTRAR SERVICIOS', 'CONFIGURACION', 'ACTIVO'),
+(8, 'REPORTE DE EMPRESAS', 'REPORTES', 'ACTIVO'),
+(9, 'REPORTE DE SUCURSAL', 'REPORTES', 'ACTIVO'),
+(10, 'REPORTE EMPLEADOS', 'REPORTES', 'ACTIVO'),
+(11, 'LISTA SERVICIO EMPRESA', 'CONFIGURACION', 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -1491,7 +1504,8 @@ INSERT INTO `sector` (`id`, `nombre`, `descripcion`, `estado`, `logo`) VALUES
 (1, 'Peluquerias', 'Sector de arreglo', 'ACTIVO', '/imagenes/empresa_1.png'),
 (2, 'Lavaderos', 'Lavadero de autos', 'ACTIVO', '/imagenes/sector_2.png'),
 (3, 'Canchas', 'Sector de alquiler de canchas', 'ACTIVO', '/imagenes/empresa_3.png'),
-(6, 'Bancos', 'Sector bancos', 'ACTIVO', '/imagenes/empresa_6.png');
+(6, 'Bancos', 'Sector bancos', 'ACTIVO', '/imagenes/empresa_6.png'),
+(7, 'Venta', 'vender', 'INACTIVO', NULL);
 
 -- --------------------------------------------------------
 
@@ -1541,7 +1555,8 @@ INSERT INTO `servicio` (`id`, `nombre`, `descripcion`, `estado`) VALUES
 (18, 'Cepillado', 'Cepillado de cabello', 'ACTIVO'),
 (19, 'Enguage extra', 'sÃºper enguage', 'ACTIVO'),
 (20, 'Poner arbitros', 'agregar arbitros', 'INACTIVO'),
-(21, 'Dar agua', 'agregar bolsa de agua', 'ACTIVO');
+(21, 'Dar agua', 'agregar bolsa de agua', 'ACTIVO'),
+(22, 'das', 'dsa', 'INACTIVO');
 
 -- --------------------------------------------------------
 
@@ -1592,7 +1607,8 @@ INSERT INTO `serviciossector` (`id`, `idSector`, `idServicio`) VALUES
 (11, 1, 18),
 (12, 2, 19),
 (13, 3, 20),
-(14, 3, 21);
+(14, 3, 21),
+(15, 2, 22);
 
 -- --------------------------------------------------------
 
@@ -1613,15 +1629,16 @@ CREATE TABLE `serviciossucursal` (
 --
 
 INSERT INTO `serviciossucursal` (`id`, `idServicio`, `idSucursal`, `precio`, `precioVIP`) VALUES
-(37, 16, 5, NULL, NULL),
-(38, 19, 5, NULL, NULL),
-(39, 17, 5, NULL, NULL),
-(40, 20, 9, NULL, NULL),
-(41, 19, 9, NULL, NULL),
-(42, 16, 9, NULL, NULL),
-(45, 17, 10, NULL, NULL),
 (46, 19, 11, NULL, NULL),
-(47, 16, 11, NULL, NULL);
+(47, 16, 11, NULL, NULL),
+(63, 16, 9, NULL, NULL),
+(64, 19, 9, NULL, NULL),
+(73, 16, 5, NULL, NULL),
+(74, 19, 5, NULL, NULL),
+(75, 17, 5, NULL, NULL),
+(81, 17, 13, NULL, NULL),
+(82, 17, 12, NULL, NULL),
+(84, 17, 10, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1636,8 +1653,8 @@ CREATE TABLE `sucursal` (
   `nombre` varchar(30) NOT NULL,
   `direccion` varchar(20) DEFAULT NULL,
   `telefono` varchar(12) NOT NULL,
-  `latitud` varchar(12) NOT NULL,
-  `longitud` varchar(12) NOT NULL,
+  `latitud` varchar(12) DEFAULT NULL,
+  `longitud` varchar(12) DEFAULT NULL,
   `promedio` float DEFAULT NULL,
   `estado` enum('ACTIVO','INACTIVO') NOT NULL,
   `usuario` varchar(40) DEFAULT NULL,
@@ -1652,7 +1669,9 @@ INSERT INTO `sucursal` (`id`, `idEmpresa`, `idMunicipio`, `nombre`, `direccion`,
 (5, 43, 458, 'FortÃ­n la 4ta', 'carrera 4 calle 16', '3232323', '10.472662291', '-73.23876857', 6, 'ACTIVO', NULL, ''),
 (9, 43, 458, 'Lavado la 4ta', '', '3004883', '10.475489708', '-73.24147224', 3, 'ACTIVO', NULL, ''),
 (10, 43, 458, 'FortÃ­n la 23', 'carrera 23 calle 12', '3007373', '10.472788892', '-73.26773643', 3, 'ACTIVO', NULL, ''),
-(11, 68, 458, 'Biblos', '', '(322) 234-23', '10.469328437', '-73.26292857', 3, 'ACTIVO', NULL, '');
+(11, 68, 458, 'Biblos', '', '(322) 234-23', '10.469328437', '-73.26292857', 3, 'ACTIVO', NULL, ''),
+(12, 43, 458, 'dad', '', '(321) 312-31', '10.473970502', '-73.26619148', 2, 'ACTIVO', NULL, ''),
+(13, 43, 458, 'sfsd', '', '(232) 123-12', '10.477768503', '-73.25529098', 2, 'ACTIVO', NULL, '');
 
 -- --------------------------------------------------------
 
@@ -1679,14 +1698,27 @@ INSERT INTO `tipoturno` (`id`, `nombre`, `estado`, `prioridad`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tipoturnosector`
+-- Estructura de tabla para la tabla `tipoturnosucursal`
 --
 
-CREATE TABLE `tipoturnosector` (
+CREATE TABLE `tipoturnosucursal` (
   `id` int(10) UNSIGNED NOT NULL,
-  `idsector` int(10) UNSIGNED NOT NULL,
+  `idsucursal` int(10) UNSIGNED NOT NULL,
   `idtipoturno` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tipoturnosucursal`
+--
+
+INSERT INTO `tipoturnosucursal` (`id`, `idsucursal`, `idtipoturno`) VALUES
+(19, 9, 2),
+(25, 5, 1),
+(34, 13, 2),
+(35, 13, 1),
+(36, 12, 2),
+(39, 10, 1),
+(40, 10, 3);
 
 -- --------------------------------------------------------
 
@@ -1716,25 +1748,25 @@ CREATE TABLE `turno` (
 -- Volcado de datos para la tabla `turno`
 --
 
-INSERT INTO `turno` (`id`, `idCliente`, `idServicio`, `idSucursal`, `idEmpleado`, `fechaSolicitud`, `fechaInicio`, `fechaFinal`, `tiempo`, `turno`, `avisado`, `tipoTurno`, `estadoTurno`, `estado`) VALUES
-(13, 2, 17, 5, 17, '2016-03-04 16:33:21', NULL, NULL, 0, 1, 0, 3, 'CANCELADO', 'ACTIVO'),
-(14, 2, 17, 5, 17, '2016-03-04 16:36:23', '2016-03-04 11:52:02', '2016-03-04 11:52:08', 0, 1, 0, 2, 'TERMINADO', 'ACTIVO'),
-(15, 3, 17, 5, 17, '2016-03-04 23:54:04', '2016-03-04 11:54:54', '2016-03-04 11:55:02', 0, 1, 0, 3, 'TERMINADO', 'ACTIVO'),
-(16, 3, 17, 5, 17, '2016-03-04 23:56:44', '2016-03-04 11:56:59', '2016-03-04 11:57:02', 0, 1, 0, 1, 'TERMINADO', 'ACTIVO'),
-(17, 2, 17, 5, 17, '2016-03-05 19:13:46', NULL, NULL, 0, 1, 0, 1, 'CANCELADO', 'ACTIVO'),
-(18, 4, 16, 11, 56, '2016-03-05 19:34:42', '2016-03-05 07:44:18', '2016-03-05 07:47:36', 0, 1, 0, 1, 'TERMINADO', 'ACTIVO'),
-(19, 2, 19, 11, 56, '2016-03-05 19:46:26', '2016-03-05 07:48:36', '2016-03-05 07:48:38', 0, 1, 1, 1, 'TERMINADO', 'ACTIVO'),
-(20, 6, 16, 11, 56, '2016-03-05 19:46:30', '2016-03-05 07:58:46', '2016-03-05 08:00:52', 0, 2, 0, 1, 'TERMINADO', 'ACTIVO'),
-(21, 4, 16, 11, 56, '2016-03-05 19:47:50', '2016-03-05 08:01:00', '2016-03-05 08:01:06', 0, 3, 1, 1, 'TERMINADO', 'ACTIVO'),
-(22, 2, 19, 11, 56, '2016-03-05 19:59:32', '2016-03-05 07:59:52', '2016-03-05 07:59:55', 0, 1, 0, 1, 'TERMINADO', 'ACTIVO'),
-(23, 2, 16, 11, 56, '2016-03-05 20:00:45', NULL, NULL, 0, 4, 0, 1, 'CANCELADO', 'ACTIVO'),
-(24, 4, 16, 11, 56, '2016-03-05 20:01:29', '2016-03-05 08:03:13', '2016-03-05 08:06:12', 0, 1, 1, 1, 'TERMINADO', 'ACTIVO'),
-(25, 2, 16, 11, 56, '2016-03-05 20:01:42', NULL, NULL, 0, 2, 1, 1, 'CONFIRMADO', 'ACTIVO'),
-(26, 7, 16, 11, 56, '2016-03-05 20:01:48', NULL, NULL, 0, 3, 1, 1, 'CONFIRMADO', 'ACTIVO'),
-(27, 8, 16, 11, 56, '2016-03-05 20:02:35', '2016-03-05 08:02:58', '2016-03-05 08:03:01', 0, 4, 0, 2, 'TERMINADO', 'ACTIVO');
+INSERT INTO `turno` (`id`, `idCliente`, `idServicio`, `idSucursal`, `idEmpleado`, `fechaSolicitud`, `fechaInicio`, `fechaFinal`, `tiempo`, `turno`, `turnoReal`, `avisado`, `tipoTurno`, `estadoTurno`, `estado`) VALUES
+(13, 2, 17, 5, 17, '2016-03-04 16:33:21', NULL, NULL, 0, 1, 0, 0, 3, 'CANCELADO', 'ACTIVO'),
+(14, 2, 17, 5, 17, '2016-03-04 16:36:23', '2016-03-04 11:52:02', '2016-03-04 11:52:08', 0, 1, 0, 0, 2, 'TERMINADO', 'ACTIVO'),
+(15, 3, 17, 5, 17, '2016-03-04 23:54:04', '2016-03-04 11:54:54', '2016-03-04 11:55:02', 0, 1, 0, 0, 3, 'TERMINADO', 'ACTIVO'),
+(16, 3, 17, 5, 17, '2016-03-04 23:56:44', '2016-03-04 11:56:59', '2016-03-04 11:57:02', 0, 1, 0, 0, 1, 'TERMINADO', 'ACTIVO'),
+(17, 2, 17, 5, 17, '2016-03-05 19:13:46', NULL, NULL, 0, 1, 0, 0, 1, 'CANCELADO', 'ACTIVO'),
+(18, 4, 16, 11, 56, '2016-03-05 19:34:42', '2016-03-05 07:44:18', '2016-03-05 07:47:36', 0, 1, 0, 0, 1, 'TERMINADO', 'ACTIVO'),
+(19, 2, 19, 11, 56, '2016-03-05 19:46:26', '2016-03-05 07:48:36', '2016-03-05 07:48:38', 0, 1, 0, 1, 1, 'TERMINADO', 'ACTIVO'),
+(20, 6, 16, 11, 56, '2016-03-05 19:46:30', '2016-03-05 07:58:46', '2016-03-05 08:00:52', 0, 2, 0, 0, 1, 'TERMINADO', 'ACTIVO'),
+(21, 4, 16, 11, 56, '2016-03-05 19:47:50', '2016-03-05 08:01:00', '2016-03-05 08:01:06', 0, 3, 0, 1, 1, 'TERMINADO', 'ACTIVO'),
+(22, 2, 19, 11, 56, '2016-03-05 19:59:32', '2016-03-05 07:59:52', '2016-03-05 07:59:55', 0, 1, 0, 0, 1, 'TERMINADO', 'ACTIVO'),
+(23, 2, 16, 11, 56, '2016-03-05 20:00:45', NULL, NULL, 0, 4, 0, 0, 1, 'CANCELADO', 'ACTIVO'),
+(24, 4, 16, 11, 56, '2016-03-05 20:01:29', '2016-03-05 08:03:13', '2016-03-05 08:06:12', 0, 1, 0, 1, 1, 'TERMINADO', 'ACTIVO'),
+(25, 2, 16, 11, 56, '2016-03-05 20:01:42', NULL, NULL, 0, 2, 0, 1, 1, 'CONFIRMADO', 'ACTIVO'),
+(26, 7, 16, 11, 56, '2016-03-05 20:01:48', NULL, NULL, 0, 3, 0, 1, 1, 'CONFIRMADO', 'ACTIVO'),
+(27, 8, 16, 11, 56, '2016-03-05 20:02:35', '2016-03-05 08:02:58', '2016-03-05 08:03:01', 0, 4, 0, 0, 2, 'TERMINADO', 'ACTIVO');
 
 --
--- Ã�ndices para tablas volcadas
+-- Índices para tablas volcadas
 --
 
 --
@@ -1889,11 +1921,11 @@ ALTER TABLE `tipoturno`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `tipoturnosector`
+-- Indices de la tabla `tipoturnosucursal`
 --
-ALTER TABLE `tipoturnosector`
+ALTER TABLE `tipoturnosucursal`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `idsector` (`idsector`),
+  ADD KEY `idsector` (`idsucursal`),
   ADD KEY `idtipoturno` (`idtipoturno`);
 
 --
@@ -1937,7 +1969,7 @@ ALTER TABLE `departamento`
 -- AUTO_INCREMENT de la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 --
 -- AUTO_INCREMENT de la tabla `empresa`
 --
@@ -1957,7 +1989,7 @@ ALTER TABLE `ingresos`
 -- AUTO_INCREMENT de la tabla `modulos`
 --
 ALTER TABLE `modulos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `municipio`
 --
@@ -1972,17 +2004,17 @@ ALTER TABLE `perfil`
 -- AUTO_INCREMENT de la tabla `perfilpermisos`
 --
 ALTER TABLE `perfilpermisos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 --
 -- AUTO_INCREMENT de la tabla `permisos`
 --
 ALTER TABLE `permisos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT de la tabla `sector`
 --
 ALTER TABLE `sector`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `sectorempresa`
 --
@@ -1992,7 +2024,7 @@ ALTER TABLE `sectorempresa`
 -- AUTO_INCREMENT de la tabla `servicio`
 --
 ALTER TABLE `servicio`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT de la tabla `serviciosempleado`
 --
@@ -2002,27 +2034,27 @@ ALTER TABLE `serviciosempleado`
 -- AUTO_INCREMENT de la tabla `serviciossector`
 --
 ALTER TABLE `serviciossector`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT de la tabla `serviciossucursal`
 --
 ALTER TABLE `serviciossucursal`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 --
 -- AUTO_INCREMENT de la tabla `sucursal`
 --
 ALTER TABLE `sucursal`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT de la tabla `tipoturno`
 --
 ALTER TABLE `tipoturno`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
--- AUTO_INCREMENT de la tabla `tipoturnosector`
+-- AUTO_INCREMENT de la tabla `tipoturnosucursal`
 --
-ALTER TABLE `tipoturnosector`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tipoturnosucursal`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 --
 -- AUTO_INCREMENT de la tabla `turno`
 --
@@ -2072,7 +2104,7 @@ ALTER TABLE `municipio`
 ALTER TABLE `perfilpermisos`
   ADD CONSTRAINT `perfilpermisos_ibfk_1` FOREIGN KEY (`idperfil`) REFERENCES `perfil` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `perfilpermisos_ibfk_2` FOREIGN KEY (`idpermiso`) REFERENCES `permisos` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `perfilpermisos_ibfk_3` FOREIGN KEY (`idmodulo`) REFERENCES `modulos` (`id`);
+  ADD CONSTRAINT `perfilpermisos_ibfk_3` FOREIGN KEY (`idmodulo`) REFERENCES `modulos` (`id`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `sectorempresa`
@@ -2110,11 +2142,11 @@ ALTER TABLE `sucursal`
   ADD CONSTRAINT `sucursal_ibfk_2` FOREIGN KEY (`idMunicipio`) REFERENCES `municipio` (`id`) ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `tipoturnosector`
+-- Filtros para la tabla `tipoturnosucursal`
 --
-ALTER TABLE `tipoturnosector`
-  ADD CONSTRAINT `tipoturnosector_ibfk_1` FOREIGN KEY (`idsector`) REFERENCES `sector` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `tipoturnosector_ibfk_2` FOREIGN KEY (`idtipoturno`) REFERENCES `tipoturno` (`id`);
+ALTER TABLE `tipoturnosucursal`
+  ADD CONSTRAINT `tipoturnosucursal_ibfk_1` FOREIGN KEY (`idsucursal`) REFERENCES `sucursal` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `tipoturnosucursal_ibfk_2` FOREIGN KEY (`idtipoturno`) REFERENCES `tipoturno` (`id`);
 
 --
 -- Filtros para la tabla `turno`

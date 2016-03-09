@@ -48,7 +48,7 @@ class ServiciosSucursalControl{
 	function getallid(Request $request, Response $response){
 		$response = $response->withHeader('Content-type', 'application/json');
 	    $id = $request->getAttribute("id");
-	    $data = ServiciosSucursal::select("serviciossucursal.*","servicio.nombre")
+	    $data = ServiciosSucursal::select("serviciossucursal.*","servicio.nombre as servicio")
 	    				->join("servicio","servicio.id","=","serviciossucursal.idServicio")
 	                    ->where("idSucursal","=",$id)
 	                    ->get();
@@ -73,6 +73,27 @@ class ServiciosSucursalControl{
     		return $response;
 	}
 
+	function putserviciosucursalprecios(Request $request, Response $response){
+		try {
+	        $response = $response->withHeader('Content-type', 'application/json');
+		    $data = json_decode($request->getBody(),true);
+		    $id = $request->getAttribute("id");
+		    $servi = ServiciosSucursal::select("*")
+                          ->where("id","=",$id)
+                          ->first();
+		      
+		    $servi->precio            =   $data['precio'];
+		    $servi->precioVIP         =   $data['precioVIP'];
+		    $servi->save();
 
+	      	$respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
+	      	$response = $response->withStatus(200);
+	    } catch (Exception $err) {
+	        $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+	        $response = $response->withStatus(404);
+	    }
+	    $response->getBody()->write($respuesta);
+	    	return $response;
+	}
 
 }

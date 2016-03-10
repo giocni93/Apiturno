@@ -251,7 +251,7 @@ class TurnoControl{
     $turnoCliente = Turno::select("idCliente")
                     ->where("idCliente","=",$idCliente)
                     ->where("idServicio","=",$data["idServicio"])
-                    ->where("idServicio","=",$data["idEmpleado"])
+                    ->where("idEmpleado","=",$data["idEmpleado"])
                     ->where("idSucursal","=",$data["idSucursal"])
                     ->where("estadoTurno","<>","TERMINADO")
                     ->where("estadoTurno","<>","CANCELADO")
@@ -262,12 +262,13 @@ class TurnoControl{
         $turnoReal = 0;
         $lista = Turno::select("*")
                         ->where("idServicio","=",$data["idServicio"])
-                        ->where("idServicio","=",$data["idEmpleado"])
+                        ->where("idEmpleado","=",$data["idEmpleado"])
                         ->where("idSucursal","=",$data["idSucursal"])
                         ->where("estadoTurno","<>","TERMINADO")
                         ->where("estadoTurno","<>","CANCELADO")
                         ->orderBy('turno', 'desc')
                         ->get();
+                        //echo json_encode($lista);
         if(count($lista) > 0){
           $turnoSiguiente = $lista[0]->turno;
         }
@@ -281,29 +282,75 @@ class TurnoControl{
             $ban = false;
             $cont = 0;
             $ind = 0;
+            //echo "LISTA: ".count($lista);
             for($i = count($lista) - 1; $i >= 0; $i--){
+            
+            //CALCULAR SI EL CLIENTE YA ESTA A PUNTO DE ATENDER
+            $query = "SELECT "
+                        ."COALESCE((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes),0) as tiempoEstimado "
+                        ."FROM "
+                        ."( "
+                        ."  SELECT "
+                        ."    count(t.id) as faltantes "
+                        ."    FROM "
+                        ."    turno as t "
+                        ."    WHERE "
+                        ."    t.idEmpleado = ".$data["idEmpleado"]." AND "
+                        ."    t.idServicio = ".$data["idServicio"]." AND "
+                        ."    t.fechaSolicitud <= '".$lista[$i]->fechaSolicitud."' AND "
+                        ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
+                        .") as turnosFaltantes, "
+                        ."turno "
+                        ."WHERE "
+                        ."idEmpleado = ".$data["idEmpleado"]." AND "
+                        ."idServicio = ".$data["idServicio"]." AND "
+                        ."idCliente = ".$lista[$i]->idCliente." AND "
+                        ."estadoTurno = 'TERMINADO' LIMIT 1";
+                $dataTiempo = DB::select(DB::raw($query));
+                if(count($dataTiempo) > 0){
+                    //VARIFICAR SI YA PASO UN TIEMPO PARAMETRIZDO PARA AVISARLE
+                    $tiempo = ($dataTiempo[0]->tiempoEstimado / 60);
+                    if($tiempo < 5){
+                        try {
+                            $tu = Turno::select("*")
+                                    ->where("id","=",$lista[$i]->id)
+                                    ->first();
+                            $tu->avisado     =   1;
+                            $tu->save();
+                            $lista[$i]->avisado = 1;
+                          } catch (Exception $err) {
+                          }
+                    }
+
+                }
+            
+            
                 $banCont = true;
-                if($lista[$i]->avisado == 0 && $ban == false){
-                    //VALIDAR SI EL ANTERIOR ES VIP
-                    $inew = $i + 1;
-                    $contVIP = 0;
-                    while($contVIP < 4){
-                        if($inew < count($lista)){
-                            if($lista[$inew]->tipoTurno == 2){
-                                $banCont = false;
-                                break;
-                            }
-                        }
-                        $inew ++;
-                        $contVIP ++;
-                    }
-                    $inew = $i;
-                    if($banCont){
-                        $ban = true;
-                        $turnoReal = $lista[$inew]->turno;
-                        $ind = $inew;
-                        break;
-                    }
+                //echo $lista[$i]->avisado;
+                if($lista[$i]->estadoTurno != "ATENDIENDO"){
+                	if($lista[$i]->avisado == 0 && $ban == false){
+	                    //VALIDAR SI EL ANTERIOR ES VIP
+	                    $inew = $i + 1;
+	                    $contVIP = 0;
+	                    while($contVIP < 4){
+	                        if($inew < count($lista)){
+	                            if($lista[$inew]->tipoTurno == 2){
+	                                $banCont = false;
+	                                break;
+	                            }
+	                        }
+	                        $inew ++;
+	                        $contVIP ++;
+	                    }
+	                    $inew = $i;
+	                    if($banCont){
+	                        $ban = true;
+	                        $turnoReal = $lista[$inew]->turno;
+	                        $ind = $inew;
+	                        break;
+	                    }
+	                }
+                
                 }
             }
             if($ban){
@@ -316,7 +363,7 @@ class TurnoControl{
                     $turUp->turnoReal = $cont;
                     $turUp->save();
                 }
-                }
+            }
         }
         
         //INSERTAR TURNO

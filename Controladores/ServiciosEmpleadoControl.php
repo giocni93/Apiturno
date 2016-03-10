@@ -22,6 +22,20 @@ class ServiciosEmpleadoControl{
         return $response;
 	}
 
+    function borrarserviciosempleado(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        $id = $request->getAttribute("id");
+
+        $tipo = ServiciosEmpleado::select("*")
+                            ->where("idEmpleado","=",$id)
+                            ->delete();
+
+        $response->getBody()->write($tipo);
+        return $response;
+
+    }
+
     function servicioxempleado(Request $request, Response $response){
         $response = $response->withHeader('Content-type', 'application/json');
         $id = $request->getAttribute("id");

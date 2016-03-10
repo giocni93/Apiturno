@@ -3,9 +3,9 @@
   $config = array(
       'driver'    => 'mysql',
       'host'      => 'localhost',
-      'database'  => 'mydsoluc_turnomovil',
-      'username'  => 'mydsoluc_turnomo',
-      'password'  => 'turnomovil2016',
+      'database'  => 'turnobd',
+      'username'  => 'root',
+      'password'  => '',
       'collation' => 'utf8_general_ci',
       'prefix'    => '',
       'charset'   => 'utf8'

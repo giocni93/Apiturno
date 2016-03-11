@@ -563,8 +563,6 @@ class TurnoControl{
         }else{
           $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
         }
-
-
       }
       $response->getBody()->write(json_encode($data));
       return $response;

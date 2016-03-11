@@ -16,6 +16,15 @@ class SectorControl{
 
 	}
 
+    function sectoresactivos(Request $request, Response $response) {
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = Sector::select('*')->where('estado','=','ACTIVO')->get();
+        
+        $response->getBody()->write($data);
+        return $response;
+
+    }
+
 	function getSectorEmpresas(Request $request, Response $response){
 			$response = $response->withHeader('Content-type', 'application/json');
 			$data = Parametros::select("*")->first();

@@ -1,6 +1,8 @@
 <?php
  $app->get('/sector', "SectorControl:getAll");
 
+ $app->get('/sector/activos', "SectorControl:sectoresactivos");
+
  $app->post('/sector',"SectorControl:postSector");
 
  $app->get('/sector/{id}/posicion/{latitud}/{longitud}/empresas', "SectorControl:getSectorEmpresas");

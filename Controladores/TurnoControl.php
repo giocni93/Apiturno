@@ -164,7 +164,8 @@ class TurnoControl{
     $banTerminado = false;
 
     try {
-      $turno = Turno::select("*")
+      $turno = Turno::select("turno.*","cliente.idPush")
+                      ->join("cliente","cliente.id","=","turno.idCliente")
                       ->where("id","=",$id)
                       ->first();
       $turno->estadoTurno   =   $data['estadoTurno'];
@@ -174,6 +175,24 @@ class TurnoControl{
       }
       if($turno->estadoTurno == "ATENDIENDO"){
         $turno->fechaInicio = fechaHoraActual();
+      }
+      if($turno->estadoTurno == "CONFIRMADO"){
+        $payload = array(
+            'title'         => "Turno movil",
+            'msg'           => "Tu turno ha sido aceptado.",
+            'std'           => 0,
+            'idServicio'    => "0"
+        );
+        enviarNotificacion(array($turno->idPush),$payload);
+      }
+      if($turno->estadoTurno == "CANCELADO"){
+        $payload = array(
+            'title'         => "Turno movil",
+            'msg'           => "Tu turno ha sido aceptado.",
+            'std'           => 0,
+            'idServicio'    => "0"
+        );
+        enviarNotificacion(array($turno->idPush),$payload);
       }
       $turno->save();
       if($banTerminado){

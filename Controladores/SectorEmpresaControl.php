@@ -24,17 +24,6 @@ class SectorEmpresaControl{
 		    return $response;
 	}
 
-        function sectorxempresa(Request $request, Response $response){
-                $response = $response->withHeader('Content-type', 'application/json');
-                $id = $request->getAttribute("id");
-                $sector = SectorEmpresa::select('sectorempresa.idSector','sector.nombre')
-                                        ->join('sector','sector.id','=','sectorempresa.idSector')
-                                        ->where('idEmpresa','=',$id)
-                                        ->where('sector.estado','=','ACTIVO')
-                                        ->get();
-                $response->getBody()->write(json_encode($sector));
-                return $response;
-        }
         
 	
 }

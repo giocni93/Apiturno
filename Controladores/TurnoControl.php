@@ -42,6 +42,7 @@ class TurnoControl{
     $data = Turno::select("*")
                     ->where("turno.idServicio","=",$idServicio)
                     ->where("turno.idEmpleado","=",$idEmpleado)
+                    ->where("turno.id","<>",$idTurno)
                     ->where("turno.avisado","=",1)
                     ->where("turno.aplazado","=",0)
                     ->where("turno.estadoTurno","=","CONFIRMADO")
@@ -373,89 +374,32 @@ class TurnoControl{
         //VERIFICO QUE TIPO DE TURNO ES
         if($data['tipoTurno'] == 2){
             //SI ES VIP
-            $ban = false;
+            $ban = true;
             $cont = 0;
             $ind = 0;
-            //echo "LISTA: ".count($lista);
-            for($i = count($lista) - 1; $i >= 0; $i--){
-
-            //CALCULAR SI EL CLIENTE YA ESTA A PUNTO DE ATENDER
-            $query = "SELECT "
-                        ."COALESCE((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes),0) as tiempoEstimado "
-                        ."FROM "
-                        ."( "
-                        ."  SELECT "
-                        ."    count(t.id) as faltantes "
-                        ."    FROM "
-                        ."    turno as t "
-                        ."    WHERE "
-                        ."    t.idEmpleado = ".$data["idEmpleado"]." AND "
-                        ."    t.idServicio = ".$data["idServicio"]." AND "
-                        ."    t.fechaSolicitud <= '".$lista[$i]->fechaSolicitud."' AND "
-                        ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
-                        .") as turnosFaltantes, "
-                        ."turno "
-                        ."WHERE "
-                        ."idEmpleado = ".$data["idEmpleado"]." AND "
-                        ."idServicio = ".$data["idServicio"]." AND "
-                        ."idCliente = ".$lista[$i]->idCliente." AND "
-                        ."estadoTurno = 'TERMINADO' LIMIT 1";
-                $dataTiempo = DB::select(DB::raw($query));
-                if(count($dataTiempo) > 0){
-                    //VARIFICAR SI YA PASO UN TIEMPO PARAMETRIZDO PARA AVISARLE
-                    $tiempo = ($dataTiempo[0]->tiempoEstimado / 60);
-                    if($tiempo < 5){
-                        try {
-                            $tu = Turno::select("*")
-                                    ->where("id","=",$lista[$i]->id)
-                                    ->first();
-                            $tu->avisado     =   1;
-                            $tu->save();
-                            $lista[$i]->avisado = 1;
-                          } catch (Exception $err) {
-                          }
-                    }
-
-                }
-
-
-                $banCont = true;
-                //echo $lista[$i]->avisado;
+            $lista = Turno::select("*")
+                        ->where("idServicio","=",$data["idServicio"])
+                        ->where("idEmpleado","=",$data["idEmpleado"])
+                        ->where("idSucursal","=",$data["idSucursal"])
+                        ->where("estadoTurno","<>","TERMINADO")
+                        ->where("estadoTurno","<>","CANCELADO")
+                        ->orderBy('turnoReal', 'asc')
+                        ->get();
+            for($i = 0; $i < count($lista); $i++){
                 if($lista[$i]->estadoTurno != "ATENDIENDO"){
-                	if($lista[$i]->avisado == 0 && $ban == false){
-	                    //VALIDAR SI EL ANTERIOR ES VIP
-	                    $inew = $i + 1;
-	                    $contVIP = 0;
-	                    while($contVIP < 4){
-	                        if($inew < count($lista)){
-	                            if($lista[$inew]->tipoTurno == 2){
-	                                $banCont = false;
-	                                break;
-	                            }
-	                        }
-	                        $inew ++;
-	                        $contVIP ++;
-	                    }
-	                    $inew = $i;
-	                    if($banCont){
-	                        $ban = true;
-	                        $turnoReal = $lista[$inew]->turno;
-	                        $ind = $inew;
-	                        break;
-	                    }
-	                }
-
-                }
-            }
-            if($ban){
-                //ACTUALIZAR TURNOS REALES
-                for($j = $ind; $j >= 0; $j--){
-                    $cont = $lista[$j]->turno + 1;
-                    $turUp = Turno::select("*")
-                                    ->where("id","=",$lista[$j]->id)
-                                    ->first();
-                    $turUp->turnoReal = $cont;
-                    $turUp->save();
+                	if($lista[$i]->tipoTurno == 1){
+                	
+                		
+                		$turUp = Turno::select("*")
+		                                    ->where("id","=",$lista[$i]->id)
+		                                    ->first();
+		                    if($ban){
+                			$turnoReal = $turUp->turnoReal;
+                			$ban = false;
+                		}
+		                    $turUp->turnoReal = $lista[$i]->turnoReal + 1;
+		                    $turUp->save();
+                	}
                 }
             }
         }

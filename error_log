@@ -1,0 +1,14 @@
+[10-Mar-2016 16:31:46 America/Bogota] PHP Notice:  Trying to get property of non-object in /home/mydsoluc/public_html/api/Controladores/EmpleadoControl.php on line 174
+[10-Mar-2016 16:55:30 America/Bogota] PHP Notice:  Trying to get property of non-object in /home/mydsoluc/public_html/api/Controladores/EmpleadoControl.php on line 174
+[10-Mar-2016 18:14:58 America/Bogota] PHP Notice:  Undefined offset: -1 in /home/mydsoluc/public_html/api/vendor/illuminate/support/Collection.php on line 1045
+[10-Mar-2016 18:14:58 America/Bogota] PHP Notice:  Trying to get property of non-object in /home/mydsoluc/public_html/api/Controladores/TurnoControl.php on line 389
+[10-Mar-2016 18:14:58 America/Bogota] PHP Notice:  Undefined offset: -1 in /home/mydsoluc/public_html/api/vendor/illuminate/support/Collection.php on line 1045
+[10-Mar-2016 18:14:58 America/Bogota] PHP Notice:  Trying to get property of non-object in /home/mydsoluc/public_html/api/Controladores/TurnoControl.php on line 390
+[10-Mar-2016 18:15:12 America/Bogota] PHP Notice:  Undefined offset: -1 in /home/mydsoluc/public_html/api/vendor/illuminate/support/Collection.php on line 1045
+[10-Mar-2016 18:15:12 America/Bogota] PHP Notice:  Trying to get property of non-object in /home/mydsoluc/public_html/api/Controladores/TurnoControl.php on line 389
+[10-Mar-2016 18:15:12 America/Bogota] PHP Notice:  Undefined offset: -1 in /home/mydsoluc/public_html/api/vendor/illuminate/support/Collection.php on line 1045
+[10-Mar-2016 18:15:12 America/Bogota] PHP Notice:  Trying to get property of non-object in /home/mydsoluc/public_html/api/Controladores/TurnoControl.php on line 390
+[10-Mar-2016 18:31:47 America/Bogota] PHP Notice:  Undefined offset: 0 in /home/mydsoluc/public_html/api/Controladores/TurnoControl.php on line 561
+[10-Mar-2016 18:31:47 America/Bogota] PHP Notice:  Trying to get property of non-object in /home/mydsoluc/public_html/api/Controladores/TurnoControl.php on line 561
+[10-Mar-2016 19:07:33 America/Bogota] PHP Notice:  Undefined offset: 0 in /home/mydsoluc/public_html/api/Controladores/TurnoControl.php on line 561
+[10-Mar-2016 19:07:33 America/Bogota] PHP Notice:  Trying to get property of non-object in /home/mydsoluc/public_html/api/Controladores/TurnoControl.php on line 561

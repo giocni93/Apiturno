@@ -227,7 +227,7 @@ class TurnoControl{
                     //ANVIAR NOTIFICACION
                     $payload = array(
                         'title'         => "Turno movil",
-                        'msg'           => "Ya esta cerca tu turno, solo falta ".$tiempo." minutos",
+                        'msg'           => "Ya esta cerca tu turno, solo falta ".round($tiempo)." minutos",
                         'std'           => 0,
                         'idServicio'    => "0"
                     );

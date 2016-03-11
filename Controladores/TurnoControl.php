@@ -225,17 +225,16 @@ class TurnoControl{
                           }
                     }
                     //ANVIAR NOTIFICACION
-                    $titulo = "Turno movil";
-                    $msg = "Ya esta cerca tu turno, solo falta ".$tiempo." minutos";
-                    $std = 0;
-                    enviarNotificacion(array($turnos[$i]->idPush),$titulo, $msg, $std);
+                    $payload = array(
+                        'title'         => "Turno movil",
+                        'msg'           => "Ya esta cerca tu turno, solo falta ".$tiempo." minutos",
+                        'std'           => 0,
+                        'idServicio'    => "0"
+                    );
+                    enviarNotificacion(array($turnos[$i]->idPush),$payload);
                     //array_push($vec, $turnos[$i]->idPush);
                 }
-
-
-
           }
-
       }
       $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
       $response = $response->withStatus(200);

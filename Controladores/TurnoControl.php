@@ -388,8 +388,8 @@ class TurnoControl{
             for($i = 0; $i < count($lista); $i++){
                 if($lista[$i]->estadoTurno != "ATENDIENDO"){
                 	if($lista[$i]->tipoTurno == 1){
-                	
-                		
+
+
                 		$turUp = Turno::select("*")
 		                                    ->where("id","=",$lista[$i]->id)
 		                                    ->first();
@@ -558,7 +558,13 @@ class TurnoControl{
                 ."idEmpleado = ".$data[$i]->idEmpleado." AND "
                 ."idServicio = ".$data[$i]->idServicio;
         $dataTiempo = DB::select(DB::raw($query));
-        $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
+        if ($dataTiempo[0]->turnoActual == null){
+          $data[$i]->turnoActual = 0;
+        }else{
+          $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
+        }
+
+
       }
       $response->getBody()->write(json_encode($data));
       return $response;

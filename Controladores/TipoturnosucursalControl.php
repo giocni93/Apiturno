@@ -72,5 +72,19 @@ class TipoturnosucursalControl{
         $response->getBody()->write($respuesta);
         return $response;
 	}
+
+    function borrartipoturnosucursal(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        $id = $request->getAttribute("id");
+
+        $tipo = Tipoturnosucursal::select("*")
+                            ->where("idsucursal","=",$id)
+                            ->delete();
+
+        $response->getBody()->write($tipo);
+        return $response;
+
+    }
 	
 }

@@ -3,3 +3,4 @@
 	$app->get('/tipoturnosucursal/{id}', "TipoturnosucursalControl:tiposelecionados");
 	$app->post('/tipoturnosucursal/{id}', "TipoturnosucursalControl:posttipoturnosucursal");
 	$app->post('/tipoturnosucursal', "TipoturnosucursalControl:posttipoturno");
+	$app->delete('/tipoturnosucursal/{id}', "TipoturnosucursalControl:borrartipoturnosucursal");

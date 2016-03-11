@@ -166,7 +166,7 @@ class TurnoControl{
     try {
       $turno = Turno::select("turno.*","cliente.idPush")
                       ->join("cliente","cliente.id","=","turno.idCliente")
-                      ->where("id","=",$id)
+                      ->where("turno.id","=",$id)
                       ->first();
       $turno->estadoTurno   =   $data['estadoTurno'];
       if($turno->estadoTurno == "TERMINADO"){

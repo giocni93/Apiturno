@@ -9,7 +9,7 @@ class TurnoControl{
     $response = $response->withHeader('Content-type', 'application/json');
     $idEmpleado = $request->getAttribute("idEmpleado");
     $idServicio = $request->getAttribute("idServicio");
-    $data = Turno::select("tipoturno.prioridad","turno.tipoTurno","turno.id as calificacionCliente","turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
+    $data = Turno::select("turno.aplazado","tipoturno.prioridad","turno.tipoTurno","turno.id as calificacionCliente","turno.id","cliente.nombres","cliente.apellidos","turno.turno","turno.fechaSolicitud","turno.idServicio","turno.idEmpleado","turno.estadoTurno","cliente.idPush","cliente.id as idCliente")
                     ->join("cliente","cliente.id","=","turno.idCliente")
                     ->join("tipoturno","tipoturno.id","=","turno.tipoTurno")
                     ->where("turno.idEmpleado","=",$idEmpleado)
@@ -31,6 +31,100 @@ class TurnoControl{
         }
     }
     $response->getBody()->write($data);
+    return $response;
+  }
+
+  public function aplazarTurno(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $idTurno = $request->getAttribute("idTurno");
+    $idEmpleado = $request->getAttribute("idEmpleado");
+    $idServicio = $request->getAttribute("idServicio");
+    $data = Turno::select("*")
+                    ->where("turno.idServicio","=",$idServicio)
+                    ->where("turno.idEmpleado","=",$idEmpleado)
+                    ->where("turno.avisado","=",1)
+                    ->where("turno.aplazado","=",0)
+                    ->where("turno.estadoTurno","=","CONFIRMADO")
+                    ->where("turno.estado","=","ACTIVO")
+                    ->orderBy('turno.turnoReal', 'asc')
+                    ->get();
+    if(count($data) > 0){
+      //LE ACTUALISO EL NUEVO TURNO A LA PERSONA QUE SE LE APLAZO EL TURNO
+      $nuevoTurnoReal = 0;
+      $tu = Turno::select("*")
+                    ->where("id","=",$idTurno)
+                    ->first();
+      $nuevoTurnoReal = $tu->turnoReal;
+      $tu->turnoReal = $data[0]->turnoReal;
+      $tu->aplazado = 1;
+      $tu->save();
+
+    //COLOCO EL NUEVO TURNO A LA PERSONA QUE ESTE EN EL SITIO Y NO HA SIDO AVISADA
+      $tu = Turno::select("*")
+                    ->where("id","=",$data[0]->id)
+                    ->first();
+      $tu->turnoReal = $nuevoTurnoReal;
+      $tu->save();
+
+      //ENVIAR NOTIFICACION PARA AVISAR QUE SU TURNO HA SIDO APLAZADO
+
+    }else{
+      $tu = Turno::select("*")
+                    ->where("id","=",$idTurno)
+                    ->first();
+      $tu->aplazado = 1;
+      $tu->save();
+    }
+    $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+    $response->getBody()->write($respuesta);
+    return $response;
+  }
+
+  public function aplazarCancelarTurno(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $idTurno = $request->getAttribute("idTurno");
+    $idEmpleado = $request->getAttribute("idEmpleado");
+    $idServicio = $request->getAttribute("idServicio");
+    $data = Turno::select("*")
+                    ->where("turno.idServicio","=",$idServicio)
+                    ->where("turno.idEmpleado","=",$idEmpleado)
+                    ->where("turno.avisado","=",1)
+                    ->where("turno.aplazado","=",0)
+                    ->where("turno.estadoTurno","=","CONFIRMADO")
+                    ->where("turno.estado","=","ACTIVO")
+                    ->orderBy('turno.turnoReal', 'asc')
+                    ->get();
+    if(count($data) > 0){
+      //LE ACTUALISO EL NUEVO TURNO A LA PERSONA QUE SE LE APLAZO EL TURNO
+      $nuevoTurnoReal = 0;
+      $tu = Turno::select("*")
+                    ->where("id","=",$idTurno)
+                    ->first();
+      $nuevoTurnoReal = $tu->turnoReal;
+      $tu->turnoReal = $data[0]->turnoReal;
+      $tu->estadoTurno = "CANCELADO";
+      $tu->aplazado = 1;
+      $tu->save();
+
+    //COLOCO EL NUEVO TURNO A LA PERSONA QUE ESTE EN EL SITIO Y NO HA SIDO AVISADA
+      $tu = Turno::select("*")
+                    ->where("id","=",$data[0]->id)
+                    ->first();
+      $tu->turnoReal = $nuevoTurnoReal;
+      $tu->save();
+
+      //ENVIAR NOTIFICACION PARA AVISAR QUE SU TURNO HA SIDO CANCELADO
+
+    }else{
+      $tu = Turno::select("*")
+                    ->where("id","=",$idTurno)
+                    ->first();
+      $tu->aplazado = 1;
+      $tu->estadoTurno = "CANCELADO";
+      $tu->save();
+    }
+    $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+    $response->getBody()->write($respuesta);
     return $response;
   }
 
@@ -90,7 +184,7 @@ class TurnoControl{
                                 ->orwhere("turno.estadoTurno","=","ATENDIENDO");
                       })
                     ->where("turno.idEmpleado","=",$idEmpleado)
-                    ->where("turno.idServicio","=",$idServicio)   
+                    ->where("turno.idServicio","=",$idServicio)
                     ->where("turno.tipoTurno","<>",2)
                     ->orderBy('turno.fechaSolicitud', 'asc')
                     ->get();
@@ -137,7 +231,7 @@ class TurnoControl{
                     //array_push($vec, $turnos[$i]->idPush);
                 }
 
-                
+
 
           }
 
@@ -193,7 +287,7 @@ class TurnoControl{
             $turno->save();
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1, "numeroTurno" => $turnoSiguiente));
             $response = $response->withStatus(200);
-            
+
             //ENVIAR NOTIFICACION AL EMPLEADO Y AL ADMINISTRADOR DE LA SUCURSAL
             $dataEmple = Empleado::select("idPush")
                ->where("id","=",$data['idEmpleado'])
@@ -221,7 +315,7 @@ class TurnoControl{
     $response->getBody()->write($respuesta);
     return $response;
   }
-  
+
   public function postTurnoAnonimo(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $data = json_decode($request->getBody(),true);
@@ -246,7 +340,7 @@ class TurnoControl{
     }else{
         $idCliente = $cli->id;
     }
-    
+
     //VALIDAR SI TIENE UN TURNO EN EL SERVICIO DE LA SUCURSAL SOLICITADA
     $turnoCliente = Turno::select("idCliente")
                     ->where("idCliente","=",$idCliente)
@@ -272,10 +366,10 @@ class TurnoControl{
         if(count($lista) > 0){
           $turnoSiguiente = $lista[0]->turno;
         }
-        
+
         $turnoSiguiente ++;
         $turnoReal = $turnoSiguiente;
-        
+
         //VERIFICO QUE TIPO DE TURNO ES
         if($data['tipoTurno'] == 2){
             //SI ES VIP
@@ -284,7 +378,7 @@ class TurnoControl{
             $ind = 0;
             //echo "LISTA: ".count($lista);
             for($i = count($lista) - 1; $i >= 0; $i--){
-            
+
             //CALCULAR SI EL CLIENTE YA ESTA A PUNTO DE ATENDER
             $query = "SELECT "
                         ."COALESCE((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes),0) as tiempoEstimado "
@@ -323,8 +417,8 @@ class TurnoControl{
                     }
 
                 }
-            
-            
+
+
                 $banCont = true;
                 //echo $lista[$i]->avisado;
                 if($lista[$i]->estadoTurno != "ATENDIENDO"){
@@ -350,7 +444,7 @@ class TurnoControl{
 	                        break;
 	                    }
 	                }
-                
+
                 }
             }
             if($ban){
@@ -365,7 +459,7 @@ class TurnoControl{
                 }
             }
         }
-        
+
         //INSERTAR TURNO
         try{
             $turno = new Turno;
@@ -383,7 +477,7 @@ class TurnoControl{
             $turno->save();
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1, "numeroTurno" => $turnoSiguiente));
             $response = $response->withStatus(200);
-            
+
             //ENVIAR NOTIFICACION AL EMPLEADO Y AL ADMINISTRADOR DE LA SUCURSAL
 
         }catch(Exception $err){
@@ -407,16 +501,16 @@ class TurnoControl{
       $fechainicial = $request->getAttribute("fechainicial");
       $fechafinal = $request->getAttribute("fechafinal");
       $date = date("Y-m-d");
-      $data = DB::select(DB::raw("Select id,COUNT(*) as contador,estadoTurno,idSucursal  from turno  where   
+      $data = DB::select(DB::raw("Select id,COUNT(*) as contador,estadoTurno,idSucursal  from turno  where
         turno.idSucursal = ".$id." and (estadoTurno='SOLICITADO' or estadoTurno='CANCELADO' or estadoTurno='CONFIRMADO' or estadoTurno='TERMINADO') and fechaSolicitud BETWEEN '".$fechainicial."' and '".$fechafinal."' GROUP BY estadoTurno "));
-          
+
           foreach ($data as $row) {
             $vec2 = $this->categoria(utf8_encode($row->estadoTurno));
             $vec[] = array(
               "id" => $row->id,
               "contador" => $row->contador,
               "estadoTurno" => $row->estadoTurno,
-              "color" =>  $vec2["color"] 
+              "color" =>  $vec2["color"]
             );
           }
 
@@ -430,7 +524,7 @@ class TurnoControl{
       $id = $request->getAttribute("id");
       $fechainicial = $request->getAttribute("fechainicial");
       $fechafinal = $request->getAttribute("fechafinal");
-      $data = DB::select(DB::raw("Select turno.id,turno.estadoTurno,turno.idSucursal,COUNT(*) as contador,turno.idServicio,servicio.nombre,sucursal.nombre as sucursal from turno inner join servicio on servicio.id = turno.idServicio inner join sucursal on sucursal.id = turno.idSucursal where   
+      $data = DB::select(DB::raw("Select turno.id,turno.estadoTurno,turno.idSucursal,COUNT(*) as contador,turno.idServicio,servicio.nombre,sucursal.nombre as sucursal from turno inner join servicio on servicio.id = turno.idServicio inner join sucursal on sucursal.id = turno.idSucursal where
         turno.idSucursal = ".$id." and estadoTurno='TERMINADO' and fechaSolicitud BETWEEN '".$fechainicial."' and '".$fechafinal."' GROUP BY idServicio "));
 
       $response->getBody()->write(json_encode($data));
@@ -467,10 +561,10 @@ class TurnoControl{
                               ->where('sucursal.idEmpresa','=',$idempresa)
                               ->get();
         for($i=0;$i<count($servi);$i++){
-          $data = DB::select(DB::raw("Select turno.id,COUNT(*) as contador,turno.estadoTurno,turno.idSucursal,sucursal.nombre  from turno inner join sucursal on sucursal.id = turno.idSucursal where   
+          $data = DB::select(DB::raw("Select turno.id,COUNT(*) as contador,turno.estadoTurno,turno.idSucursal,sucursal.nombre  from turno inner join sucursal on sucursal.id = turno.idSucursal where
         turno.idSucursal = ".$servi[$i]->id." and  estadoTurno='TERMINADO' and fechaSolicitud BETWEEN '".$fechainicial."' and '".$fechafinal."' GROUP BY estadoTurno"));
           $servi[$i]['turno'] = $data;
-        }                
+        }
 
 
     $response->getBody()->write(json_encode($servi));
@@ -486,10 +580,10 @@ class TurnoControl{
                               ->where('sucursal.idEmpresa','=',$idempresa)
                               ->get();
         for($i=0;$i<count($servi);$i++){
-          $data = DB::select(DB::raw("Select turno.id,COUNT(*) as contador,turno.estadoTurno,turno.idSucursal,sucursal.nombre,turno.idServicio as servicio,servicio.nombre as nombreservicio  from turno inner join sucursal on sucursal.id = turno.idSucursal inner join servicio on servicio.id = turno.idServicio where   
+          $data = DB::select(DB::raw("Select turno.id,COUNT(*) as contador,turno.estadoTurno,turno.idSucursal,sucursal.nombre,turno.idServicio as servicio,servicio.nombre as nombreservicio  from turno inner join sucursal on sucursal.id = turno.idSucursal inner join servicio on servicio.id = turno.idServicio where
         turno.idSucursal = ".$servi[$i]->id." and  estadoTurno='TERMINADO' and fechaSolicitud BETWEEN '".$fechainicial."' and '".$fechafinal."' GROUP BY turno.idservicio, turno.idSucursal"));
           $servi[$i]['turno'] = $data;
-        }                
+        }
 
 
     $response->getBody()->write(json_encode($servi));
@@ -506,7 +600,7 @@ class TurnoControl{
 
   public function getTurnosCliente(Request $request, Response $response)
   {
-    # 
+    #
       $idCliente= $request->getAttribute("idCliente");
       $query = "SELECT tu.*, su.nombre as sucursal, em.razonSocial as empresa, concat(emp.nombres, ' ', emp.apellidos) as empleado, '' as turnoActual FROM turno tu INNER JOIN sucursal su on su.id = tu.idSucursal INNER JOIN empresa em on em.id = su.idEmpresa INNER JOIN empleado emp on emp.id = tu.idEmpleado where idCliente = '$idCliente' and CAST(fechaSolicitud AS DATE) = curdate() and (estadoturno = 'SOLICITADO' OR estadoturno = 'ATENDIENDO' OR estadoturno = 'CONFIRMADO')";
       $data = DB::select(DB::raw($query));
@@ -531,10 +625,10 @@ class TurnoControl{
         $id = $request->getAttribute("id");
         $fechainicial = $request->getAttribute("fechainicial");
         $fechafinal = $request->getAttribute("fechafinal");
-        $data = DB::select(DB::raw("Select idEmpleado,COUNT(*) as contador,estadoTurno,idSucursal  from turno where   
+        $data = DB::select(DB::raw("Select idEmpleado,COUNT(*) as contador,estadoTurno,idSucursal  from turno where
                 turno.idEmpleado = ".$id." and estadoTurno='TERMINADO' and fechaSolicitud BETWEEN '".$fechainicial."' "
                 . "and '".$fechafinal."' GROUP BY idEmpleado "));
-          
+
       $response->getBody()->write(json_encode($data));
       return $response;
   }

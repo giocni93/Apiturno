@@ -110,6 +110,27 @@ class ClienteControl{
     $response->getBody()->write($respuesta);
     return $response;
   }
+  
+  public function putIdpush(Request $request, Response $response)
+  {
+    try {
+      $response = $response->withHeader('Content-type', 'application/json');
+      $data = json_decode($request->getBody(),true);
+      $id = $request->getAttribute("id");
+      $cliente = Cliente::select("*")
+                          ->where("id","=",$id)
+                          ->first();
+      $cliente->idPush    =   $data['idPush'];
+      $cliente->save();
+      $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+      $response = $response->withStatus(200);
+    } catch (Exception $err) {
+      $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+      $response = $response->withStatus(404);
+    }
+    $response->getBody()->write($respuesta);
+    return $response;
+  }
 
   function login(Request $request, Response $response)
   {

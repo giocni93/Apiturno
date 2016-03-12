@@ -21,3 +21,5 @@ $app->put('/trabajador/estado/{id}',"EmpleadoControl:updateestado");
 $app->get('/empleado/{idEmpleado}/servicio/{idServicio}/informacion', "EmpleadoControl:getEmpleadosAll");
 $app->get('/empleado/{idEmpleado}/estadoOnline', "EmpleadoControl:getEstadoEmpleado");
 $app->put('/empleado/{idEmpleado}/estadoOnline',"EmpleadoControl:updateEstadoEmpleado");
+
+$app->put('/empleado/foto/{id}',"EmpleadoControl:fotoperfil");

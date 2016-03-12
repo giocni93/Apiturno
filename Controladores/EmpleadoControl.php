@@ -571,4 +571,24 @@ class EmpleadoControl{
       return $response;
     }
 
+    function fotoperfil(Request $request, Response $response){
+      try {
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        $id = $request->getAttribute("id");
+        $empleado = Empleado::select("*")
+                            ->where("id","=",$id)
+                            ->first();
+        $empleado->logo     =   $data['logo'];
+        $empleado->save();
+        $respuesta = json_encode(array('msg' => "Foto modificado correctamente", "std" => 1));
+        $response = $response->withStatus(200);
+      } catch (Exception $err) {
+        $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+        $response = $response->withStatus(404);
+      }
+      $response->getBody()->write($respuesta);
+      return $response;
+    }
+
 }

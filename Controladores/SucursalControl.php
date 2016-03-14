@@ -106,6 +106,30 @@ class SucursalControl{
 		    return $response;
 		}
 
+	public function getSucursalesByCiudad(Request $request, Response $response)
+	{
+		$response = $response->withHeader('Content-type', 'application/json');
+		$idServicio = $request->getAttribute("idServicio");
+		$ciudad = $request->getAttribute("ciudad");
+		$dataCiudad = Municipio::select("*")->where("nombre","=",$ciudad)->first();
+		$idMunicipio = $dataCiudad->id;
+
+		$query = "SELECT "
+					. "su.*, "
+					. "ss.precio, "
+					. "ss.precioVIP "
+	                . "FROM sucursal su "
+	                . "INNER JOIN serviciossucursal ss ON ss.idSucursal = su.id "
+	                . "INNER JOIN servicio se ON se.id = ss.idServicio "
+	                . "INNER JOIN municipio mu ON mu.id = su.idMunicipio "
+	                . "WHERE su.Estado = 'ACTIVO' AND se.id= $idServicio "
+	                . "AND mu.id = $idMunicipio";
+	    $data = DB::select(DB::raw($query));
+		$response->getBody()->write(json_encode($data));
+		return $response;
+
+	}
+
 	function getsucursalxempresa(Request $request, Response $response){
 		$response = $response->withHeader('Content-type', 'application/json');
 	    $id = $request->getAttribute("id");

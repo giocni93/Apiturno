@@ -51,6 +51,7 @@ class EmpleadoControl{
         $empleado->apellidos        =   $data['apellidos'];
         $empleado->telefono         =   $data['telefono'];
         $empleado->pass             =   sha1($data['pass']);
+        $empleado->logo             =   '/imagenes/users-10.png';
         $empleado->idPerfil         =   '2';
         $empleado->estado           =   "ACTIVO";
         $empleado->estadoOnline     =   "INACTIVO";

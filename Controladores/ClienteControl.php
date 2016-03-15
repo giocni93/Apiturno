@@ -23,7 +23,7 @@ class ClienteControl{
     $response->getBody()->write($data);
     return $response;
   }
-  
+
   function getClienteByemail(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $email = $request->getAttribute("email");
@@ -99,7 +99,7 @@ class ClienteControl{
         $cliente->idFace    =   "01";//$data['idFace'];
         $cliente->estado    =   "ACTIVO";
         $cliente->save();
-        $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+        $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1, 'idCliente' => $cliente->id));
         $response = $response->withStatus(200);
     }catch(Exception $err){
         $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
@@ -157,7 +157,7 @@ class ClienteControl{
     $response->getBody()->write($respuesta);
     return $response;
   }
-  
+
   public function putIdpush(Request $request, Response $response)
   {
     try {

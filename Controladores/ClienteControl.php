@@ -223,6 +223,28 @@ class ClienteControl{
             return $response;
     }
     
-    
+    public function postcliente(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        //echo $data["email"];
+        try{
+            $cliente = new Cliente;
+            $cliente->email     =   $data['email'];
+            $cliente->nombres   =   $data['nombres'];
+            $cliente->apellidos =   $data['apellidos'];
+            $cliente->telefono  =   $data['telefono'];
+            $cliente->pass      =   sha1($data['pass']);
+            $cliente->estado    =   "ACTIVO";
+            $cliente->save();
+            $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1, 'idCliente' => $cliente->id));
+            $response = $response->withStatus(200);
+        }catch(Exception $err){
+            $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+            $response = $response->withStatus(404);
+            //echo $respuesta;
+        }
+        $response->getBody()->write($respuesta);
+        return $response;
+    }
 
 }

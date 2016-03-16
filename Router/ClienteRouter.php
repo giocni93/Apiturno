@@ -11,3 +11,4 @@ $app->put('/idpush/cliente/{id}',"ClienteControl:putIdpush");
 $app->post('/cliente/sesion/facebook',"ClienteControl:loginFacebook" );
 $app->get('/facebook/{idFace}/cliente', "ClienteControl:verificarLoginFacebook");
 $app->put('/cliente/perfil/{id}',"ClienteControl:putperfilcliente");
+$app->post('/cliente/register',"ClienteControl:postcliente");

@@ -106,6 +106,7 @@ class SectorControl{
             $sector = Sector::find($id);
             $sector->nombre   	 	=   $data['nombre'];
             $sector->descripcion   =   $data['descripcion'];
+            $sector->cupos          =   $data['cupos'];
             $sector->save();
 
             

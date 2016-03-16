@@ -69,9 +69,12 @@ class SectorControl{
         $data = json_decode($request->getBody(),true);
         try{
             $sector = new Sector;
-            $sector->nombre   	 =  $data['nombre'];
-            $sector->descripcion =  $data['descripcion'];
-            $sector->estado		 =  "INACTIVO";
+            $sector->nombre         =   $data['nombre'];
+            $sector->descripcion    =   $data['descripcion'];
+            $sector->estado         =   "INACTIVO";
+            $sector->logo           =   $data['logo'];
+            $sector->cupos          =   $data['cupos'];
+            $sector->aleatorio      =   '1';
             $sector->save();
 
             

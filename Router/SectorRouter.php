@@ -17,3 +17,5 @@ $app->get('/sector/maxid',"SectorControl:maxIdSector");
 
 $app->put('/logosector/{id}', "SectorControl:putfotoservidor");
 
+$app->get('/sector/{idSector}/cupos', "SectorControl:CuposBySector");
+

@@ -188,6 +188,20 @@ class SectorControl{
         $response->getBody()->write($respuesta);
         return $response;
     }
+
+    public function CuposBySector(Request $request, Response $response)
+    {
+        $response = $response->withHeader('Content-type', 'application/json');
+        $id = $request->getAttribute("idSector");
+        $data = Sector::select("cupos")
+                        ->where("id","=",$id)
+                        ->first();
+        if($data == null){
+          $response = $response->withStatus(404);
+        }
+        $response->getBody()->write($data);
+        return $response;
+    }
         
 
 }

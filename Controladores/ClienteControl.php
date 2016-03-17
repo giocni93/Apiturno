@@ -36,7 +36,7 @@ class ClienteControl{
     $response->getBody()->write($data);
     return $response;
   }
-  
+
   function verificarLoginFacebook(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $id = $request->getAttribute("idFace");
@@ -52,7 +52,7 @@ class ClienteControl{
     $response->getBody()->write($respuesta);
     return $response;
   }
-  
+
   function loginFacebook(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $data = json_decode($request->getBody(),true);

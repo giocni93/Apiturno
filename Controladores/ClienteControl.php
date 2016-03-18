@@ -246,5 +246,16 @@ class ClienteControl{
         $response->getBody()->write($respuesta);
         return $response;
     }
+    
+    function maxId(Request $request,Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = Cliente::select("")
+                        ->max('id');
+        $cli = Cliente::select('*')
+                ->where('id','=',$data)
+                ->first();
+        $response->getBody()->write($cli);
+        return $response;
+    }
 
 }

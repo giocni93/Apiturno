@@ -36,5 +36,31 @@ class SectorEmpresaControl{
                 return $response;
         }
         
+        
+        public function reportesector(Request $request, Response $response){
+            $response = $response->withHeader('Content-type', 'application/json');
+            $id = $request->getAttribute("idsector");
+            $fechainicial = $request->getAttribute("fechainicial");
+            $fechafinal = $request->getAttribute("fechafinal");
+            $data = SectorEmpresa::select('sectorempresa.idEmpresa','empresa.razonSocial')
+                        ->join('empresa','empresa.id','=','sectorempresa.idEmpresa')
+                        ->where('sectorempresa.idSector','=',$id)
+                        ->where('empresa.estado','=','ACTIVO')
+                        ->get();
+            
+            for($i=0;$i<count($data);$i++){
+                $sucu = Sucursal::select('sucursal.id','sucursal.nombre','turno.estadoTurno')
+                            ->join('turno','turno.idSucursal','=','sucursal.id')
+                            ->where('turno.estadoTurno','=','TERMINADO')
+                            ->whereBetween('turno.fechaSolicitud',array($fechainicial,$fechafinal))
+                            ->where('sucursal.idEmpresa','=',$data[$i]->idEmpresa)
+                            ->count();
+                
+                $data[$i]['sucursales'] = $sucu;
+            }
+            
+            $response->getBody()->write(json_encode($data));
+            return $response;
+        }
 	
 }

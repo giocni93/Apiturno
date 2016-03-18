@@ -74,7 +74,7 @@ class SectorControl{
             $sector->estado         =   "INACTIVO";
             $sector->logo           =   $data['logo'];
             $sector->cupos          =   $data['cupos'];
-            $sector->aleatorio      =   '1';
+            $sector->aleatorio      =   $data['aleatorio'];
             $sector->save();
 
             

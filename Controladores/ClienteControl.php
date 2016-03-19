@@ -79,7 +79,7 @@ class ClienteControl{
             $response = $response->withStatus(404);
         }
     }
-    //$respuesta = json_encode(array("std" => 1, "cliente" => $cliente, "msg" => "Ok"));
+    $respuesta = json_encode(array("std" => 1, "cliente" => $cliente, "msg" => "Ok"));
     $response->getBody()->write($respuesta);
     return $response;
   }

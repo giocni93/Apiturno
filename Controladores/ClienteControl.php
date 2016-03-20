@@ -208,6 +208,9 @@ class ClienteControl{
             $cliente = Cliente::select("*")
                               ->where("id","=",$id)
                               ->first();
+            if(strtolower($data['email']) == "null"){
+                $data['email'] = null;
+            }
             $cliente->email     =   $data['email'];
             $cliente->nombres   =   $data['nombres'];
             $cliente->apellidos =   $data['apellidos'];

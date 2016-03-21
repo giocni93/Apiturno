@@ -119,7 +119,6 @@ class SucursalControl{
 		$query = "SELECT "
                         . "(6371 * ACOS( SIN(RADIANS(su.latitud)) * SIN(RADIANS($lat)) + COS(RADIANS(su.longitud - $lng)) * "
 			. "COS(RADIANS(su.latitud)) * COS(RADIANS($lat)))) AS distancia, "
-                        . "0 as calificacion, "
                         . "0 as numeroTurnos, "
                         . "su.*, "
                         . "ss.precio, "

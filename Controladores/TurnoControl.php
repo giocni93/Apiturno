@@ -564,7 +564,7 @@ class TurnoControl{
   public function getTurnosCliente(Request $request, Response $response)
   {
       $idCliente= $request->getAttribute("idCliente");
-      $query = "SELECT tu.*,su.latitud,su.longitud, su.nombre as sucursal, em.razonSocial as empresa, concat(emp.nombres, ' ', emp.apellidos) as empleado, '' as turnoActual FROM turno tu INNER JOIN sucursal su on su.id = tu.idSucursal INNER JOIN empresa em on em.id = su.idEmpresa INNER JOIN empleado emp on emp.id = tu.idEmpleado where idCliente = '$idCliente' and (estadoturno = 'SOLICITADO' OR estadoturno = 'ATENDIENDO' OR estadoturno = 'CONFIRMADO')";
+      $query = "SELECT 0 as tiempoEstimado, tu.*,ser.nombre as servicio,su.latitud,su.longitud, su.nombre as sucursal, em.razonSocial as empresa, concat(emp.nombres, ' ', emp.apellidos) as empleado, '' as turnoActual FROM turno tu INNER JOIN servicio ser on (ser.id = tu.idServicio) INNER JOIN sucursal su on su.id = tu.idSucursal INNER JOIN empresa em on em.id = su.idEmpresa INNER JOIN empleado emp on emp.id = tu.idEmpleado where idCliente = '$idCliente' and (estadoturno = 'SOLICITADO' OR estadoturno = 'ATENDIENDO' OR estadoturno = 'CONFIRMADO')";
       $data = DB::select(DB::raw($query));
       for($i = 0; $i < count($data); $i++){
         $query = "SELECT "
@@ -581,6 +581,33 @@ class TurnoControl{
         }else{
           $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
         }
+        
+        //CALCULAR TIEMPO
+        $query = "SELECT "
+                        ."COALESCE((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes),0) as tiempoEstimado "
+                        ."FROM "
+                        ."( "
+                        ."  SELECT "
+                        ."    count(t.id) as faltantes "
+                        ."    FROM "
+                        ."    turno as t "
+                        ."    WHERE "
+                        ."    t.idEmpleado = ".$data[$i]->idEmpleado." AND "
+                        ."    t.idServicio = ".$data[$i]->idServicio." AND "
+                        ."    t.fechaSolicitud <= '".$data[$i]->fechaSolicitud."' AND "
+                        ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
+                        .") as turnosFaltantes, "
+                        ."turno "
+                        ."WHERE "
+                        ."idEmpleado = ".$data[$i]->idEmpleado." AND "
+                        ."idServicio = ".$data[$i]->idServicio." AND "
+                        ."idCliente = ".$data[$i]->idCliente." AND "
+                        ."estadoTurno = 'TERMINADO' LIMIT 1";
+        $dataTiempo = DB::select(DB::raw($query));
+        if(count($dataTiempo) > 0){
+            $data[$i]->tiempoEstimado = strval(($dataTiempo[0]->tiempoEstimado / 60))." minutos";
+        }
+        
       }
       $response->getBody()->write(json_encode($data));
       return $response;

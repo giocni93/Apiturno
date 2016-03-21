@@ -111,22 +111,41 @@ class SucursalControl{
 		$response = $response->withHeader('Content-type', 'application/json');
 		$idServicio = $request->getAttribute("idServicio");
 		$ciudad = $request->getAttribute("ciudad");
+                $lat = $request->getAttribute("latitud");
+		$lng = $request->getAttribute("longitud");
 		$dataCiudad = Municipio::select("*")->where("nombre","=",$ciudad)->first();
 		$idMunicipio = $dataCiudad->id;
 
 		$query = "SELECT "
-					. "su.*, "
-					. "ss.precio, "
-					. "ss.precioVIP "
+                        . "(6371 * ACOS( SIN(RADIANS(su.latitud)) * SIN(RADIANS($lat)) + COS(RADIANS(su.longitud - $lng)) * "
+			. "COS(RADIANS(su.latitud)) * COS(RADIANS($lat)))) AS distancia, "
+                        . "0 as calificacion, "
+                        . "0 as numeroTurnos, "
+                        . "su.*, "
+                        . "ss.precio, "
+                        . "ss.precioVIP "
 	                . "FROM sucursal su "
 	                . "INNER JOIN serviciossucursal ss ON ss.idSucursal = su.id "
 	                . "INNER JOIN servicio se ON se.id = ss.idServicio "
 	                . "INNER JOIN municipio mu ON mu.id = su.idMunicipio "
 	                . "WHERE su.Estado = 'ACTIVO' AND se.id= $idServicio "
-	                . "AND mu.id = $idMunicipio";
+	                . "AND mu.id = $idMunicipio ORDER BY distancia ASC";
 	    $data = DB::select(DB::raw($query));
-		$response->getBody()->write(json_encode($data));
-		return $response;
+            for($i = 0; $i < count($data); $i++){
+                $query = "SELECT "
+                        . "count(tu.id) as numTurnos "
+                        . "FROM turno as tu "
+                        . "WHERE tu.idServicio = $idServicio AND "
+                        . "tu.idSucursal = ".$data[$i]->id." AND "
+                        . "(tu.estadoTurno <> 'TERMINADO' AND "
+                        . "tu.estadoTurno <> 'CANCELADO')";
+                $dataTur = DB::select(DB::raw($query));
+                if(count($dataTur) > 0){
+                    $data[$i]->numeroTurnos = $dataTur[0]->numTurnos;
+                }
+            }
+            $response->getBody()->write(json_encode($data));
+            return $response;
 
 	}
 

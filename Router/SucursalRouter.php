@@ -19,6 +19,6 @@
 
 	$app->get('/empleado/empresa/{id}',"SucursalControl:empleadosporempresa");
 
-	$app->get('/servicio/{idServicio}/ciudad/{ciudad}/sucursal', "SucursalControl:getSucursalesByCiudad");
+	$app->get('/servicio/{idServicio}/ciudad/{ciudad}/posicion/{latitud}/{longitud}/sucursal', "SucursalControl:getSucursalesByCiudad");
 
 	

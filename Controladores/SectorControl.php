@@ -7,7 +7,7 @@ class SectorControl{
 
 	function getAll(Request $request, Response $response) {
 	    $response = $response->withHeader('Content-type', 'application/json');
-	    $data = Sector::all();
+	    $data = Sector::select("*")->where("estado","=","ACTIVO")->get();
 	    if(count($data) == 0){
 	      $response = $response->withStatus(404);
 	    }

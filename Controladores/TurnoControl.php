@@ -576,7 +576,7 @@ class TurnoControl{
                 ."idEmpleado = ".$data[$i]->idEmpleado." AND "
                 ."idServicio = ".$data[$i]->idServicio;
         $dataTiempo = DB::select(DB::raw($query));
-        if ($dataTiempo[0]->turnoActual == null){
+        if (count($dataTiempo) == 0){
           $data[$i]->turnoActual = 0;
         }else{
           $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
@@ -601,11 +601,16 @@ class TurnoControl{
                         ."WHERE "
                         ."idEmpleado = ".$data[$i]->idEmpleado." AND "
                         ."idServicio = ".$data[$i]->idServicio." AND "
-                        ."idCliente = ".$data[$i]->idCliente." AND "
+                        //."idCliente = ".$data[$i]->idCliente." AND "
                         ."estadoTurno = 'TERMINADO' LIMIT 1";
         $dataTiempo = DB::select(DB::raw($query));
         if(count($dataTiempo) > 0){
-            $data[$i]->tiempoEstimado = strval(($dataTiempo[0]->tiempoEstimado / 60))." minutos";
+            $val = ceil(($dataTiempo[0]->tiempoEstimado / 60));
+            $str = " minuto";
+            if($val != 1){
+                $str .= "s";
+            }
+            $data[$i]->tiempoEstimado = strval($val).$str;
         }
         
       }

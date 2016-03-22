@@ -159,7 +159,16 @@ class EmpresaControl{
         return $response;
     }
 
-    
+    function empresaactivas(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = Empresa::select('*')
+                ->where('estado','=','ACTIVO')->get();
+        if(count($data) == 0){
+          $response = $response->withStatus(404);
+        }
+        $response->getBody()->write($data);
+        return $response;
+    }
 
 
 }

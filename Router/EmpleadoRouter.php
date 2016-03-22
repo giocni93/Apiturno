@@ -23,3 +23,6 @@ $app->get('/empleado/{idEmpleado}/estadoOnline', "EmpleadoControl:getEstadoEmple
 $app->put('/empleado/{idEmpleado}/estadoOnline',"EmpleadoControl:updateEstadoEmpleado");
 
 $app->put('/empleado/foto/{id}',"EmpleadoControl:fotoperfil");
+
+$app->get('/empleado/reporte/{idsucursal}/{fechainicial}/{fechafinal}',"EmpleadoControl:reporteempleado");
+//$app->get('/empleado/reporte/{idsucursal}',"EmpleadoControl:reporteempleado");

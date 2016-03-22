@@ -626,5 +626,28 @@ class EmpleadoControl{
       $response->getBody()->write($respuesta);
       return $response;
     }
+    
+    function reporteempleado(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $idsucursal = $request->getAttribute("idsucursal");
+        $fechainicial = $request->getAttribute("fechainicial");
+        $fechafinal = $request->getAttribute("fechafinal");
+        $empl = Empleado::select('id','nombres','apellidos')
+                ->where('idSucursal','=',$idsucursal)
+                ->get();
+        for($i=0;$i<count($empl);$i++){
+            /*$suma = Ingreso::select('id')
+                        ->where('idEmpleado','=',$empl[$i]->id)
+                        ->sum('valor');*/
+            $tur = Turno::select('turno.id')
+                        ->where('turno.estadoTurno','=','TERMINADO')
+                        ->where('turno.idEmpleado','=',$empl[$i]->id)
+                        ->whereBetween('turno.fechaSolicitud',array($fechainicial,$fechafinal))
+                        ->count();
+            $empl[$i]['contador'] = $tur;
+        }
+        $response->getBody()->write($empl);
+        return $response;
+    }
 
 }

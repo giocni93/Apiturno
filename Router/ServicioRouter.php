@@ -10,3 +10,4 @@ $app->get('/getallservicio',"ServicioControl:getAllservis");
 $app->get('/sector/{idSector}/servicio',"ServicioControl:getServiciosBySector");
 $app->get('/servicio/{idServicio}/sucursal/{idSucursal}/precios',"ServicioControl:getPreciosByServicioSucursal");
 $app->get('/empresa/{idempresa}/sucursal/servicio',"ServicioControl:serviciossucursales");
+$app->get('/servicio/empleado',"ServicioControl:getAllservicios");

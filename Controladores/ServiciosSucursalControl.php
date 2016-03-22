@@ -13,6 +13,8 @@ class ServiciosSucursalControl{
 	    		$servicio = new ServiciosSucursal;
 	    		$servicio->idServicio =	 $data['servicios'][$i]['idservicio'];
 	    		$servicio->idSucursal =  $data['servicios'][$i]['idsucursal'];
+                        $servicio->precio = '0';
+                        $servicio->precioVIP = '0';
 	    		$servicio->save();
 	    	}
 	    	

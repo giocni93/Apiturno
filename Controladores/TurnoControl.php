@@ -210,7 +210,7 @@ class TurnoControl{
                     ->get();
           for($i = 0; $i < count($turnos); $i++){
               $query = "SELECT "
-                        ."COALESCE((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes),0) as tiempoEstimado "
+                        ."(COALESCE(AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)),0) * turnosFaltantes.faltantes) as tiempoEstimado "
                         ."FROM "
                         ."( "
                         ."  SELECT "
@@ -220,19 +220,19 @@ class TurnoControl{
                         ."    WHERE "
                         ."    t.idEmpleado = ".$idEmpleado." AND "
                         ."    t.idServicio = ".$idServicio." AND "
-                        ."    t.fechaSolicitud <= '".$turnos[$i]->fechaSolicitud."' AND "
+                        ."    t.fechaSolicitud < '".$turnos[$i]->fechaSolicitud."' AND "
                         ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
                         .") as turnosFaltantes, "
                         ."turno "
                         ."WHERE "
                         ."idEmpleado = ".$idEmpleado." AND "
                         ."idServicio = ".$idServicio." AND "
-                        ."idCliente = ".$turnos[$i]->idCliente." AND "
+                        //."idCliente = ".$turnos[$i]->idCliente." AND "
                         ."estadoTurno = 'TERMINADO' LIMIT 1";
                 $dataTiempo = DB::select(DB::raw($query));
                 if(count($dataTiempo) > 0){
                     //VARIFICAR SI YA PASO UN TIEMPO PARAMETRIZDO PARA AVISARLE
-                    $tiempo = ($dataTiempo[0]->tiempoEstimado / 60);
+                    $tiempo = ceil(($dataTiempo[0]->tiempoEstimado / 60));
                     if($tiempo < 5){
                         try {
                             $tu = Turno::select("*")
@@ -246,7 +246,7 @@ class TurnoControl{
                     //ANVIAR NOTIFICACION
                     $payload = array(
                         'title'         => "Turno movil",
-                        'msg'           => "Ya esta cerca tu turno, solo falta ".round($tiempo)." minutos",
+                        'msg'           => "Ya esta cerca tu turno, solo falta ".$tiempo." minutos",
                         'std'           => 0,
                         'idServicio'    => "0"
                     );
@@ -584,7 +584,7 @@ class TurnoControl{
         
         //CALCULAR TIEMPO
         $query = "SELECT "
-                        ."COALESCE((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes),0) as tiempoEstimado "
+                        ."(COALESCE(AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)),0) * turnosFaltantes.faltantes) as tiempoEstimado "
                         ."FROM "
                         ."( "
                         ."  SELECT "
@@ -594,7 +594,7 @@ class TurnoControl{
                         ."    WHERE "
                         ."    t.idEmpleado = ".$data[$i]->idEmpleado." AND "
                         ."    t.idServicio = ".$data[$i]->idServicio." AND "
-                        ."    t.fechaSolicitud <= '".$data[$i]->fechaSolicitud."' AND "
+                        ."    t.fechaSolicitud < '".$data[$i]->fechaSolicitud."' AND "
                         ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
                         .") as turnosFaltantes, "
                         ."turno "

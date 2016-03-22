@@ -225,7 +225,8 @@ class EmpleadoControl{
     for($i = 0; $i < count($data); $i++){
       //CALCULAR TIEMPO
       $query = "SELECT "
-                ."SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes)) as tiempoEstimado "
+                ."((COALESCE(AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)),0) * turnosFaltantes.faltantes)) as tiempoEstimado, "
+                . "turnosFaltantes.faltantes as turnFaltantes "
                 ."FROM "
                 ."( "
                 ."  SELECT "
@@ -271,6 +272,10 @@ class EmpleadoControl{
         if(count($dataTiempo) > 0){
             $val = ceil(($dataTiempo[0]->tiempoEstimado / 60));
             $str = " minuto";
+            if($val == 0){
+                //5 min
+                $val = ceil(5 * $dataTiempo[0]->turnFaltantes);
+            }
             if($val != 1){
                 $str .= "s";
             }
@@ -316,7 +321,8 @@ class EmpleadoControl{
     for($i = 0; $i < count($data); $i++){
       //CALCULAR TIEMPO
       $query = "SELECT "
-                ."SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * turnosFaltantes.faltantes)) as tiempoEstimado "
+                ."((COALESCE(AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)),0) * turnosFaltantes.faltantes)) as tiempoEstimado, "
+                . "turnosFaltantes.faltantes as turnFaltantes "
                 ."FROM "
                 ."( "
                 ."  SELECT "
@@ -362,6 +368,10 @@ class EmpleadoControl{
         if(count($dataTiempo) > 0){
             $val = ceil(($dataTiempo[0]->tiempoEstimado / 60));
             $str = " minuto";
+            if($val == 0){
+                //5 min
+                $val = ceil(5 * $dataTiempo[0]->turnFaltantes);
+            }
             if($val != 1){
                 $str .= "s";
             }
@@ -538,18 +548,19 @@ class EmpleadoControl{
       for($i = 0; $i < count($data); $i++){
         //CALCULAR TIEMPO
         $query = "SELECT "
-                  ."TIME_FORMAT(SEC_TO_TIME((AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)) * ( "
-                  ."  SELECT "
-                  ."    count(t.id) as faltantes "
-                  ."    FROM "
-                  ."    turno as t "
-                  ."    WHERE "
-                  ."    t.idEmpleado = ".$data[$i]->idEmpleado." AND "
-                  ."    t.idServicio = ".$data[$i]->idServicio." AND "
-                  ."    t.estadoTurno <> 'TERMINADO' AND "
-                  ."    t.estadoTurno <> 'CANCELADO' "
-                  ."))),'%H:%i:%s') as tiempoEstimado "
-                  ."FROM "
+                ."((COALESCE(AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)),0) * turnosFaltantes.faltantes)) as tiempoEstimado, "
+                . "turnosFaltantes.faltantes as turnFaltantes "
+                ."FROM "
+                ."( "
+                ."  SELECT "
+                ."    count(t.id) as faltantes "
+                ."    FROM "
+                ."    turno as t "
+                ."    WHERE "
+                ."    t.idEmpleado = ".$data[$i]->idEmpleado." AND "
+                ."    t.idServicio = ".$data[$i]->idServicio." AND "
+                ."    t.estadoTurno <> 'TERMINADO' AND t.estadoTurno <> 'CANCELADO'"
+                .") as turnosFaltantes, "
                   ."turno "
                   ."WHERE idEmpleado = ".$data[$i]->idEmpleado." AND "
                   ."idServicio = ".$data[$i]->idServicio." AND "
@@ -557,8 +568,8 @@ class EmpleadoControl{
                   ."LIMIT 1";
           $dataTiempo = DB::select(DB::raw($query));
           $query = "SELECT "
-                    ."COALESCE(MAX(tu.turno),0) as turnoActual, "
-                    ."COALESCE(CONCAT(cl.nombres,' ',cl.apellidos),'') as cliente "
+                    ."tu.turno as turnoActual, "
+                    ."CONCAT(cl.nombres,' ',cl.apellidos) as cliente "
                     ."FROM turno as tu "
                     ."INNER JOIN "
                     ."cliente as cl "
@@ -566,14 +577,31 @@ class EmpleadoControl{
                     ."WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND "
                     ."tu.idServicio = ".$data[$i]->idServicio." AND "
                     ."tu.estadoTurno = 'ATENDIENDO' OR "
-                    ."tu.estadoTurno = 'CONFIRMADO' LIMIT 1";
-          $dataCliente = DB::select(DB::raw($query));
-          $data[$i]->tiempoEstimado = $dataTiempo[0]->tiempoEstimado;
-          if($data[$i]->tiempoEstimado == null){
-            $data[$i]->tiempoEstimado = "00:00:00";
+                    ."tu.estadoTurno = 'CONFIRMADO' OR tu.estadoTurno = 'SOLICITADO' "
+                    . "ORDER BY "
+                    . "tu.fechaSolicitud DESC "
+                    . "LIMIT 1";
+        $dataCliente = DB::select(DB::raw($query));
+        if(count($dataTiempo) > 0){
+            $val = ceil(($dataTiempo[0]->tiempoEstimado / 60));
+            $str = " minuto";
+            if($val == 0){
+                //5 min
+                $val = ceil(5 * $dataTiempo[0]->turnFaltantes);
+            }
+            if($val != 1){
+                $str .= "s";
+            }
+            $data[$i]->tiempoEstimado = strval($val).$str;
+        }else{
+            $data[$i]->tiempoEstimado = "0 minutos";
+        }
+
+          if(count($dataCliente) > 0){
+              $data[$i]->turnoActual = $dataCliente[0]->turnoActual;
+              $data[$i]->cliente = $dataCliente[0]->cliente;
           }
-          $data[$i]->turnoActual = $dataCliente[0]->turnoActual;
-          $data[$i]->cliente = $dataCliente[0]->cliente;
+          
       }
       $response->getBody()->write(json_encode($data));
       return $response;

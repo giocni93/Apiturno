@@ -21,4 +21,4 @@
 
 	$app->get('/servicio/{idServicio}/ciudad/{ciudad}/posicion/{latitud}/{longitud}/sucursal', "SucursalControl:getSucursalesByCiudad");
 
-	
+	$app->get('/sucursal/activas',"SucursalControl:sucursalesactivas");

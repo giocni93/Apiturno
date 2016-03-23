@@ -293,5 +293,14 @@ class SucursalControl{
 	    $response->getBody()->write($sucursal);
 	    return $response;					
   	}
+        
+    function sucursalesactivas(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = Sucursal::select("sucursal.*")
+                        ->where('estado','=','ACTIVO')
+                        ->get();
+        $response->getBody()->write($data);
+        return $response;
+    }
 
 }

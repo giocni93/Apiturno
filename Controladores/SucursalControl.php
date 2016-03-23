@@ -164,31 +164,33 @@ class SucursalControl{
         $data = json_decode($request->getBody(),true);
         try{
             $id = $request->getAttribute("id");
+            $idEmpleado = $request->getAttribute("idEmpleado");
             $sucursal = Sucursal::find($id);
-            $sucursal->nombre   	 	=   $data['nombre'];
-            $sucursal->direccion    	=   $data['direccion'];
-            $sucursal->telefono    		=   $data['telefono'];
-            $sucursal->latitud     		=  	$data['latitud'];
-	        $sucursal->longitud    		=  	$data['longitud'];
-	        $sucursal->promedio    		=  	$data['promedio'];
-	        $sucursal->save();
+            $sucursal->nombre   	=       $data['nombre'];
+            $sucursal->direccion    	=       $data['direccion'];
+            $sucursal->telefono         =       $data['telefono'];
+            $sucursal->idMunicipio      =       $data['idMunicipio'];
+            $sucursal->latitud     	=  	$data['latitud'];
+            $sucursal->longitud    	=  	$data['longitud'];
+            //$sucursal->promedio    	=  	$data['promedio'];
+            $sucursal->save();
 
             $admin = Empleado::select("*")
-                        ->where("idSucursal","=",$id)
+                        ->where("id","=",$idEmpleado)
                         ->first();
-	        $admin->nombres       	=   $data['nombres'];
-	        $admin->apellidos		= 	$data['apellidos'];
+	        $admin->nombres       	=       $data['nombres'];
+	        $admin->apellidos	= 	$data['apellidos'];
 	        $admin->identificacion  = 	$data['identificacion'];
-	        $admin->telefono		= 	$data['telefonoadmin'];
-	        $admin->email 			=	$data['email'];
+	        $admin->telefono	= 	$data['telefonoadmin'];
+	        $admin->email 		=	$data['email'];
 	        $admin->save();
 
             $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
       		$response = $response->withStatus(200);
-		} catch (Exception $err) {
-	      $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
-	      $response = $response->withStatus(404);
-	    }
+	} catch (Exception $err) {
+            $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+            $response = $response->withStatus(404);
+	}
 	    $response->getBody()->write($respuesta);
 	    return $response;
 

@@ -234,5 +234,31 @@ class ServicioControl{
 	    $response->getBody()->write($data);
 	    return $response;
   	}
+        
+        
+    function calificarServicio(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $idServicio = $request->getAttribute("idServicio");
+        $data = json_decode($request->getBody(),true);
+        try{
+            $query = "INSERT INTO "
+                    . "calificacionservicio "
+                    . "VALUES ("
+                    . "'',"
+                    . "$idServicio,"
+                    . "$data->idEmpleado,"
+                    . "$data->idSucursal,"
+                    . "$data->calificacion);";
+            DB::select(DB::raw($query));
+
+            $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+            $response = $response->withStatus(200);
+        }catch(Exception $err){
+            $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+            $response = $response->withStatus(404);
+        }
+        $response->getBody()->write($respuesta);
+        return $response;
+    }
 
 }

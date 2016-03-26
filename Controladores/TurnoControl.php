@@ -164,8 +164,10 @@ class TurnoControl{
     $banTerminado = false;
 
     try {
-      $turno = Turno::select("turno.*","cliente.idPush")
-                      ->join("cliente","cliente.id","=","turno.idCliente")
+      $turno = Turno::select("turno.*","cliente.idPush","servicio.nombre as servicio","empleado.nombre as empleado")
+                    ->join("cliente","cliente.id","=","turno.idCliente")
+                    ->join("servicio","servicio.id","=","turno.idServicio")
+                    ->join("empleado","empleado.id","=","turno.idEmpleado")
                       ->where("turno.id","=",$id)
                       ->first();
       $turno->estadoTurno   =   $data['estadoTurno'];
@@ -254,6 +256,18 @@ class TurnoControl{
                     //array_push($vec, $turnos[$i]->idPush);
                 }
           }
+          //ENVIAR NOTIFICACION PARA QUE EL CLIENTE CALIFIQUE EL SERVICIO
+          $payload = array(
+                'title'         => "Turno movil",
+                'msg'           => "Califica el servicio",
+                'std'           => 10,
+                'idServicio'    => $turno->idServicio,
+                'idSucursal'    => $turno->idSucursal,
+                'idEmpleado'    => $turno->idEmpleado,
+                'empleado'    => $turno->empleado,
+                'servicio'    => $turno->servicio
+            );
+            enviarNotificacion(array($turno->idPush),$payload);
       }
       $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
       $response = $response->withStatus(200);

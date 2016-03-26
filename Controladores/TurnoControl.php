@@ -164,7 +164,7 @@ class TurnoControl{
     $banTerminado = false;
 
     try {
-      $turno = Turno::select("turno.*","cliente.idPush","servicio.nombre as servicio","empleado.nombre as empleado")
+      $turno = Turno::select("turno.*","cliente.idPush","servicio.nombre as servicio","empleado.nombres as empleado1","empleado.apellidos as empleado2")
                     ->join("cliente","cliente.id","=","turno.idCliente")
                     ->join("servicio","servicio.id","=","turno.idServicio")
                     ->join("empleado","empleado.id","=","turno.idEmpleado")
@@ -264,7 +264,7 @@ class TurnoControl{
                 'idServicio'    => $turno->idServicio,
                 'idSucursal'    => $turno->idSucursal,
                 'idEmpleado'    => $turno->idEmpleado,
-                'empleado'    => $turno->empleado,
+                'empleado'    => $turno->empleado1." ".$turno->empleado2,
                 'servicio'    => $turno->servicio
             );
             enviarNotificacion(array($turno->idPush),$payload);
@@ -304,7 +304,7 @@ class TurnoControl{
           $turnoSiguiente = $con_turno['turno'] + 1;
         }
 
-        for ($i=0; $i < $data["numeroTurnos"]; $i++) { 
+         for ($i=0; $i < $data["numeroTurnos"]; $i++) {
           try{
               $turno = new Turno;
               $turno->idCliente   =   $data['idCliente'];
@@ -339,7 +339,7 @@ class TurnoControl{
               $respuesta = json_encode(array('msg' => "error al pedir el turno", "std" => 0,"err" => $err->getMessage()));
               $response = $response->withStatus(404);
           }
-        }        
+}
 
     }else{
       $respuesta = json_encode(array('msg' => "Ya tienes un turno activo en este servicio", "std" => 0));
@@ -595,7 +595,7 @@ class TurnoControl{
         }else{
           $data[$i]->turnoActual = $dataTiempo[0]->turnoActual;
         }
-        
+
         //CALCULAR TIEMPO
         $query = "SELECT "
                         ."(COALESCE(AVG(TIMESTAMPDIFF(SECOND,fechaInicio,fechaFinal)),0) * turnosFaltantes.faltantes) as tiempoEstimado "
@@ -626,7 +626,7 @@ class TurnoControl{
             }
             $data[$i]->tiempoEstimado = strval($val).$str;
         }
-        
+
       }
       $response->getBody()->write(json_encode($data));
       return $response;

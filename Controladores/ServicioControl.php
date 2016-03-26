@@ -15,7 +15,7 @@ class ServicioControl{
 	        $servicio->estado      =  $data['estado'];
 	        $servicio->save();
 	        //$val = $servicio->id;
-	        
+
 	        $servisector = new ServiciosSector;
 	        $servisector->idSector		=	$data['idSector'];
 	        $servisector->idServicio	= 	$servicio->id;
@@ -141,7 +141,7 @@ class ServicioControl{
             $response->getBody()->write($data);
             return $response;
   	}
-        
+
         function getServiciosByEmpleado(Request $request, Response $response){
             $response = $response->withHeader('Content-type', 'application/json');
             $idEmpleado = $request->getAttribute("idEmpleado");
@@ -214,9 +214,9 @@ class ServicioControl{
                             ->join('sector','sector.id','=','serviciossector.idSector')
                             ->where('serviciossector.idSector','=',$empresa[$i]->idSector)
                             ->get();
-            $empresa[$i]['servicio'] = $servi;                
-        }            
-        
+            $empresa[$i]['servicio'] = $servi;
+        }
+
 
         $response->getBody()->write($empresa);
         return $response;
@@ -234,22 +234,20 @@ class ServicioControl{
 	    $response->getBody()->write($data);
 	    return $response;
   	}
-        
-        
-    function calificarServicio(Request $request, Response $response){
+
+		function calificarServicio(Request $request, Response $response){
         $response = $response->withHeader('Content-type', 'application/json');
         $idServicio = $request->getAttribute("idServicio");
         $data = json_decode($request->getBody(),true);
         try{
             $query = "INSERT INTO "
-                    . "calificacionservicio "
+                    . "calificacionservicio (idServicio,idEmpleado,idSucursal,calificacion) "
                     . "VALUES ("
-                    . "'',"
                     . "$idServicio,"
-                    . "$data->idEmpleado,"
-                    . "$data->idSucursal,"
-                    . "$data->calificacion);";
-            DB::select(DB::raw($query));
+                    . "".$data['idEmpleado'].","
+                    . "".$data['idSucursal'].","
+                    . "".$data['calificacion'].")";
+            DB::statement(DB::raw($query));
 
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
             $response = $response->withStatus(200);

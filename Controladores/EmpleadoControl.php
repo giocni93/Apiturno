@@ -13,7 +13,21 @@ class EmpleadoControl{
     $response->getBody()->write($data);
     return $response;
   }
-
+  
+  function getallactivos(Request $request, Response $response){
+      $response = $response->withHeader('Content-type', 'application/json');
+        $data = Empleado::select('empleado.nombres','empleado.apellidos','empleado.telefono','empleado.email',
+                'empleado.identificacion','empleado.id','sucursal.nombre as sucursal','empleado.estado',
+                'sucursal.id as idsucursal','empresa.razonSocial','empresa.id as idempresa')
+                    ->join('sucursal','sucursal.id','=','empleado.idSucursal')
+                    ->join('empresa','empresa.id','=','sucursal.idEmpresa')
+                    ->where('empleado.idperfil','=','2')
+                    ->get();
+        
+        $response->getBody()->write($data);
+        return $response;
+  }
+  
   function getById(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $id = $request->getAttribute("id");
@@ -72,6 +86,35 @@ class EmpleadoControl{
     }
     $response->getBody()->write($respuesta);
     return $response;
+  }
+  
+  function postEmpleado(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $data = json_decode($request->getBody(),true);
+
+    try{
+        $empleado = new Empleado;
+        $empleado->idSucursal       =   $data['idSucursal'];
+        $empleado->identificacion   =   $data['identificacion'];
+        $empleado->email            =   $data['email'];
+        $empleado->nombres          =   $data['nombres'];
+        $empleado->apellidos        =   $data['apellidos'];
+        $empleado->telefono         =   $data['telefono'];
+        $empleado->pass             =   sha1($data['pass']);
+        $empleado->logo             =   '/imagenes/users-10.png';
+        $empleado->idPerfil         =   '2';
+        $empleado->estado           =   "ACTIVO";
+        $empleado->estadoOnline     =   "INACTIVO";
+        $empleado->save();
+
+        $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+        $response = $response->withStatus(200);
+    }catch(Exception $err){
+        $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+        $response = $response->withStatus(404);
+    }
+        $response->getBody()->write($respuesta);
+        return $response;
   }
 
   public function delete(Request $request, Response $response)

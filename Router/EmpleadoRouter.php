@@ -1,7 +1,9 @@
 <?php
 $app->get('/empleado', "EmpleadoControl:getAll");
+$app->get('/empleado/sucursal', "EmpleadoControl:getallactivos");
 $app->get('/empleado/{id}', "EmpleadoControl:getById");
 $app->post('/empleado', "EmpleadoControl:post");
+$app->post('/empleadoAdmin', "EmpleadoControl:postEmpleado");
 $app->delete('/empleado/{id}', "EmpleadoControl:delete");
 $app->put('/empleado/{id}',"EmpleadoControl:update");
 $app->post('/empleado/sesion', "EmpleadoControl:sesion");

@@ -5,8 +5,8 @@ use Slim\Http\Response;
 class ServiciosEmpleadoControl{
 
 	function guardarserviciosempleado(Request $request, Response $response){
-		$response = $response->withHeader('Content-type', 'application/json');
-        $data = json_decode($request->getBody(),true);
+            $response = $response->withHeader('Content-type', 'application/json');
+            $data = json_decode($request->getBody(),true);
         try{
             $servicio = new ServiciosEmpleado;
             $servicio->idEmpleado   =  $data['idEmpleado'];
@@ -29,6 +29,17 @@ class ServiciosEmpleadoControl{
                         ->where("idEmpleado","=",$id)
                         ->get();
         $response->getBody()->write($data);
+        return $response;
+    }
+    
+    function eliminarservicios(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        $id = $request->getAttribute("idempleado");
+        $tipo = ServiciosEmpleado::select("*")
+                            ->where("idEmpleado","=",$id)
+                            ->delete();
+        $response->getBody()->write($tipo);
         return $response;
     }
 

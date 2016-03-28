@@ -19,7 +19,7 @@ class EmpresaControl{
             $empresa->email         =   $data['email'];
             $empresa->telefono      =   $data['telefono'];
             $empresa->contacto      =   $data['contacto'];
-            $empresa->promedio      =   $data['promedio'];
+            $empresa->promedio      =   '0';
             $empresa->pass          =   sha1($data['pass']);
             $empresa->estado        =   "INACTIVO";
             $empresa->save();

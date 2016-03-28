@@ -1,6 +1,7 @@
 <?php
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class IngresoControl{
 
@@ -38,7 +39,7 @@ class IngresoControl{
             
             $sucu[$i]['sucursal'] = $turno;
                 for($j=0;$j<count($turno);$j++){
-                    $ingreso = Ingreso::select('valor','idServicio','idEmpleado')
+                        $ingreso = Ingreso::select('valor','idServicio','idEmpleado')
                             ->where('idServicio','=',$turno[$j]->idServicio)
                             ->where('idEmpleado','=',$turno[$j]->idEmpleado)
                             ->sum('valor');
@@ -52,6 +53,68 @@ class IngresoControl{
 
 
 
+    }
+    
+    function contabilidadsector(Request $request, Response $response){
+        $response = $response->withHeader('Content-type','application/json');
+        $id = $request->getAttribute("idSector");
+        $fechainicial = $request->getAttribute("fechainicial");
+        $fechafinal = $request->getAttribute("fechafinal");
+        $data = SectorEmpresa::select('sectorempresa.idEmpresa','empresa.razonSocial')
+                ->join('empresa','empresa.id','=','sectorempresa.idEmpresa')
+                ->where('idSector','=',$id)
+                ->get();
+        for($i=0;$i<count($data);$i++){
+            $sucu = Sucursal::select('sucursal.id','sucursal.nombre')
+                    ->where('sucursal.idEmpresa','=',$data[$i]->idEmpresa)
+                    ->get();
+            $data[$i]['sucu'] = $sucu;
+            for($j=0;$j<count($sucu);$j++){
+                $empl = Empleado::select('empleado.id as idempleado')
+                        ->where('idSucursal','=',$sucu[$j]->id)
+                        ->get();
+                $sucu[$j]['idEmpleado'] = $empl;
+                for($k=0;$k<count($empl);$k++){
+                    $ingreso = Ingreso::select('ingresos.valor')
+                                ->where('ingresos.idEmpleado','=',$empl[$k]->idempleado)
+                                ->whereBetween('ingresos.fecha',array($fechainicial,$fechafinal))
+                                ->sum('ingresos.valor');
+                    $empl[$k]['valor'] = $ingreso;
+                }
+            }
+        }
+        $response->getBody()->write($data);
+        return $response;
+    }
+    
+    function contabilidadsectores(Request $request, Response $response){
+        $response = $response->withHeader('Content-type','application/json');
+        $id = $request->getAttribute("idSector");
+        $data = SectorEmpresa::select('sectorempresa.idSector','empresa.razonSocial','sucursal.nombre',
+                                'empleado.nombres','ingresos.idServicio','ingresos.valor')
+                                ->join('empresa','empresa.id','=','sectorempresa.idEmpresa')
+                                ->join('sucursal','sucursal.idEmpresa','=','empresa.id')
+                                ->join('empleado','empleado.idSucursal','=','sucursal.id')
+                                ->join('ingresos','ingresos.idEmpleado','=','empleado.id')
+                                ->where('sectorempresa.idSector','=',$id)
+                                ->sum('ingresos.valor');
+        $response->getBody()->write($data);
+        return $response;
+    }
+    
+    function contasector(Request $request, Response $response){
+        $response = $response->withHeader('Content-type','application/json');
+        $id = $request->getAttribute("idSector");
+        $data = DB::select(DB::raw("select sectorempresa.id,empresa.razonSocial"
+                . " from sectorempresa "
+                . "inner join empresa on empresa.id = sectorempresa.idEmpresa "
+                //. "inner join sucursal on sucursal.idEmpresa = empresa.id "
+                //. "inner join empleado on empleado.idSucursal = sucursal.id "
+                //. "inner join ingresos on ingresos.idEmpleado = empleado.id "
+                . "where sectorempresa.idSector = ".$id." "
+                . " "));
+        $response->getBody()->write($data);
+        return $response;
     }
 	
 }

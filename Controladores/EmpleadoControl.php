@@ -146,7 +146,7 @@ class EmpleadoControl{
       $empleado = Empleado::select("*")
                           ->where("id","=",$id)
                           ->first();
-      //$empleado->identificacion   =   $data['identificacion'];
+      $empleado->identificacion   =   $data['identificacion'];
       $empleado->email            =   $data['email'];
       $empleado->nombres          =   $data['nombres'];
       $empleado->apellidos        =   $data['apellidos'];

@@ -286,7 +286,8 @@ class SucursalControl{
 	    					->get();
 	    			for($i=0;$i<count($sucursal);$i++){
 	    				$empleado = Empleado::select('empleado.nombres','empleado.apellidos',
-	    					'empleado.identificacion','empleado.estado','empleado.id')
+	    					'empleado.identificacion','empleado.estado','empleado.id',
+                                                'empleado.telefono','empleado.email')
 	    					->where('empleado.idSucursal','=',$sucursal[$i]->id)
 	    					->where('empleado.idPerfil','=',2)
 	    					->get();
@@ -300,6 +301,18 @@ class SucursalControl{
         $response = $response->withHeader('Content-type', 'application/json');
         $data = Sucursal::select("sucursal.*")
                         ->where('estado','=','ACTIVO')
+                        ->get();
+        $response->getBody()->write($data);
+        return $response;
+    }
+    
+     function sucursalebyempresaactivas(Request $request, Response $response) {
+        $response = $response->withHeader('Content-type', 'application/json');
+        $id = $request->getAttribute("id");
+        $data = Sucursal::select("sucursal.*","empresa.razonSocial")
+                                    ->join('empresa','empresa.id','=','sucursal.idEmpresa')
+                        ->where("idEmpresa","=",$id)
+                        ->where('sucursal.estado','=','ACTIVO')
                         ->get();
         $response->getBody()->write($data);
         return $response;

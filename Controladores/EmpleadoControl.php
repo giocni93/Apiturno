@@ -151,6 +151,7 @@ class EmpleadoControl{
       $empleado->nombres          =   $data['nombres'];
       $empleado->apellidos        =   $data['apellidos'];
       $empleado->telefono         =   $data['telefono'];
+      $empleado->idSucursal       =   $data['idSucursal'];
       $empleado->save();
       $respuesta = json_encode(array('msg' => "Modificado correctamente", "std" => 1));
       $response = $response->withStatus(200);

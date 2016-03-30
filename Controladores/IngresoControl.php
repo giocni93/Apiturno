@@ -102,19 +102,5 @@ class IngresoControl{
         return $response;
     }
     
-    function contasector(Request $request, Response $response){
-        $response = $response->withHeader('Content-type','application/json');
-        $id = $request->getAttribute("idSector");
-        $data = DB::select(DB::raw("select sectorempresa.id,empresa.razonSocial"
-                . " from sectorempresa "
-                . "inner join empresa on empresa.id = sectorempresa.idEmpresa "
-                //. "inner join sucursal on sucursal.idEmpresa = empresa.id "
-                //. "inner join empleado on empleado.idSucursal = sucursal.id "
-                //. "inner join ingresos on ingresos.idEmpleado = empleado.id "
-                . "where sectorempresa.idSector = ".$id." "
-                . " "));
-        $response->getBody()->write($data);
-        return $response;
-    }
 	
 }

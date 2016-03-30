@@ -13,12 +13,12 @@ class SectorEmpresaControl{
         		->get();
         		
         		for($i=0;$i<count($servi);$i++){
-        			$serviciosector = ServiciosSector::select('serviciossector.idServicio','servicio.nombre','serviciossector.idSector')
-        						->join('servicio','servicio.id','=','serviciossector.idServicio')
-								->where('serviciossector.idSector','=',$servi[$i]->idSector)
-                                                                ->where('servicio.estado','=','ACTIVO')
-								->get();
-        			$servi[$i]['servicio'] = $serviciosector;	
+                            $serviciosector = ServiciosSector::select('serviciossector.idServicio','servicio.nombre','serviciossector.idSector')
+                                        ->join('servicio','servicio.id','=','serviciossector.idServicio')
+                                                ->where('serviciossector.idSector','=',$servi[$i]->idSector)
+                                                ->where('servicio.estado','=','ACTIVO')
+                                                ->get();
+                            $servi[$i]['servicio'] = $serviciosector;	
         		}
         	$response->getBody()->write(json_encode($servi));
 		    return $response;
@@ -59,6 +59,25 @@ class SectorEmpresaControl{
                 $data[$i]['sucursales'] = $sucu;
             }
             
+            $response->getBody()->write(json_encode($data));
+            return $response;
+        }
+        
+        function contasector(Request $request, Response $response){
+            $response = $response->withHeader('Content-type', 'application/json');//sum(ingresos.valor) as total,
+            $id = $request->getAttribute("idSector");
+            $fechainicial = $request->getAttribute("fechainicial");
+            $fechafinal = $request->getAttribute("fechafinal");
+            $data = DB::select(DB::raw("select sum(ingresos.valor) as total,ingresos.fecha,sectorempresa.id,"
+                    . "empresa.razonSocial,sucursal.nombre"
+                    . " from sectorempresa "
+                    . "inner join empresa on empresa.id = sectorempresa.idEmpresa "
+                    . "inner join sucursal on sucursal.idEmpresa = empresa.id "
+                    . "inner join empleado on empleado.idSucursal = sucursal.id "
+                    . "inner join ingresos on ingresos.idEmpleado = empleado.id "
+                    . "where sectorempresa.idSector = ".$id." and ingresos.fecha BETWEEN '".$fechainicial."' and "
+                    . "'".$fechafinal."' "
+                    . "GROUP BY empresa.razonSocial"));
             $response->getBody()->write(json_encode($data));
             return $response;
         }

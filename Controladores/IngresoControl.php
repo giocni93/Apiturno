@@ -102,5 +102,55 @@ class IngresoControl{
         return $response;
     }
     
+    function contabilidadsucursal(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');//sum(ingresos.valor) as total,
+            $id = $request->getAttribute("idSector");
+            $fechainicial = $request->getAttribute("fechainicial");
+            $fechafinal = $request->getAttribute("fechafinal");
+            $data = DB::select(DB::raw("select sum(ingresos.valor) as total,ingresos.fecha,"
+                    . "empresa.razonSocial,sucursal.nombre"
+                    . " from sectorempresa "
+                    . "inner join empresa on empresa.id = sectorempresa.idEmpresa "
+                    . "inner join sucursal on sucursal.idEmpresa = empresa.id "
+                    . "inner join empleado on empleado.idSucursal = sucursal.id "
+                    . "inner join ingresos on ingresos.idEmpleado = empleado.id "
+                    . "where sucursal.id = ".$id." and ingresos.fecha BETWEEN '".$fechainicial."' and "
+                    . "'".$fechafinal."' "
+                    . "GROUP BY empresa.razonSocial"));
+            $response->getBody()->write(json_encode($data));
+            return $response;
+    }
+    
+    function contasucursales(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');//sum(ingresos.valor) as total,
+        $id = $request->getAttribute("idsucursal");
+        $data = DB::select(DB::raw("select sucursal.nombre,sucursal.telefono,sucursal.direccion,sucursal.estado,"
+                . "sum(ingresos.valor) as total,empresa.razonSocial,sucursal.id from empresa "
+                . "inner join sucursal on sucursal.idEmpresa = empresa.id "
+                . "inner join empleado on empleado.idSucursal = sucursal.id "
+                . "inner join ingresos on ingresos.idEmpleado = empleado.id "
+                . "where empresa.id = ".$id." GROUP BY sucursal.nombre "));
+        $response->getBody()->write(json_encode($data));
+            return $response;
+    }
+    
+    function contabilidadempleado(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $id = $request->getAttribute("idempleado");
+        $fechainicial = $request->getAttribute("fechainicial");
+        $fechafinal = $request->getAttribute("fechafinal");
+        $data = DB::select(DB::raw("select CONCAT(empleado.nombres,' ',empleado.apellidos) as cliente,
+                empleado.identificacion,empleado.telefono,sum(ingresos.valor) as total,sucursal.nombre,
+                sucursal.direccion,empresa.razonSocial,empleado.logo,empleado.email,
+                count(ingresos.idServicio) as termindaos
+                from ingresos
+                inner join empleado on empleado.id = ingresos.idEmpleado
+                inner join sucursal on sucursal.id = empleado.idSucursal
+                inner join empresa on empresa.id = sucursal.idEmpresa
+                where ingresos.idEmpleado = ".$id." and ingresos.fecha BETWEEN '".$fechainicial."' and "
+                . "'".$fechafinal."'"));
+        $response->getBody()->write(json_encode($data));
+        return $response;
+    }
 	
 }

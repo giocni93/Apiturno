@@ -587,7 +587,32 @@ class EmpleadoControl{
     {
       $idEmpleado= $request->getAttribute("idEmpleado");
       $idServicio= $request->getAttribute("idServicio");
-      $query = "SELECT emp.id as idEmpleado,ser.id as idServicio,CONCAT(emp.nombres, ' ', emp.apellidos) AS empleado,ser.nombre as servicio, '' as tiempoEstimado, '' as cliente, '' as turnoActual, su.nombre as sucursal, em.razonSocial as Empresa, su.id as idSucursal FROM empleado emp INNER JOIN serviciosempleado seremp ON(seremp.idEmpleado = emp.id) INNER JOIN servicio ser ON(ser.id = seremp.idServicio) INNER JOIN sucursal su ON(su.id = emp.idSucursal) INNER JOIN empresa em ON(em.id = su.idEmpresa) WHERE emp.id = $idEmpleado AND ser.id = $idServicio AND emp.estadoOnline = 'ACTIVO' AND ser.estado = 'ACTIVO'";
+      $query = "SELECT DISTINCT "
+              . "emp.id as idEmpleado,"
+              . "ser.id as idServicio,"
+              . "CONCAT(emp.nombres, ' ', emp.apellidos) AS empleado,"
+              . "ser.nombre as servicio, "
+              . "'' as tiempoEstimado, "
+              . "'' as cliente, "
+              . "'' as turnoActual, "
+              . "su.nombre as sucursal, "
+              . "em.razonSocial as Empresa, "
+              . "su.id as idSucursal "
+              . "FROM "
+              . "empleado emp "
+              . "INNER JOIN "
+              . "serviciosempleado seremp "
+              . "ON(seremp.idEmpleado = emp.id) "
+              . "INNER JOIN servicio ser "
+              . "ON(ser.id = seremp.idServicio) "
+              . "INNER JOIN sucursal su "
+              . "ON(su.id = emp.idSucursal) "
+              . "INNER JOIN empresa em "
+              . "ON(em.id = su.idEmpresa) "
+              . "WHERE emp.id = $idEmpleado AND "
+              . "ser.id = $idServicio AND "
+              . "emp.estadoOnline = 'ACTIVO' AND "
+              . "ser.estado = 'ACTIVO'";
       $data = DB::select(DB::raw($query));
       for($i = 0; $i < count($data); $i++){
         //CALCULAR TIEMPO
@@ -620,8 +645,8 @@ class EmpleadoControl{
                     ."ON(cl.id = tu.idCliente) "
                     ."WHERE tu.idEmpleado = ".$data[$i]->idEmpleado." AND "
                     ."tu.idServicio = ".$data[$i]->idServicio." AND "
-                    ."tu.estadoTurno = 'ATENDIENDO' OR "
-                    ."tu.estadoTurno = 'CONFIRMADO' OR tu.estadoTurno = 'SOLICITADO' "
+                    ."(tu.estadoTurno = 'ATENDIENDO' OR "
+                    ."tu.estadoTurno = 'CONFIRMADO' OR tu.estadoTurno = 'SOLICITADO') "
                     . "ORDER BY "
                     . "tu.fechaSolicitud DESC "
                     . "LIMIT 1";
@@ -641,11 +666,13 @@ class EmpleadoControl{
             $data[$i]->tiempoEstimado = "0 minutos";
         }
 
-          if(count($dataCliente) > 0){
-              $data[$i]->turnoActual = $dataCliente[0]->turnoActual;
-              $data[$i]->cliente = $dataCliente[0]->cliente;
-          }
-          
+        $data[$i]->turnoActual = 0;
+        $data[$i]->cliente = "";
+        if(count($dataCliente) > 0){
+            $data[$i]->turnoActual = $dataCliente[0]->turnoActual;
+            $data[$i]->cliente = $dataCliente[0]->cliente;
+        }
+
       }
       $response->getBody()->write(json_encode($data));
       return $response;

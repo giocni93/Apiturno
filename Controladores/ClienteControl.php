@@ -60,14 +60,20 @@ class ClienteControl{
                     ->where("idFace","=",$data['idFace'])
                     ->where("estado","=","ACTIVO")
                     ->first();
+    $email = null;
+    $pass = "";
+    if($data['email'] != ""){
+        $email = $data['email'];
+        $pass = sha1($email);
+    }
     if($cliente == null){
         try{
             $cliente = new Cliente;
-            $cliente->email     =   null;
+            $cliente->email     =   $email;
             $cliente->nombres   =   $data['nombres'];
             $cliente->apellidos =   $data['apellidos'];
             $cliente->telefono  =   "";
-            $cliente->pass      =   "";
+            $cliente->pass      =   $pass;
             $cliente->idPush    =   "01";//$data['idPush'];
             $cliente->idFace    =   $data['idFace'];//$data['idFace'];
             $cliente->estado    =   "ACTIVO";
@@ -78,6 +84,18 @@ class ClienteControl{
             $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
             $response = $response->withStatus(404);
         }
+    }else{
+      try{
+          $cliente->email     =   $email;
+          $cliente->pass      =   $pass;
+          $cliente->idFace    =   $data['idFace'];
+          $cliente->save();
+          $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
+          $response = $response->withStatus(200);
+      }catch(Exception $err){
+          $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+          $response = $response->withStatus(404);
+      }
     }
     $respuesta = json_encode(array("std" => 1, "cliente" => $cliente, "msg" => "Ok"));
     $response->getBody()->write($respuesta);

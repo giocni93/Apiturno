@@ -256,6 +256,29 @@ class TurnoControl{
                     //array_push($vec, $turnos[$i]->idPush);
                 }
           }
+          //BUSCAR PRECIO DEL SERVICIO
+          $valorServicio = ServiciosSucursal::select("*")
+                  ->where("idServicio","=",$turno->idServicio)
+                  ->where("idSucursal","=",$turno->idSucursal)
+                  ->first();
+          $valor = $valorServicio->precio;
+          if($turno->tipoTurno == 2){
+              $valor = $valorServicio->precioVIP;
+          }
+          if($valor != null && $valor != 0){
+              //INSERTAR EN INGRESOS
+            try{
+              $ingreso = new Ingreso();  
+              $ingreso->idServicio    =   $turno->idServicio;
+              $ingreso->idEmpleado    =   $turno->idEmpleado;
+              $ingreso->valor         =   $valor;
+              $ingreso->save();
+            }catch(Exception $ex){
+
+            }
+          }
+          
+          
           //ENVIAR NOTIFICACION PARA QUE EL CLIENTE CALIFIQUE EL SERVICIO
           $payload = array(
                 'title'         => "Turno movil",

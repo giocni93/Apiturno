@@ -38,3 +38,26 @@
       curl_close($ch);
       return $res;
   }
+
+  function enviarNotificacionIos($idPush,$notification) {
+      $apiKey = 'AIzaSyC1TNQb7IC15-PJLHbiGugkGylIQ6rXjZ4';
+      $headers = array('Content-Type:application/json',"Authorization:key=$apiKey");
+
+      $data = array(
+          'to' => $idPush,
+          'content_available' => true,
+          'notification' => $notification
+      );
+
+      $ch = curl_init();
+      curl_setopt ($ch, CURLOPT_ENCODING, 'gzip');
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+      curl_setopt($ch, CURLOPT_URL, "https://gcm-http.googleapis.com/gcm/send");
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+      $res = curl_exec($ch);
+      curl_close($ch);
+      return $res;
+  }

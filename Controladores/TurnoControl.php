@@ -185,7 +185,12 @@ class TurnoControl{
             'std'           => 0,
             'idServicio'    => "0"
         );
+        $notification = array(
+            'body' => "Tu turno ha sido aceptado."
+            'title' => "Aceptación de turno."
+        );
         enviarNotificacion(array($turno->idPush),$payload);
+        enviarNotificacionIos($turno->idPush,$notification);
       }
       if($turno->estadoTurno == "CANCELADO"){
         $payload = array(
@@ -194,7 +199,12 @@ class TurnoControl{
             'std'           => 0,
             'idServicio'    => "0"
         );
+        $notification = array(
+            'body' => "Tu turno no ha sido aceptado."
+            'title' => "Cancelación de turno."
+        );
         enviarNotificacion(array($turno->idPush),$payload);
+        enviarNotificacionIos($turno->idPush,$notification);
       }
       $turno->save();
       if($banTerminado){
@@ -252,7 +262,12 @@ class TurnoControl{
                         'std'           => 0,
                         'idServicio'    => "0"
                     );
+                     $notification = array(
+                          'body' => "Ya esta cerca tu turno, solo falta ".$tiempo." minutos"
+                          'title' => "Informacion de Turno."
+                      );
                     enviarNotificacion(array($turnos[$i]->idPush),$payload);
+                    enviarNotificacionIos($turnos[$i]->idPush,$notification);
                     //array_push($vec, $turnos[$i]->idPush);
                 }
           }
@@ -300,6 +315,11 @@ class TurnoControl{
     }
     $response->getBody()->write($respuesta);
     return $response;
+  }
+
+  function notificacionesIOS()
+  {
+    # code...
   }
 
   public function postTurno(Request $request, Response $response){
@@ -362,7 +382,7 @@ class TurnoControl{
               $respuesta = json_encode(array('msg' => "error al pedir el turno", "std" => 0,"err" => $err->getMessage()));
               $response = $response->withStatus(404);
           }
-}
+  }
 
     }else{
       $respuesta = json_encode(array('msg' => "Ya tienes un turno activo en este servicio", "std" => 0));

@@ -36,16 +36,31 @@ class PerfilpermisosControl{
   	}
 
   	function validarpermisos(Request $request, Response $response){
-  		$response = $response->withHeader('Content-type', 'application/json');
-	    $data = json_decode($request->getBody(),true);
+            $response = $response->withHeader('Content-type', 'application/json');
 	    $idperfil = $request->getAttribute("idperfil");
-	    $idpermiso = $request->getAttribute("idpermiso");
-	    $data = Perfilpermisos::select('idpermiso')
-	    						->where('idperfil','=',$idperfil)
-	    						->where('idpermiso','=',$idpermiso)
-	    						->get();
-	    				$response->getBody()->write($data);
-    					return $response;
+	    $data = Perfilpermisos::select('idpermiso','idmodulo')
+                                ->where('idperfil','=',$idperfil)
+                                ->get();
+                $response->getBody()->write($data);
+                return $response;
   	}
+        
+        function modulopermisoperfil(Request $request, Response $response){
+            $response = $response->withHeader('Content-type', 'application/json');
+            $idperfil = $request->getAttribute("idperfil");
+            $data = Perfilpermisos::select('idmodulo','idperfil')
+                        ->where('idperfil','=',$idperfil)
+                        ->groupBy('idmodulo')
+                        ->get();
+            for($i=0;$i<count($data);$i++){
+                $permisos = Perfilpermisos::select('idpermiso')
+                                ->where('idperfil','=',$data[$i]->idperfil)
+                                ->where('idmodulo','=',$data[$i]->idmodulo)
+                                ->get();
+                $data[$i]['permisos'] = $permisos;
+            }
+            $response->getBody()->write($data);
+            return $response;
+        }
 
 }

@@ -124,12 +124,16 @@ class IngresoControl{
     function contasucursales(Request $request, Response $response){
         $response = $response->withHeader('Content-type', 'application/json');//sum(ingresos.valor) as total,
         $id = $request->getAttribute("idsucursal");
+        $fechainicial = $request->getAttribute("fechainicial");
+        $fechafinal = $request->getAttribute("fechafinal");
         $data = DB::select(DB::raw("select sucursal.nombre,sucursal.telefono,sucursal.direccion,sucursal.estado,"
                 . "sum(ingresos.valor) as total,empresa.razonSocial,sucursal.id from empresa "
                 . "inner join sucursal on sucursal.idEmpresa = empresa.id "
                 . "inner join empleado on empleado.idSucursal = sucursal.id "
                 . "inner join ingresos on ingresos.idEmpleado = empleado.id "
-                . "where empresa.id = ".$id." GROUP BY sucursal.nombre "));
+                . "where empresa.id = ".$id." and ingresos.fecha BETWEEN '".$fechainicial."' and "
+                . "'".$fechafinal."' "
+                . "GROUP BY sucursal.nombre "));
         $response->getBody()->write(json_encode($data));
             return $response;
     }

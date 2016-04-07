@@ -156,5 +156,23 @@ class IngresoControl{
         $response->getBody()->write(json_encode($data));
         return $response;
     }
+    
+    function contaempleadosucursal(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $id = $request->getAttribute("idsucursal");
+        $fechainicial = $request->getAttribute("fechainicial");
+        $fechafinal = $request->getAttribute("fechafinal");
+        $data = DB::select(DB::raw("select CONCAT(empleado.nombres,' ',empleado.apellidos) as empleado,"
+                . "empleado.identificacion,sucursal.nombre,ingresos.idEmpleado,sum(ingresos.valor) as total,"
+                . "empleado.email,empleado.telefono,empleado.estado "
+                . "from sucursal "
+                . "inner join empleado on empleado.idSucursal = sucursal.id "
+                . "inner join ingresos on ingresos.idEmpleado = empleado.id "
+                . "where sucursal.id = ".$id." and ingresos.fecha BETWEEN '".$fechainicial."' and "
+                . "'".$fechafinal."'"
+                . "GROUP BY ingresos.idEmpleado"));
+        $response->getBody()->write(json_encode($data));
+        return $response;
+    }
 	
 }

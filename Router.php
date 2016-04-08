@@ -24,3 +24,4 @@
   include_once 'Router/SectorEmpresaRouter.php';
   include_once 'Router/TipoturnosucursalRouter.php';
   include_once 'Router/IngresoRouter.php';
+  include_once 'Router/GaleriaRouter.php';

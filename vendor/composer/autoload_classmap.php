@@ -23,6 +23,8 @@ return array(
     'EmpresaControl' => $baseDir . '/Controladores/EmpresaControl.php',
     'EstadoTurno' => $baseDir . '/Modelos/EstadoTurno.php',
     'EstadoTurnoControl' => $baseDir . '/Controladores/EstadoTurnoControl.php',
+    'Galeria' => $baseDir . '/Modelos/Galeria.php',
+    'GaleriaControl' => $baseDir . '/Controladores/GaleriaControl.php',
     'Ingreso' => $baseDir . '/Modelos/Ingreso.php',
     'IngresoControl' => $baseDir . '/Controladores/IngresoControl.php',
     'Modulo' => $baseDir . '/Modelos/Modulo.php',

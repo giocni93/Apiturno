@@ -27,4 +27,8 @@ $app->put('/empleado/{idEmpleado}/estadoOnline',"EmpleadoControl:updateEstadoEmp
 $app->put('/empleado/foto/{id}',"EmpleadoControl:fotoperfil");
 
 $app->get('/empleado/reporte/{idsucursal}/{fechainicial}/{fechafinal}',"EmpleadoControl:reporteempleado");
+
+$app->get('/empleado/buscar/{peticion}',"EmpleadoControl:encontrarempleado");
+$app->post('/empleado/email',"EmpleadoControl:enviaremail");
+$app->put('/clave/empleado/{id}/{email}',"EmpleadoControl:claveupdate");
 //$app->get('/empleado/reporte/{idsucursal}',"EmpleadoControl:reporteempleado");

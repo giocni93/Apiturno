@@ -186,7 +186,7 @@ class TurnoControl{
             'idServicio'    => "0"
         );
         $notification = array(
-            'body' => "Tu turno ha sido aceptado."
+            'body' => "Tu turno ha sido aceptado.",
             'title' => "Aceptación de turno."
         );
         enviarNotificacion(array($turno->idPush),$payload);
@@ -200,7 +200,7 @@ class TurnoControl{
             'idServicio'    => "0"
         );
         $notification = array(
-            'body' => "Tu turno no ha sido aceptado."
+            'body' => "Tu turno no ha sido aceptado.",
             'title' => "Cancelación de turno."
         );
         enviarNotificacion(array($turno->idPush),$payload);
@@ -263,7 +263,7 @@ class TurnoControl{
                         'idServicio'    => "0"
                     );
                      $notification = array(
-                          'body' => "Ya esta cerca tu turno, solo falta ".$tiempo." minutos"
+                          'body' => "Ya esta cerca tu turno, solo falta ".$tiempo." minutos",
                           'title' => "Informacion de Turno."
                       );
                     enviarNotificacion(array($turnos[$i]->idPush),$payload);
@@ -361,7 +361,7 @@ class TurnoControl{
               $turno->estadoTurno =   "SOLICITADO";
               $turno->estado      =   "ACTIVO";
               $turno->save();
-              $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1, "numeroTurno" => $turnoSiguiente));
+              $respuesta = json_encode(array('msg' => "Su turno ha sido asignado satisfactoriamente.", "std" => 1, "numeroTurno" => $turnoSiguiente, 'idTurno' => $turno->id));
               $response = $response->withStatus(200);
 
               //ENVIAR NOTIFICACION AL EMPLEADO Y AL ADMINISTRADOR DE LA SUCURSAL

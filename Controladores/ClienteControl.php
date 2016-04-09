@@ -299,5 +299,16 @@ class ClienteControl{
         $response->getBody()->write($cli);
         return $response;
     }
+    
+    function vercliente(Request $request,Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $id = $request->getAttribute("id");
+        $data = Cliente::select("*")
+                        ->orwhere('idFace','=',$id)
+                        ->orwhere('id','=',$id)
+                        ->first();
+        $response->getBody()->write($data);
+        return $response;
+    }
 
 }

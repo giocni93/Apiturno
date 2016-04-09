@@ -745,6 +745,7 @@ class EmpleadoControl{
             $id = $data['id'];
             $user = $data['user'];
             $email = $data['email'];
+            $clave = bin2hex($bytes);
             $val = true;
             $para = $email;
             $nombre = $user;
@@ -766,7 +767,7 @@ class EmpleadoControl{
                           <br/>
 
                           <h4> Si deseas cambiar tu Contraseña, por favor sigue este enlace para ingresar una Nueva Contraseña</h4>
-                          <h4><a href='http://turnomovil.com/sesion.html#/cambiarclave/$id/$email' target='_blank'>Click Aqui, para cambiar la Contraseña</a></h4>
+                          <h4><a href='http://turnomovil.com/sesion.html#/cambiarclave/$id/$clave' target='_blank'>Click Aqui, para cambiar la Contraseña</a></h4>
                           <h4>Atentamente</h4>
                           <h4>Turnomovil.com</h4>
                         </body>
@@ -793,8 +794,8 @@ class EmpleadoControl{
         $response = $response->withHeader('Content-type', 'application/json');
         $data = json_decode($request->getBody(),true);
         $id = $request->getAttribute("id");
-        $para = $request->getAttribute("email");
-        $empleado = Empleado::select("*")
+        //$para = $request->getAttribute("email");
+        $empleado = Empleado::select("email","id")
                             ->where("id","=",$id)
                             ->first();
         $empleado->pass     =   sha1($data['pass']);
@@ -826,7 +827,7 @@ class EmpleadoControl{
         
             $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
             $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-            $cabeceras .= 'To: '.$empleado->nombres.' <'.$para.'>' . "\r\n";
+            $cabeceras .= 'To: '.$empleado->nombres.' <'.$empleado->email.'>' . "\r\n";
             $cabeceras .= 'From: Turnomovil.com' . "\r\n";
             
             mail($para, $titulo, $mensaje, $cabeceras);

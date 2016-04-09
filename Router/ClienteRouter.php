@@ -14,3 +14,4 @@ $app->put('/cliente/perfil/{id}',"ClienteControl:putperfilcliente");
 $app->post('/cliente/register',"ClienteControl:postcliente");
 $app->get('/idmax/cliente',"ClienteControl:maxId");
 $app->put('/cliente/{id}/contrasena',"ClienteControl:putContrasenaCliente");
+$app->get('/ver/cliente/{id}',"ClienteControl:vercliente");

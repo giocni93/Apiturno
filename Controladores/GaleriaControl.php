@@ -13,6 +13,7 @@ class GaleriaControl {
             $galeria = new Galeria;
             $galeria->logo  =  $data['logo'];
             $galeria->idSucursal = $data['idsucursal'];
+            $galeria->fecha = fechaHoraActual();
             $galeria->save();
             $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));
             $response = $response->withStatus(200);
@@ -21,6 +22,17 @@ class GaleriaControl {
             $response = $response->withStatus(404);
         }
         $response->getBody()->write($respuesta);
+        return $response;
+    }
+    
+    function getgaleria(Request $request,Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $id = $request->getAttribute("id");
+        $data = Galeria::select("galeria.*","sucursal.nombre")
+                      ->join('sucursal','sucursal.id','=','galeria.idSucursal')  
+                      ->where("galeria.idSucursal","=",$id)
+                      ->get();
+        $response->getBody()->write($data);
         return $response;
     }
     

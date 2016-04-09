@@ -621,7 +621,7 @@ class TurnoControl{
   public function getTurnosCliente(Request $request, Response $response)
   {
       $idCliente= $request->getAttribute("idCliente");
-      $query = "SELECT 0 as tiempoEstimado, tu.*,ser.nombre as servicio,su.latitud,su.longitud, su.nombre as sucursal, em.razonSocial as empresa, concat(emp.nombres, ' ', emp.apellidos) as empleado, '' as turnoActual FROM turno tu INNER JOIN servicio ser on (ser.id = tu.idServicio) INNER JOIN sucursal su on su.id = tu.idSucursal INNER JOIN empresa em on em.id = su.idEmpresa INNER JOIN empleado emp on emp.id = tu.idEmpleado where idCliente = '$idCliente' and (estadoturno = 'SOLICITADO' OR estadoturno = 'ATENDIENDO' OR estadoturno = 'CONFIRMADO')";
+      $query = "SELECT su.id as idSucursal, 0 as tiempoEstimado, tu.*,ser.nombre as servicio,su.latitud,su.longitud, su.nombre as sucursal, em.razonSocial as empresa, concat(emp.nombres, ' ', emp.apellidos) as empleado, '' as turnoActual FROM turno tu INNER JOIN servicio ser on (ser.id = tu.idServicio) INNER JOIN sucursal su on su.id = tu.idSucursal INNER JOIN empresa em on em.id = su.idEmpresa INNER JOIN empleado emp on emp.id = tu.idEmpleado where idCliente = '$idCliente' and (estadoturno = 'SOLICITADO' OR estadoturno = 'ATENDIENDO' OR estadoturno = 'CONFIRMADO')";
       $data = DB::select(DB::raw($query));
       for($i = 0; $i < count($data); $i++){
         $query = "SELECT "

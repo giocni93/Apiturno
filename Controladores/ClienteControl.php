@@ -56,16 +56,26 @@ class ClienteControl{
   function loginFacebook(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $data = json_decode($request->getBody(),true);
-    $cliente = Cliente::select("*")
-                    ->where("idFace","=",$data['idFace'])
-                    ->where("estado","=","ACTIVO")
-                    ->first();
+    $cliente = null;
     $email = null;
     $pass = "";
     if($data['email'] != ""){
         $email = $data['email'];
         $pass = sha1($email);
     }
+    
+    if($email != null){
+        $cliente = Cliente::select("*")
+                    ->where("email","=",$email)
+                    ->where("estado","=","ACTIVO")
+                    ->first();
+    }else{
+        $cliente = Cliente::select("*")
+                    ->where("idFace","=",$data['idFace'])
+                    ->where("estado","=","ACTIVO")
+                    ->first();
+    }
+    
     if($cliente == null){
         try{
             $cliente = new Cliente;
@@ -87,7 +97,7 @@ class ClienteControl{
     }else{
       try{
           $cliente->email     =   $email;
-          $cliente->pass      =   $pass;
+          //$cliente->pass      =   $pass;
           $cliente->idFace    =   $data['idFace'];
           $cliente->save();
           $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1));

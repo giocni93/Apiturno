@@ -18,7 +18,7 @@
   }
 
   function enviarNotificacion($array,$payload) {
-      $apiKey = 'AIzaSyCZlGhlftLINks2FNkwbk4Ub-D7sXTiH_4';
+      $apiKey = 'AIzaSyC1TNQb7IC15-PJLHbiGugkGylIQ6rXjZ4';
       $headers = array('Content-Type:application/json',"Authorization:key=$apiKey");
 
       $data = array(

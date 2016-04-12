@@ -1,6 +1,7 @@
 <?php
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class ClienteControl{
 
@@ -321,6 +322,57 @@ class ClienteControl{
         return $response;
     }
     
-    
+    function enviaremail(Request $request, Response $response){
+        try {
+            $response = $response->withHeader('Content-type', 'application/json');
+            $data = json_decode($request->getBody(),true);
+            $id = $data['id'];
+            
+            $cliente = Cliente::select('*')
+                        ->where('id','=',$id)
+                        ->first();
+            $respuesta = json_encode($cliente);
+            $response = $response->withStatus(200);
+            
+            $para = $cliente->email;
+            $user = $cliente->nombres+' '+$cliente->apellidos;
+            
+            $titulo = utf8_encode('Recuperacion de Clave [Turnomovil]');
+            
+            $mensaje = ""
+                    . "<html>
+                        <head>
+                          <title>". utf8_encode("Recuperación de Usuario o Contraseña") ."</title>
+                        </head>
+                        <body>          
+                        <img style='height:60px;' src='http://turnomovil.com/images/turnomovil.png' alt=''/>
+                          <h1>Hola, $user </h1><br/>
+                          <h4>Hemos Recibido una solicitud, para recuperar tu Usuario o  Contraseña</h4>
+
+                          <br/>    
+                            <h4>Usuario Turnomovil: $user</h4>
+                          <br/>
+
+                          <h4> Si deseas cambiar tu Contraseña, por favor sigue este enlace para ingresar una Nueva Contraseña</h4>
+                          <h4><a href='http://turnomovil.com/sesion.html#/cambiarclave/$id/$para' target='_blank'>Click Aqui, para cambiar la Contraseña</a></h4>
+                          <h4>Atentamente</h4>
+                          <h4>Turnomovil.com</h4>
+                        </body>
+                        </html>";
+            
+            $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+            $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+       
+            $cabeceras .= 'To: '.$user.' <'.$para.'>' . "\r\n";
+            $cabeceras .= 'From: Turnomovil.com' . "\r\n";
+            
+            mail($para, $titulo, $mensaje, $cabeceras);
+            
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+        $response->getBody()->write($respuesta);
+        return $response;
+    }
 
 }

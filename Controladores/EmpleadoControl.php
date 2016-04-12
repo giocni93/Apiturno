@@ -745,7 +745,7 @@ class EmpleadoControl{
             $id = $data['id'];
             $user = $data['user'];
             $email = $data['email'];
-            $clave = bin2hex($bytes);
+            //$clave = bin2hex($bytes);
             $val = true;
             $para = $email;
             $nombre = $user;
@@ -767,7 +767,7 @@ class EmpleadoControl{
                           <br/>
 
                           <h4> Si deseas cambiar tu Contraseña, por favor sigue este enlace para ingresar una Nueva Contraseña</h4>
-                          <h4><a href='http://turnomovil.com/sesion.html#/cambiarclave/$id/$clave' target='_blank'>Click Aqui, para cambiar la Contraseña</a></h4>
+                          <h4><a href='http://turnomovil.com/sesion.html#/cambiarclave/$id/$email' target='_blank'>Click Aqui, para cambiar la Contraseña</a></h4>
                           <h4>Atentamente</h4>
                           <h4>Turnomovil.com</h4>
                         </body>
@@ -795,13 +795,13 @@ class EmpleadoControl{
         $data = json_decode($request->getBody(),true);
         $id = $request->getAttribute("id");
         //$para = $request->getAttribute("email");
-        $empleado = Empleado::select("email","id")
+        $empleado = Empleado::select("*")
                             ->where("id","=",$id)
                             ->first();
         $empleado->pass     =   sha1($data['pass']);
         $empleado->save();
         
-        
+        $respuesta = json_encode(array('msg' => "Clave actualizada correctamente", "std" => 1));
         
         $clave = $data['pass'];
         
@@ -827,12 +827,11 @@ class EmpleadoControl{
         
             $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
             $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-            $cabeceras .= 'To: '.$empleado->nombres.' <'.$empleado->email.'>' . "\r\n";
+            $cabeceras .= 'To: '.$empleado->nombres.' <'.$empleado->email.'>' . "\r\n"; 
             $cabeceras .= 'From: Turnomovil.com' . "\r\n";
             
             mail($para, $titulo, $mensaje, $cabeceras);
-            
-        $respuesta = json_encode(array('msg' => "Clave actualizada correctamente", "std" => 1));
+        
         $response = $response->withStatus(200);
       } catch (Exception $err) {
         $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));

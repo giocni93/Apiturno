@@ -126,16 +126,69 @@ class ClienteControl{
         $cliente->pass      =   sha1($data['pass']);
         $cliente->idPush    =   "01";//$data['idPush'];
         $cliente->idFace    =   "01";//$data['idFace'];
-        $cliente->estado    =   "ACTIVO";
+        $cliente->estado    =   "INACTIVO";
         $cliente->save();
-        $respuesta = json_encode(array('msg' => "Guardado correctamente", "std" => 1, 'idCliente' => $cliente->id));
+        $respuesta = json_encode(array('msg' => "Guardado correctamente, revise su correo para activar su cuenta", "std" => 1, 'idCliente' => $cliente->id));
         $response = $response->withStatus(200);
+        
+        //ENVIAR ACTIVACION AL CORREO
+        $id = $cliente->id;
+        $para = $cliente->email;
+        $user = $cliente->nombres.' '.$cliente->apellidos;
+
+        $titulo = utf8_encode('Activacion de la cuenta [Turnomovil]');
+
+        $mensaje = ""
+                . "<html>
+                    <head>
+                      <title>". utf8_encode("Activacion de la cuenta") ."</title>
+                    </head>
+                    <body>          
+                    <img style='height:40px;' src='http://turnomovil.com/images/turnomovil.png' alt=''/>
+                      <h1>Hola, $user </h1><br/>
+                      <h4>Hemos Recibido una solicitud, para activar tu cuenta</h4>
+
+                      <br/>    
+                        <h4>Usuario Turnomovil: $user</h4>
+                      <br/>
+
+                      <h4> Si deseas activar tu cuenta, por favor sigue este enlace</h4>
+                      <h4><a href='http://turnomovil.com/api/cliente/$id/activar/cuenta' target='_blank'>Click Aqui, para activar la cuenta turnomovil</a></h4>
+                      <h4>Atentamente</h4>
+                      <h4>Turnomovil.com</h4>
+                    </body>
+                    </html>";
+
+        $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+        $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+
+        $cabeceras .= 'To: '.$user.' <'.$para.'>' . "\r\n";
+        $cabeceras .= 'From: Turnomovil.com' . "\r\n";
+
+        mail($para, $titulo, $mensaje, $cabeceras);
+        
+        
+        
     }catch(Exception $err){
         $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
         $response = $response->withStatus(404);
         //echo $respuesta;
     }
     $response->getBody()->write($respuesta);
+    return $response;
+  }
+  
+  function activarCuenta(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $id = $request->getAttribute("id");
+    $cliente = Cliente::select("*")
+                          ->where("id","=",$id)
+                          ->first();
+    if($cliente != null){
+        $cliente->estado = "ACTIVO";
+        $cliente->save();
+    }
+    $response->getBody()->write("BIEN");
     return $response;
   }
 
@@ -211,17 +264,26 @@ class ClienteControl{
   function login(Request $request, Response $response)
   {
     $response = $response->withHeader('Content-type', 'application/json');
+    $response = $response->withStatus(200);
     $data = json_decode($request->getBody(),true);
     //echo $data["email"];
     $cliente = Cliente::select("*")
                         ->where("email","=",$data["email"])
                         ->where("pass","=",sha1($data["pass"]))
-                        ->where("estado","=","ACTIVO")
                         ->first();
-    $respuesta = json_encode(array("std" => 1, "cliente" => $cliente, "msg" => "Ok"));
+    
     if($cliente == null){
       $respuesta = json_encode(array('cliente' => null, "std" => 0, "msg" => "Email o contraseña no validos."));
-      $response = $response->withStatus(404);
+    }else{
+        if($cliente->estado == "ACTIVO"){
+            $respuesta = json_encode(array("std" => 1, "cliente" => $cliente, "msg" => "Ok"));
+        }else{
+            if($cliente->estado == "INACTIVO"){
+                $respuesta = json_encode(array('cliente' => null, "std" => 0, "msg" => "Debe activar su cuenta ingresando a la dirección enviada a su correo"));
+            }else{
+                $respuesta = json_encode(array('cliente' => null, "std" => 0, "msg" => "Su cuenta ha sido desactivada por infringir las normas del sitio"));
+            }
+        }
     }
     $response->getBody()->write($respuesta);
     return $response;
@@ -313,6 +375,7 @@ class ClienteControl{
     
     function vercliente(Request $request,Response $response){
         $response = $response->withHeader('Content-type', 'application/json');
+        $response = $response->withStatus(200);
         $id = $request->getAttribute("id");
         $data = Cliente::select("*")
                         ->orwhere('idFace','=',$id)
@@ -323,58 +386,114 @@ class ClienteControl{
     }
     
     function enviaremail(Request $request, Response $response){
+      try {
+          $response = $response->withHeader('Content-type', 'application/json');
+          $data = json_decode($request->getBody(),true);
+          $id = $data['email'];
+
+          $cliente = Cliente::select('*')
+                      ->where('email','=',$id)
+                      ->first();
+
+          if($cliente == null){
+              $respuesta = json_encode(array("msg" => "El email ingresado no esta registrado en el sistema", "std" => 0));
+          }else{
+
+              $para = $cliente->email;
+              $user = $cliente->nombres.' '.$cliente->apellidos;
+
+              $titulo = utf8_encode('Recuperacion de Clave [Turnomovil]');
+
+              $mensaje = ""
+                      . "<html>
+                          <head>
+                            <title>". utf8_encode("Recuperación de Usuario o Contraseña") ."</title>
+                          </head>
+                          <body>
+                          <img style='height:40px;' src='http://turnomovil.com/images/turnomovil.png' alt=''/>
+                            <h1>Hola, $user </h1><br/>
+                            <h4>Hemos Recibido una solicitud, para recuperar tu Usuario o  Contraseña</h4>
+
+                            <br/>
+                              <h4>Usuario Turnomovil: $user</h4>
+                            <br/>
+
+                            <h4> Si deseas cambiar tu Contraseña, por favor sigue este enlace para ingresar una Nueva Contraseña</h4>
+                            <h4><a href='http://turnomovil.com/sesion.html#/cambiarclave/$id/$para' target='_blank'>Click Aqui, para cambiar la Contraseña</a></h4>
+                            <h4>Atentamente</h4>
+                            <h4>Turnomovil.com</h4>
+                          </body>
+                          </html>";
+
+              $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+              $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+
+              $cabeceras .= 'To: '.$user.' <'.$para.'>' . "\r\n";
+              $cabeceras .= 'From: Turnomovil.com' . "\r\n";
+
+              mail($para, $titulo, $mensaje, $cabeceras);
+              $respuesta = $respuesta = json_encode(array("msg" => "Se ha enviado un correo a la dirección especificada para recuperar su contraseña", "std" => 1));
+
+          }
+
+      } catch (Exception $exc) {
+          $respuesta = $respuesta = json_encode(array("msg" => "Error del servidor, ".$exc->getTraceAsString(), "std" => 0));
+      }
+      $response->getBody()->write($respuesta);
+      return $response;
+    }
+
+
+    function updateclave(Request $request, Response $response){
         try {
-            $response = $response->withHeader('Content-type', 'application/json');
-            $data = json_decode($request->getBody(),true);
-            $id = $data['id'];
-            
-            $cliente = Cliente::select('*')
-                        ->where('id','=',$id)
-                        ->first();
-            
-            
-            
-            $para = $cliente->email;
-            $user = $cliente->nombres.' '.$cliente->apellidos;
-            
-            $titulo = utf8_encode('Recuperacion de Clave [Turnomovil]');
-            
-            $mensaje = ""
+        $response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        $id = $request->getAttribute("id");
+        //$para = $request->getAttribute("email");
+        $cliente = Cliente::select("*")
+                            ->where("id","=",$id)
+                            ->first();
+        $cliente->pass     =   sha1($data['pass']);
+        $cliente->save();
+
+        $respuesta = json_encode(array('msg' => "Clave actualizada correctamente", "std" => 1));
+
+        $clave = $data['pass'];
+
+        $titulo = utf8_encode('Clave actualizada [Turnomovil]');
+
+        $mensaje = ""
                     . "<html>
                         <head>
-                          <title>". utf8_encode("Recuperación de Usuario o Contraseña") ."</title>
+                          <title>". utf8_encode("Nueva contraseña registrada") ."</title>
                         </head>
-                        <body>          
-                        <img style='width:230px' src='http://turnomovil.com/images/turnomovil.png' alt=''/>
-                          <h1>Hola, $user </h1><br/>
-                          <h4>Hemos Recibido una solicitud, para recuperar tu Usuario o  Contraseña</h4>
+                        <body>
+                        <img style='height:60px;' src='http://turnomovil.com/images/turnomovil.png' alt=''/>
+                          <h1>Has actualizado tu contraseña </h1><br/>
+                          <h4>Gracias por usar nuestros servicios</h4>
 
-                          <br/>    
-                            <h4>Usuario Turnomovil: $user</h4>
+                          <br/>
+                            <h4>Tu nueva contraseña es: $clave</h4>
                           <br/>
 
-                          <h4> Si deseas cambiar tu Contraseña, por favor sigue este enlace para ingresar una Nueva Contraseña</h4>
-                          <h4><a href='http://turnomovil.com/sesion.html#/cambiarclave/$id/$para' target='_blank'>Click Aqui, para cambiar la Contraseña</a></h4>
-                          <h4>Atentamente</h4>
-                          <h4>Turnomovil.com</h4>
+
                         </body>
                         </html>";
-            
+
             $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
             $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-       
-            $cabeceras .= 'To: '.$user.' <'.$para.'>' . "\r\n";
+            $cabeceras .= 'To: '.$cliente->nombres.' '.$cliente->apellidos.' <'.$cliente->email.'>' . "\r\n";
             $cabeceras .= 'From: Turnomovil.com' . "\r\n";
-            
-            mail($para, $titulo, $mensaje, $cabeceras);
-            $respuesta = json_encode($user);
-            $response = $response->withStatus(200);
-            
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-        $response->getBody()->write($respuesta);
-        return $response;
+
+            mail($cliente->email, $titulo, $mensaje, $cabeceras);
+
+        $response = $response->withStatus(200);
+      } catch (Exception $err) {
+        $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+        $response = $response->withStatus(404);
+      }
+      $response->getBody()->write($respuesta);
+      return $response;
     }
     
 }

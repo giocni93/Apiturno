@@ -317,5 +317,13 @@ class SucursalControl{
         $response->getBody()->write($data);
         return $response;
     }
+    
+    function getId(Request $request,Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $id = $request->getAttribute("id");
+        $data = Sucursal::find($id);
+        $response->getBody()->write($data);
+        return $response;
+    }
 
 }

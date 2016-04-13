@@ -24,3 +24,5 @@
 	$app->get('/sucursal/activas',"SucursalControl:sucursalesactivas");
         
         $app->get('/sucursalbyempresa/{id}', "SucursalControl:sucursalebyempresaactivas");
+        
+        $app->get('/sucursal/{id}',"SucursalControl:getId");

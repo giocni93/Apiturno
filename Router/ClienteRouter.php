@@ -16,4 +16,3 @@ $app->get('/idmax/cliente',"ClienteControl:maxId");
 $app->put('/cliente/{id}/contrasena',"ClienteControl:putContrasenaCliente");
 $app->get('/ver/cliente/{id}',"ClienteControl:vercliente");
 $app->post('/cliente/email',"ClienteControl:enviaremail");
-$app->put('/cliente/{id}/clave',"ClienteControl:updateclave");

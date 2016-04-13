@@ -345,7 +345,7 @@ class ClienteControl{
                           <title>". utf8_encode("Recuperación de Usuario o Contraseña") ."</title>
                         </head>
                         <body>          
-                        <img style='height:40px;' src='http://turnomovil.com/images/turnomovil.png' alt=''/>
+                        <img style='width:230px' src='http://turnomovil.com/images/turnomovil.png' alt=''/>
                           <h1>Hola, $user </h1><br/>
                           <h4>Hemos Recibido una solicitud, para recuperar tu Usuario o  Contraseña</h4>
 
@@ -376,59 +376,5 @@ class ClienteControl{
         $response->getBody()->write($respuesta);
         return $response;
     }
-
-    
-    function updateclave(Request $request, Response $response){
-        try {
-        $response = $response->withHeader('Content-type', 'application/json');
-        $data = json_decode($request->getBody(),true);
-        $id = $request->getAttribute("id");
-        //$para = $request->getAttribute("email");
-        $cliente = Cliente::select("*")
-                            ->where("id","=",$id)
-                            ->first();
-        $cliente->pass     =   sha1($data['pass']);
-        $cliente->save();
-        
-        $respuesta = json_encode(array('msg' => "Clave actualizada correctamente", "std" => 1));
-        
-        $clave = $data['pass'];
-        
-        $titulo = utf8_encode('Clave actualizada [Turnomovil]');
-        
-        $mensaje = ""
-                    . "<html>
-                        <head>
-                          <title>". utf8_encode("Nueva contraseña registrada") ."</title>
-                        </head>
-                        <body>          
-                        <img style='height:60px;' src='http://turnomovil.com/images/turnomovil.png' alt=''/>
-                          <h1>Has actualizado tu contraseña </h1><br/>
-                          <h4>Gracias por usar nuestros servicios</h4>
-
-                          <br/>    
-                            <h4>Tu nueva contraseña es: $clave</h4>
-                          <br/>
-
-                          
-                        </body>
-                        </html>";
-        
-            $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
-            $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-            $cabeceras .= 'To: '.$cliente->nombres.' '.$cliente->apellidos.' <'.$cliente->email.'>' . "\r\n"; 
-            $cabeceras .= 'From: Turnomovil.com' . "\r\n";
-            
-            mail($cliente->email, $titulo, $mensaje, $cabeceras);
-        
-        $response = $response->withStatus(200);
-      } catch (Exception $err) {
-        $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
-        $response = $response->withStatus(404);
-      }
-      $response->getBody()->write($respuesta);
-      return $response;
-    }
-    
     
 }

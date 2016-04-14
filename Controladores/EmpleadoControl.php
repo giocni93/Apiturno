@@ -724,7 +724,7 @@ class EmpleadoControl{
     function encontrarempleado(Request $request, Response $response){
         $response = $response->withHeader('Content-type', 'application/json');
         $peticion = $request->getAttribute("peticion");
-        $data = Empleado::select('nombres','apellidos','email','id')
+        $data = Empleado::select('nombres','apellidos','email','id','identificacion')
                     ->orwhere('identificacion','=',$peticion)
                     ->orwhere('email','=',$peticion)
                     ->first();

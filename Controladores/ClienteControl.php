@@ -419,7 +419,7 @@ class ClienteControl{
                             <br/>
 
                             <h4> Si deseas cambiar tu Contraseña, por favor sigue este enlace para ingresar una Nueva Contraseña</h4>
-                            <h4><a href='http://turnomovil.com/sesion.html#/cambiarclave/$id/$para' target='_blank'>Click Aqui, para cambiar la Contraseña</a></h4>
+                            <h4><a href='http://turnomovil.com/sesion.html#/cambiarclavecliente/$id/$para' target='_blank'>Click Aqui, para cambiar la Contraseña</a></h4>
                             <h4>Atentamente</h4>
                             <h4>Turnomovil.com</h4>
                           </body>
@@ -494,6 +494,22 @@ class ClienteControl{
       }
       $response->getBody()->write($respuesta);
       return $response;
+    }
+    
+    function validarcorreo(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $response = $response->withStatus(200);
+        $correo = $request->getAttribute("email");
+        $data = Cliente::select("email")
+                        ->where('email','=',$correo)
+                        ->first();
+        if($data != null){
+            $respuesta = json_encode(array("std" => 1, "msg" => "Este correo ya esta registrado"));
+        }else{
+            $respuesta = json_encode(array("std" => 0, "msg" => "Este correo esta disponible"));
+        }
+        $response->getBody()->write($respuesta);
+        return $response;
     }
     
 }

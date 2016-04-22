@@ -36,4 +36,24 @@ class GaleriaControl {
         return $response;
     }
     
+    function eliminargaleria(Request $request,Response $response){
+        try {
+            $response = $response->withHeader('Content-type', 'application/json');
+            $id = $request->getAttribute("id");
+            $servicio = Galeria::select("*")
+                            ->where("id","=",$id)
+                            ->delete();
+            $respuesta = json_encode(array('msg' => "Eliminado correctamente", "std" => 1));
+            $response = $response->withStatus(200);
+    	} catch (Exception $err) {
+	    	$respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+	    	$response = $response->withStatus(404);
+    	}
+            $response->getBody()->write($respuesta);
+            return $response;
+    }
+    
+    
+    
+    
 }

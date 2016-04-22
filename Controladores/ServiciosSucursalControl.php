@@ -97,5 +97,23 @@ class ServiciosSucursalControl{
 	    $response->getBody()->write($respuesta);
 	    	return $response;
 	}
+        
+        function agregartiempo(Request $request, Response $response){
+            try {
+                $response = $response->withHeader('Content-type', 'application/json');
+                $data = json_decode($request->getBody(),true);
+		    $id = $request->getAttribute("id");
+		    $servi = ServiciosSucursal::select("*")
+                          ->where("id","=",$id)
+                          ->first();
+                    $servi->minutos     =   $data['minutos'];
+		    $servi->save();
+                $respuesta = json_encode(array('msg' => "Tiempo modificado correctamente", "std" => 1));
+	      	$response = $response->withStatus(200);
+            } catch (Exception $err) {
+                $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+	        $response = $response->withStatus(404);
+            }
+        }
 
 }

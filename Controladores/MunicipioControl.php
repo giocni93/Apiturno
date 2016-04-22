@@ -27,9 +27,10 @@ class MunicipiosControl{
     function getMunicipioDepartamento(Request $request, Response $response){
         $response = $response->withHeader('Content-type', 'application/json');
         $id = $request->getAttribute("id");
-        $data = Municipio::select("*")
-                        ->where("id","=",$id)
-                        ->get();
+        $data = Municipio::select("municipio.*","departamento.nombre as departamento")
+                        ->join('departamento','departamento.id','=','municipio.idDepartamento')
+                        ->where("municipio.id","=",$id)
+                        ->first();
         $response->getBody()->write($data);
         return $response;
     }

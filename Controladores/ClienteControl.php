@@ -28,7 +28,7 @@ class ClienteControl{
   function getClienteByemail(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $email = $request->getAttribute("email");
-    $data = Cliente::select("nombres","apellidos","id")
+    $data = Cliente::select("nombres","apellidos","id","email")
                     ->where("email","=",$email)
                     ->first();
     if($data == null){

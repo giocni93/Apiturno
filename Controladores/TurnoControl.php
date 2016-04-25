@@ -396,6 +396,10 @@ class TurnoControl{
   public function postReserva(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $data = json_decode($request->getBody(),true);
+    $minutosServicio = ServiciosSucursal::select("minutos")
+                    ->where("idServicio","=",$data["idServicio"])
+                    ->where("idSucursal","=",$data["idSucursal"])
+                    ->first();
     try{
         $turno = new Turno;
         $turno->idCliente   =   $data['idCliente'];
@@ -411,7 +415,14 @@ class TurnoControl{
         $turno->reserva     =   "A";
         $turno->fechaReserva = $data['fechaReserva'];
         $turno->horaReserva = $data['horaReserva'];
-        $turno->horaFinalReserva = $data['horaFinalReserva'];
+        $horaInicial = $data['horaReserva'];
+        for ($i=0; $i < $data["cupos"] ; $i++) { 
+          $segundos_horaInicial=strtotime($horaInicial);
+          $segundos_minutoAnadir=$minutosServicio->minutos*60;
+          $nuevaHora=date("H:i",$segundos_horaInicial+$segundos_minutoAnadir);
+          $horaInicial = $nuevaHora;
+        }        
+        $turno->horaFinalReserva = $nuevaHora;
         $turno->save();
         $respuesta = json_encode(array('msg' => "Su turno ha sido asignado satisfactoriamente.", "std" => 1, 'idTurno' => $turno->id));
         $response = $response->withStatus(200);
@@ -436,6 +447,7 @@ class TurnoControl{
     }
     $response->getBody()->write($respuesta);
     return $response;
+    //echo $minutosServicio;
   }
 
   public function postTurnoAnonimo(Request $request, Response $response){

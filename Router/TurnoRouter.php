@@ -15,3 +15,5 @@ $app->get('/getbysucursal/{id}',"TurnoControl:getsucursalid");
 $app->get('/reporte/empleado/{id}/{fechainicial}/{fechafinal}',"TurnoControl:empleadomasturnos");
 $app->put('/aplazar/turno/{idTurno}/empleado/{idEmpleado}/servicio/{idServicio}',"TurnoControl:aplazarTurno");
 $app->put('/aplazar/cancelar/turno/{idTurno}/empleado/{idEmpleado}/servicio/{idServicio}',"TurnoControl:aplazarCancelarTurno");
+
+$app->post('/turno/reserva', "TurnoControl:postReserva");

@@ -32,3 +32,5 @@ $app->get('/empleado/buscar/{peticion}',"EmpleadoControl:encontrarempleado");
 $app->post('/empleado/email',"EmpleadoControl:enviaremail");
 $app->put('/clave/empleado/{id}/{email}',"EmpleadoControl:claveupdate");
 //$app->get('/empleado/reporte/{idsucursal}',"EmpleadoControl:reporteempleado");
+
+$app->get('/empleado/disponibles/{idServicio}/{idSucursal}/{fecha}/{hora}/{cupos}',"EmpleadoControl:empleadosDisponibles");

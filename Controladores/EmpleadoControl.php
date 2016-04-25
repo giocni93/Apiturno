@@ -841,4 +841,52 @@ class EmpleadoControl{
       return $response;
     }
     
+    function empleadosDisponibles(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $idServicio = $request->getAttribute("idServicio");
+    $idSucursal = $request->getAttribute("idSucursal");
+    $fecha = $request->getAttribute("fecha");
+    $hora = $request->getAttribute("hora");
+    $cupos = $request->getAttribute("cupos");
+    /*$data = ServiciosSucursal::select("minutos")
+                  ->where("idServicio","=",$idServicio)
+                  ->where("idSucursal","=",$idSucursal)
+                  ->first();
+    $minutos = "01:00:00";
+    if($data != null){
+        $minutos = $data->minutos;
+    }*/
+
+    $empleado = Empleado::select("*")
+                  ->where("idSucursal","=",$idSucursal)
+                  ->get();
+
+    //$horaFinal = "(sec_to_time(time_to_sec('$hora') + (time_to_sec('$hora') * $cupos)))";
+    $horaFinal = "ADDTIME('$hora', '0".$cupos.":00:00')";
+    $data = array();
+    for($i = 0; $i < count($empleado); $i++){
+        $query = "SELECT "
+                . "tur.id "
+                . "FROM "
+                . "turno tur "
+                . "WHERE "
+                . "tur.idServicio = $idServicio AND "
+                . "tur.idSucursal = $idSucursal AND "
+                . "tur.idEmpleado = ".$empleado[$i]->id." AND "
+                . "tur.fechaReserva = '$fecha' AND "
+                . "tur.reserva = 'R' AND "
+                . "(tur.estadoTurno <> 'TERMINADO' AND tur.estadoTurno <> 'CANCELADO') AND ("
+                . "(TIMESTAMP('$fecha','$hora') >= tur.horaReserva AND TIMESTAMP('$fecha','$hora') < tur.horaFinalReserva) OR "
+                . "(TIMESTAMP('$fecha',$horaFinal) > tur.horaReserva AND TIMESTAMP('$fecha',$horaFinal) <= tur.horaFinalReserva))";
+        //echo $query;
+        $disp = DB::select(DB::raw($query));
+        if(count($disp) == 0){
+          $data[] = $empleado[$i];
+        }
+    }
+
+    $response->getBody()->write(json_encode($data));
+    return $response;
+  }
+    
 }

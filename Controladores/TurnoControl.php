@@ -393,6 +393,51 @@ class TurnoControl{
     return $response;
   }
 
+  public function postReserva(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $data = json_decode($request->getBody(),true);
+    try{
+        $turno = new Turno;
+        $turno->idCliente   =   $data['idCliente'];
+        $turno->idEmpleado  =   $data['idEmpleado'];
+        $turno->idSucursal  =   $data['idSucursal'];
+        $turno->idServicio  =   $data['idServicio'];
+        $turno->tiempo      =   0;
+        $turno->turno       =   0;
+        $turno->turnoReal   =   0;
+        $turno->tipoTurno   =   1;
+        $turno->estadoTurno =   "SOLICITADO";
+        $turno->estado      =   "ACTIVO";
+        $turno->reserva     =   "A";
+        $turno->fechaReserva = $data['fechaReserva'];
+        $turno->horaReserva = $data['horaReserva'];
+        $turno->horaFinalReserva = $data['horaFinalReserva'];
+        $turno->save();
+        $respuesta = json_encode(array('msg' => "Su turno ha sido asignado satisfactoriamente.", "std" => 1, 'idTurno' => $turno->id));
+        $response = $response->withStatus(200);
+
+        //ENVIAR NOTIFICACION AL EMPLEADO Y AL ADMINISTRADOR DE LA SUCURSAL
+        $dataEmple = Empleado::select("idPush")
+           ->where("id","=",$data['idEmpleado'])
+           ->first();
+        if($dataEmple != null){
+            $payload = array(
+                'title'         => "Turno movil",
+                'msg'           => "Te han solicitado un turno",
+                'std'           => 1,
+                'idServicio'    => $data['idServicio']
+            );
+            enviarNotificacion(array($dataEmple->idPush),$payload);
+        }
+
+    }catch(Exception $err){
+        $respuesta = json_encode(array('msg' => "error al pedir el turno", "std" => 0,"err" => $err->getMessage()));
+        $response = $response->withStatus(404);
+    }
+    $response->getBody()->write($respuesta);
+    return $response;
+  }
+
   public function postTurnoAnonimo(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');
     $data = json_decode($request->getBody(),true);

@@ -75,6 +75,7 @@ class SectorControl{
             $sector->logo           =   $data['logo'];
             $sector->cupos          =   $data['cupos'];
             $sector->aleatorio      =   $data['aleatorio'];
+            $sector->aplicaReserva  =   $data['aplicaReserva'];
             $sector->save();
 
             

@@ -108,6 +108,8 @@ class SectorControl{
             $sector->nombre   	 	=   $data['nombre'];
             $sector->descripcion   =   $data['descripcion'];
             $sector->cupos          =   $data['cupos'];
+            $sector->aleatorio  =    $data['aleatorio'];
+            $sector->aplicaReserva = $data['aplicaReserva'];   
             $sector->save();
 
             

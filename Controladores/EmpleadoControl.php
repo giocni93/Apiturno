@@ -878,7 +878,7 @@ class EmpleadoControl{
                 . "tur.idSucursal = $idSucursal AND "
                 . "tur.idEmpleado = ".$empleado[$i]->id." AND "
                 . "tur.fechaReserva = '$fecha' AND "
-                . "tur.reserva = 'R' AND "
+                . "tur.reserva = 'A' AND "
                 . "(tur.estadoTurno <> 'TERMINADO' AND tur.estadoTurno <> 'CANCELADO') AND ("
                 . "(TIMESTAMP('$fecha','$hora') >= tur.horaReserva AND TIMESTAMP('$fecha','$hora') < tur.horaFinalReserva) OR "
                 . "(TIMESTAMP('$fecha',$horaFinal) > tur.horaReserva AND TIMESTAMP('$fecha',$horaFinal) <= tur.horaFinalReserva))";

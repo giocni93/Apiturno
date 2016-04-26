@@ -848,21 +848,25 @@ class EmpleadoControl{
     $fecha = $request->getAttribute("fecha");
     $hora = $request->getAttribute("hora");
     $cupos = $request->getAttribute("cupos");
-    /*$data = ServiciosSucursal::select("minutos")
+    $dataMitiempo = ServiciosSucursal::select("minutos")
                   ->where("idServicio","=",$idServicio)
                   ->where("idSucursal","=",$idSucursal)
                   ->first();
-    $minutos = "01:00:00";
+    $minutos = 60;
     if($data != null){
-        $minutos = $data->minutos;
-    }*/
+        $minutos = $dataMitiempo->minutos;
+    }
 
     $empleado = Empleado::select("*")
                   ->where("idSucursal","=",$idSucursal)
                   ->get();
 
     //$horaFinal = "(sec_to_time(time_to_sec('$hora') + (time_to_sec('$hora') * $cupos)))";
-    $horaFinal = "ADDTIME('$hora', '0".$cupos.":00:00')";
+    $tiempo = 0;
+    for($i = 0; $i < $cupos; $i++){
+      $tiempo += $minutos;
+    }
+    $horaFinal = "ADDTIME('$hora', SEC_TO_TIME($tiempo*60))";
     $data = array();
     for($i = 0; $i < count($empleado); $i++){
         $query = "SELECT "

@@ -881,7 +881,8 @@ class EmpleadoControl{
                 . "tur.reserva = 'A' AND "
                 . "(tur.estadoTurno <> 'TERMINADO' AND tur.estadoTurno <> 'CANCELADO') AND ("
                 . "(TIMESTAMP('$fecha','$hora') >= tur.horaReserva AND TIMESTAMP('$fecha','$hora') < tur.horaFinalReserva) OR "
-                . "(TIMESTAMP('$fecha',$horaFinal) > tur.horaReserva AND TIMESTAMP('$fecha',$horaFinal) <= tur.horaFinalReserva))";
+                . "(TIMESTAMP('$fecha','$hora') < tur.horaReserva AND TIMESTAMP('$fecha',$horaFinal) > tur.horaReserva))";
+                //. "(TIMESTAMP('$fecha',$horaFinal) > tur.horaReserva AND TIMESTAMP('$fecha',$horaFinal) <= tur.horaFinalReserva))";
         //echo $query;
         $disp = DB::select(DB::raw($query));
         if(count($disp) == 0){

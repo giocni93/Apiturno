@@ -17,3 +17,4 @@ $app->put('/aplazar/turno/{idTurno}/empleado/{idEmpleado}/servicio/{idServicio}'
 $app->put('/aplazar/cancelar/turno/{idTurno}/empleado/{idEmpleado}/servicio/{idServicio}',"TurnoControl:aplazarCancelarTurno");
 
 $app->post('/turno/reserva', "TurnoControl:postReserva");
+$app->get('/sucursal/{idSucursal}/idServicio/{idServicio}/fecha/{fechaReserva}/reservas', 'TurnoControl:getReservaBySucursal');

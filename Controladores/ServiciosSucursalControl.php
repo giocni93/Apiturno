@@ -116,4 +116,17 @@ class ServiciosSucursalControl{
             }
         }
 
+        function getTiempo(Request $request, Response $response)
+        {
+			$response = $response->withHeader('Content-type', 'application/json');
+            $idServicio = $request->getAttribute("idServicio");  
+            $idSucursal = $request->getAttribute("idSucursal");
+            $tiempo = ServiciosSucursal::select("minutos")
+            							->where("idServicio", "=", $idServicio)
+            							->where("idSucursal", "=", $idSucursal)
+            							->first();
+            $response->getBody()->write($tiempo);
+            return $response;
+        }
+
 }

@@ -10,6 +10,7 @@ $app->post('/empleado/sesion', "EmpleadoControl:sesion");
 $app->put('/empleado/{id}/idpush', "EmpleadoControl:updatePush");
 $app->get('/sucursal/{idSucursal}/{idServicio}/empleado', "EmpleadoControl:getEmpleadosBySucursal");
 $app->get('/sucursal/{idSucursal}/empleados/turnos', "EmpleadoControl:getEmpleadosBySucursal2");
+$app->get('/sucursal/{idSucursal}/empleados', "EmpleadoControl:getEmpleadosBySucursal3");
 $app->put('/empleado/{id}/pass',"EmpleadoControl:updatePass");
 $app->post('/empleado/login', "EmpleadoControl:sesionlogin");
 $app->post('/superadmi', "EmpleadoControl:postsuperadmin");

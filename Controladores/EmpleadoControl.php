@@ -437,6 +437,19 @@ class EmpleadoControl{
     $response->getBody()->write(json_encode($data));
     return $response;
   }
+  
+  function getEmpleadosBySucursal3(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $idSucursal = $request->getAttribute("idSucursal");
+    $query = "SELECT "
+            . "CONCAT(nombres,' ',apellidos) as empleado, "
+            . "id as idEmpleado "
+            . "FROM empleado "
+            . "WHERE idSucursal = ".$idSucursal;
+    $data= DB::select(DB::raw($query));
+    $response->getBody()->write(json_encode($data));
+    return $response;
+  }
 
   function sesionlogin(Request $request, Response $response){
     $response = $response->withHeader('Content-type', 'application/json');

@@ -445,7 +445,7 @@ class EmpleadoControl{
             . "CONCAT(nombres,' ',apellidos) as empleado, "
             . "id as idEmpleado "
             . "FROM empleado "
-            . "WHERE idSucursal = ".$idSucursal;
+            . "WHERE idPerfil = 2 AND idSucursal = ".$idSucursal;
     $data= DB::select(DB::raw($query));
     $response->getBody()->write(json_encode($data));
     return $response;
@@ -872,6 +872,7 @@ class EmpleadoControl{
 
     $empleado = Empleado::select("*")
                   ->where("idSucursal","=",$idSucursal)
+                  ->where("idPerfil","=",2)
                   ->get();
 
     //$horaFinal = "(sec_to_time(time_to_sec('$hora') + (time_to_sec('$hora') * $cupos)))";

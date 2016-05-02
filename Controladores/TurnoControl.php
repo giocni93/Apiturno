@@ -756,5 +756,19 @@ class TurnoControl{
     $response->getBody()->write(json_encode($data));
     return $response;
   }
+  
+  public function getTurnoreserva(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $idSucursal = $request->getAttribute("idSucursal");
+    $fecha = $request->getAttribute("fecha");
+    $query = "SELECT CONCAT( cliente.nombres,' ', cliente.apellidos ) AS cliente, turno.fechaReserva, turno.horaReserva, turno.horaFinalReserva
+            FROM turno
+            INNER JOIN cliente ON cliente.id = turno.idCliente
+            WHERE turno.fechaReserva =  '$fecha'
+            AND turno.idSucursal = $idSucursal";
+      $data = DB::select(DB::raw($query));
+      $response->getBody()->write(json_encode($data));
+      return $response;
+  }
 
 }

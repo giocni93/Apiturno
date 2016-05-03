@@ -772,4 +772,20 @@ class TurnoControl{
       return $response;
   }
 
+  public function getReservaByCliente(Request $request, Response $response)
+  {
+      $idCliente = $request->getAttribute("idCliente");
+      $fecha_actual = date("Y/m/d");
+      $query = "SELECT s.nombre AS nombreSucursal, se.nombre AS nombreServicio, t . * 
+                FROM turno t
+                INNER JOIN sucursal s ON s.id = t.idSucursal
+                INNER JOIN servicio se ON se.id = t.idServicio
+                WHERE t.idCliente ='$idCliente'
+                AND t.fechaReserva >=  '$fecha_actual'";
+      $data = DB::select(DB::raw($query));
+      $response->getBody()->write(json_encode($data));
+      return $response;
+
+  }
+
 }

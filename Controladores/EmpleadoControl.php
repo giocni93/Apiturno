@@ -216,10 +216,21 @@ class EmpleadoControl{
                     ->where("pass","=",sha1($data['pass']))
                     ->where("identificacion","=",$data['identificacion'])
                     ->first();
-    $respuesta = json_encode(array('empleado' => $data, "std" => $data->idPerfil));
+    
     if($data == null){
       $respuesta = json_encode(array('empleado' => null, "std" => 0));
       $response = $response->withStatus(404);
+    }else{
+        $data2 = Sucursal::select("sector.aplicaReserva")
+                ->join("sectorempresa","sectorempresa.idEmpresa","=","sucursal.idEmpresa")
+                ->join("sector","sector.id","=","sectorempresa.idSector")
+                    ->where("sucursal.id","=",$data->idSucursal)
+                    ->first();
+        $data['aplicaReserva'] = "NO";
+        if($data2 != null){
+            $data['aplicaReserva'] = $data2->aplicaReserva;
+        }
+        $respuesta = json_encode(array('empleado' => $data, "std" => $data->idPerfil));
     }
     $response->getBody()->write($respuesta);
     return $response;

@@ -34,4 +34,6 @@ $app->post('/empleado/email',"EmpleadoControl:enviaremail");
 $app->put('/clave/empleado/{id}/{email}',"EmpleadoControl:claveupdate");
 //$app->get('/empleado/reporte/{idsucursal}',"EmpleadoControl:reporteempleado");
 
+$app->get('/minutos/sucursal/{idSucursal}/servicio/{idServicio}',"EmpleadoControl:getTiempoBySucursalEmpleado");
+
 $app->get('/empleado/disponibles/{idServicio}/{idSucursal}/{fecha}/{hora}/{cupos}',"EmpleadoControl:empleadosDisponibles");

@@ -906,5 +906,18 @@ class EmpleadoControl{
     $response->getBody()->write(json_encode($data));
     return $response;
   }
+  
+  function getTiempoBySucursalEmpleado(Request $request, Response $response){
+    $response = $response->withHeader('Content-type', 'application/json');
+    $idSucursal = $request->getAttribute("idSucursal");
+    $idServicio = $request->getAttribute("idServicio");
+    $data = ServiciosSucursal::select("serviciossucursal.minutos")
+            ->where("serviciossucursal.idServicio","=",$idServicio)
+            ->where("serviciossucursal.idSucursal","=",$idSucursal)
+            ->first();
+
+    $response->getBody()->write(json_encode($data));
+    return $response;
+  }
     
 }

@@ -7,6 +7,7 @@ $app->post('/turno', "TurnoControl:postTurno");
 $app->get('/cliente/{idCliente}/turnos', "TurnoControl:getTurnosCliente");
 
 $app->post('/anonimo/turno', "TurnoControl:postTurnoAnonimo");
+$app->post('/anonimo/reserva', "TurnoControl:postReservaAnonimo");
 $app->get('/turno/pedidos/{id}/{fechainicial}/{fechafinal}',"TurnoControl:turnosxestado");
 $app->get('/turno/pedidos/servicio/{id}/{fechainicial}/{fechafinal}',"TurnoControl:turnoxservicio");
 $app->get('/turno/empresa/servicio/{id}/{fechainicial}/{fechafinal}',"TurnoControl:turnosempresa");

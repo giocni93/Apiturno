@@ -21,3 +21,4 @@ $app->get('/sucursal/{idSucursal}/idServicio/{idServicio}/fecha/{fechaReserva}/r
 $app->get('/reservas/idsucursal/{idSucursal}/fecha/{fechainicial}/{fechafinal}',"TurnoControl:getTurnoreserva");
 
 $app->get('/cliente/{idCliente}/reservas', 'TurnoControl:getReservaByCliente');
+$app->get('/ver/reserva/{idTurno}',"TurnoControl:verturnocalendario");

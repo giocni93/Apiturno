@@ -791,5 +791,18 @@ class TurnoControl{
       return $response;
 
   }
+  
+    function verturnocalendario(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $idturno = $request->getAttribute("idTurno");
+        $query = "SELECT CONCAT( cliente.nombres,' ', cliente.apellidos ) AS cliente, turno.fechaReserva, turno.horaReserva, turno.horaFinalReserva,turno.id,empleado.nombres  
+                FROM turno
+                INNER JOIN cliente ON cliente.id = turno.idCliente
+                INNER JOIN empleado ON empleado.id = turno.idEmpleado 
+                WHERE  turno.id = $idturno ";
+          $data = DB::select(DB::raw($query));
+          $response->getBody()->write(json_encode($data));
+          return $response;
+    }
 
 }

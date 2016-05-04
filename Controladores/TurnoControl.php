@@ -804,5 +804,23 @@ class TurnoControl{
           $response->getBody()->write(json_encode($data));
           return $response;
     }
+    
+    function cancelarservicio(Request $request, Response $response){
+      $response = $response->withHeader('Content-type', 'application/json');
+        $data = json_decode($request->getBody(),true);
+        try{
+            $id = $request->getAttribute("id");
+            $turno = Turno::find($id);
+            $turno->estado      =   'INACTIVO';
+            $turno->save();
+            $respuesta = json_encode(array('msg' => "Turno cancelado", "std" => 1));
+          $response = $response->withStatus(200);
+    } catch (Exception $err) {
+        $respuesta = json_encode(array('msg' => "error", "std" => 0,"err" => $err->getMessage()));
+        $response = $response->withStatus(404);
+      }
+        $response->getBody()->write($respuesta);
+        return $response;
+  }
 
 }

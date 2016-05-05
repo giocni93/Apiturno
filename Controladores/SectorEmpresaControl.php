@@ -81,5 +81,24 @@ class SectorEmpresaControl{
             $response->getBody()->write(json_encode($data));
             return $response;
         }
+        
+        function aplicaReserva(Request $request, Response $response){
+        $response = $response->withHeader('Content-type', 'application/json');
+        $id = $request->getAttribute("idSucursal");
+        $sucursal = Sucursal::select('sucursal.idEmpresa')
+                    ->where('sucursal.id','=',$id)
+                    ->first();
+        $sectorempresa = SectorEmpresa::select('sectorempresa.idSector')
+                        ->where('sectorempresa.idEmpresa','=',$sucursal->idEmpresa)
+                        ->get();
+            foreach ($sectorempresa as $row) {
+                $sector = Sector::select('sector.aplicaReserva')
+                                ->where('sector.id','=',$row->idSector)
+                                ->where('sector.aplicaReserva','=','SI')
+                                ->get();
+            }
+        $response->getBody()->write(json_encode($sector));
+        return $response;
+    }
 	
 }

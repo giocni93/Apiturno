@@ -839,7 +839,7 @@ class TurnoControl{
   public function getReservaByCliente(Request $request, Response $response)
   {
       $idCliente = $request->getAttribute("idCliente");
-      $fecha_actual = '2016-04-27';//date("Y/m/d");
+      $fecha_actual = date("Y/m/d");
       $query = "SELECT s.nombre AS nombreSucursal, se.nombre AS nombreServicio, t . *, e.nombres as nombreEmpleado, e.apellidos as apellidoEmpleado, em.razonSocial AS nombreEmpresa
                 FROM turno t
                 INNER JOIN sucursal s ON s.id = t.idSucursal
@@ -885,6 +885,104 @@ class TurnoControl{
       }
         $response->getBody()->write($respuesta);
         return $response;
+  }
+
+  public function postTurnoRecurrente(Request $request, Response $response)
+  {
+    $response = $response->withHeader('Content-type', 'application/json');
+    $data = json_decode($request->getBody(),true);
+    $fechaReserva = $data['fechaReserva'];
+    $rango = $data["rango"];
+    $meses = $data["meses"];
+    
+    $fechaFinal = strtotime ( "+$meses month" , strtotime ( $fechaReserva ) ) ;
+    $fechaFinal = date ( 'Y/m/d' , $fechaFinal );
+
+    $datetime1 = new DateTime($fechaReserva);
+    $datetime2 = new DateTime($fechaFinal);
+    $interval = $datetime1->diff($datetime2);
+
+    $minutosServicio = ServiciosSucursal::select("minutos")
+                    ->where("idServicio","=",$data["idServicio"])
+                    ->where("idSucursal","=",$data["idSucursal"])
+                    ->first();
+
+    /*
+      Valores de Rangos 
+      
+      diario = 1
+      semanal = 2
+      mensual = 3
+    */ 
+
+    switch ($rango) {
+      case '1':
+        $tiempo =  floor(($interval->format('%a')));
+        break;
+      case '2':
+        $tiempo =  floor(($interval->format('%a')/7));
+        break;
+      
+      default:
+        $tiempo = $meses;
+        break;
+    }  
+    //echo $tiempo;
+    
+    $fecha = $fechaReserva;
+
+    for ($i=0; $i <= $tiempo; $i++) { 
+      switch ($rango) {
+        case '1':
+          $fechaReservaFinal = strtotime ( "+1 day" , strtotime ( $fecha ) ) ;
+          $fechaReservaFinal = date ( 'Y/m/d' , $fechaReservaFinal );
+          break;
+        case '2':
+          $fechaReservaFinal = strtotime ( "+7 day" , strtotime ( $fecha ) ) ;
+          $fechaReservaFinal = date ( 'Y/m/d' , $fechaReservaFinal );
+          break;
+        
+        default:
+          $fechaReservaFinal = strtotime ( "+1 month" , strtotime ( $fecha ) ) ;
+          $fechaReservaFinal = date ( 'Y/m/d' , $fechaReservaFinal );
+          break;
+      }
+      $respuesta = null;
+      try {
+        $turno = new Turno;
+        $turno->idCliente   =   $data['idCliente'];
+        $turno->idEmpleado  =   $data['idEmpleado'];
+        $turno->idSucursal  =   $data['idSucursal'];
+        $turno->idServicio  =   $data['idServicio'];
+        $turno->tiempo      =   0;
+        $turno->turno       =   0;
+        $turno->turnoReal   =   0;
+        $turno->tipoTurno   =   1;
+        $turno->estadoTurno =   "SOLICITADO";
+        $turno->estado      =   "ACTIVO";
+        $turno->reserva     =   "A";
+        $turno->fechaReserva = $fecha;
+        $turno->horaReserva = $data['horaReserva'];
+        $horaInicial = $data['horaReserva'];
+        for ($j=0; $j < $data["cupos"] ; $j++) { 
+          $segundos_horaInicial=strtotime($horaInicial);
+          $segundos_minutoAnadir=$minutosServicio->minutos*60;
+          $nuevaHora=date("H:i",$segundos_horaInicial+$segundos_minutoAnadir);
+          $horaInicial = $nuevaHora;
+        }        
+        $turno->horaFinalReserva = $nuevaHora;
+        $turno->save();
+        $fecha = $fechaReservaFinal;
+        $respuesta = json_encode(array('msg' => "Su turno ha sido asignado satisfactoriamente.", "std" => 1, 'idTurno' => $turno->id));
+        $response = $response->withStatus(200);
+      } catch(Exception $err){
+        $respuesta = json_encode(array('msg' => "error al pedir el turno", "std" => 0,"err" => $err->getMessage()));
+        $response = $response->withStatus(404);
+      }      
+    }
+
+    $response->getBody()->write($respuesta);
+    return $response;
   }
 
 }

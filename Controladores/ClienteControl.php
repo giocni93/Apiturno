@@ -512,4 +512,16 @@ class ClienteControl{
         return $response;
     }
     
+    public function getClienteBySucursal(Request $request, Response $response)
+    {
+        $response = $response->withHeader('Content-type', 'application/json');
+        $response = $response->withStatus(200);
+        $idSucursal = $request->getAttribute("idSucursal");
+        $query = "SELECT DISTINCT c.id,c.email,c.nombres,c.apellidos,c.telefono FROM turno t inner join cliente c on t.idCliente = c.id where t.idSucursal = '$idSucursal' and c.estado <> 'INACTIVO' ORDER BY (c.nombres) ASC";
+        $data = DB::select(DB::raw($query));
+        $response->getBody()->write(json_encode($data));
+        return $response;
+
+    }
+
 }

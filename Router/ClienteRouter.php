@@ -19,3 +19,4 @@ $app->post('/cliente/email',"ClienteControl:enviaremail");
 $app->put('/cliente/{id}/clave',"ClienteControl:updateclave");
 $app->get('/cliente/{id}/activar/cuenta',"ClienteControl:activarCuenta");
 $app->get('/validarcorreo/{email}',"ClienteControl:validarcorreo");
+$app->get('/sucursal/{idSucursal}/clientes', "ClienteControl:getClienteBySucursal");

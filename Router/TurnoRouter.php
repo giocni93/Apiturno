@@ -26,3 +26,5 @@ $app->get('/ver/reserva/{idTurno}',"TurnoControl:verturnocalendario");
 $app->put('/aplazar/calendario/{id}',"TurnoControl:cancelarservicio");
 
 $app->post('/turno/recurrente', "TurnoControl:postTurnoRecurrente");
+$app->get('/cliente/{idCliente}/sucursal/{idSucursal}/reservas', "TurnoControl:getClienteByReserva");
+$app->get('/cliente/{idCliente}/sucursal/{idSucursal}/turnos', "TurnoControl:getClienteByTurnos");

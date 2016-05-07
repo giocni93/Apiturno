@@ -985,4 +985,38 @@ class TurnoControl{
     return $response;
   }
 
+  public function getClienteByReserva(Request $request, Response $response)
+  {
+      $response = $response->withHeader('Content-type', 'application/json');
+      $response = $response->withStatus(200);
+      $idSucursal = $request->getAttribute("idSucursal");
+      $idCliente = $request->getAttribute("idCliente");
+      $query = "SELECT t.id,t.fechaReserva, t.horaReserva,s.nombre as servicio, su.nombre as sucursal, CONCAT( e.nombres ,' ',e.apellidos) as empleado 
+        FROM turno t 
+        INNER JOIN servicio s ON t.idServicio = s.id
+        INNER JOIN sucursal su ON t.idSucursal = su.id 
+        INNER JOIN empleado e ON t.idEmpleado = e.id
+        WHERE t.idCliente = '$idCliente' AND t.idSucursal = '$idSucursal' AND t.estado <> 'INACTIVO'";
+      $data = DB::select(DB::raw($query));
+      $response->getBody()->write(json_encode($data));
+      return $response;
+  }
+
+  public function getClienteByTurnos(Request $request, Response $response)
+  {
+      $response = $response->withHeader('Content-type', 'application/json');
+      $response = $response->withStatus(200);
+      $idSucursal = $request->getAttribute("idSucursal");
+      $idCliente = $request->getAttribute("idCliente");
+      $query = "SELECT t.id,s.nombre as servicio, su.nombre as sucursal, CONCAT( e.nombres ,' ',e.apellidos) as empleado 
+        FROM turno t 
+        INNER JOIN servicio s ON t.idServicio = s.id
+        INNER JOIN sucursal su ON t.idSucursal = su.id 
+        INNER JOIN empleado e ON t.idEmpleado = e.id
+        WHERE t.idCliente = '$idCliente' AND t.idSucursal = '$idSucursal' AND t.estado <> 'INACTIVO'";
+      $data = DB::select(DB::raw($query));
+      $response->getBody()->write(json_encode($data));
+      return $response;
+  }
+
 }
